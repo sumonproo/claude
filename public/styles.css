@@ -187,12 +187,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 }
 @media (prefers-reduced-transparency: reduce) { .nav { background: var(--surface); backdrop-filter: none; } }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 600; letter-spacing: -0.02em; }
-.brand-mark {
-  display: grid; place-items: center; width: 48px; height: 48px; border-radius: 999px;
-  background: var(--btn); color: var(--accent);
-  font-family: "Geist Mono", monospace; font-size: 13px; font-weight: 500; letter-spacing: 0.02em;
-}
-@media (prefers-color-scheme: dark) { .brand-mark { color: #9a5a2c; } }
+.brand-logo { width: 50px; height: 50px; border-radius: 6px; object-fit: cover; box-shadow: 0 0 0 1px var(--hairline); }
 .nav-links { display: flex; gap: 4px; }
 .nav-links a {
   display: block; padding: 8px 14px; border-radius: 999px;
@@ -345,7 +340,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .process-photo { margin-top: 36px; max-width: 420px; }
 .process-photo .bezel-core { aspect-ratio: 16 / 10; }
 .process-photo img { position: absolute; inset: 0; }
-.footer-logo { width: 56px; height: 56px; border-radius: 14px; object-fit: cover; }
+.footer-logo { width: 64px; height: 64px; border-radius: 6px; object-fit: cover; }
 .steps { display: grid; gap: 14px; counter-reset: s; }
 .step {
   display: grid; grid-template-columns: 56px 1fr; gap: 20px; align-items: start;
