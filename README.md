@@ -5,10 +5,10 @@ A static site with no build step: `index.html`, `styles.css` and `main.js`. Font
 Preview locally:
 
 ```bash
-cd site && python3 -m http.server 8000
+python3 -m http.server 8000
 ```
 
-Deploy by uploading the `site/` folder to any static host (Netlify, Vercel, Cloudflare Pages, GitHub Pages).
+Deploy by uploading this folder to any static host (Netlify, Vercel, Cloudflare Pages, GitHub Pages).
 
 ## Before launch
 
