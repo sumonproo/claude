@@ -1,0 +1,84 @@
+@font-face {
+  font-family: "Phosphor-Light";
+  src: url("Phosphor-Light.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.ph-light {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "Phosphor-Light" !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Enable Ligatures ================ */
+  letter-spacing: 0;
+  -webkit-font-feature-settings: "liga";
+  -moz-font-feature-settings: "liga=1";
+  -moz-font-feature-settings: "liga";
+  -ms-font-feature-settings: "liga" 1;
+  font-feature-settings: "liga";
+  -webkit-font-variant-ligatures: discretionary-ligatures;
+  font-variant-ligatures: discretionary-ligatures;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ph-light.ph-arrow-right:before {
+  content: "\e06c";
+}
+.ph-light.ph-arrow-up-right:before {
+  content: "\e092";
+}
+.ph-light.ph-broom:before {
+  content: "\ec54";
+}
+.ph-light.ph-check:before {
+  content: "\e182";
+}
+.ph-light.ph-cloud-rain:before {
+  content: "\e1b4";
+}
+.ph-light.ph-drop:before {
+  content: "\e210";
+}
+.ph-light.ph-envelope-simple:before {
+  content: "\e218";
+}
+.ph-light.ph-hammer:before {
+  content: "\e80e";
+}
+.ph-light.ph-handshake:before {
+  content: "\e582";
+}
+.ph-light.ph-instagram-logo:before {
+  content: "\e2d0";
+}
+.ph-light.ph-magnifying-glass:before {
+  content: "\e30c";
+}
+.ph-light.ph-map-pin:before {
+  content: "\e316";
+}
+.ph-light.ph-phone:before {
+  content: "\e3b8";
+}
+.ph-light.ph-plus:before {
+  content: "\e3d4";
+}
+.ph-light.ph-ruler:before {
+  content: "\e6b8";
+}
+.ph-light.ph-shield-check:before {
+  content: "\e40c";
+}
+.ph-light.ph-wrench:before {
+  content: "\e5d4";
+}
