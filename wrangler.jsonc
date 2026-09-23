@@ -1,0 +1,9 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "kj-gutters",
+  "compatibility_date": "2026-09-01",
+  // Static site: serve the files in this folder as-is.
+  "assets": {
+    "directory": "./public"
+  }
+}
