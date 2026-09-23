@@ -1,0 +1,105 @@
+@font-face {
+  font-family: "Phosphor";
+  src: url("Phosphor.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.ph {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "Phosphor" !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Enable Ligatures ================ */
+  letter-spacing: 0;
+  -webkit-font-feature-settings: "liga";
+  -moz-font-feature-settings: "liga=1";
+  -moz-font-feature-settings: "liga";
+  -ms-font-feature-settings: "liga" 1;
+  font-feature-settings: "liga";
+  -webkit-font-variant-ligatures: discretionary-ligatures;
+  font-variant-ligatures: discretionary-ligatures;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ph.ph-arrow-right:before {
+  content: "\e06c";
+}
+.ph.ph-caret-down:before {
+  content: "\e136";
+}
+.ph.ph-certificate:before {
+  content: "\e766";
+}
+.ph.ph-check:before {
+  content: "\e182";
+}
+.ph.ph-check-circle:before {
+  content: "\e184";
+}
+.ph.ph-cloud-lightning:before {
+  content: "\e1b2";
+}
+.ph.ph-credit-card:before {
+  content: "\e1d2";
+}
+.ph.ph-drop:before {
+  content: "\e210";
+}
+.ph.ph-facebook-logo:before {
+  content: "\e226";
+}
+.ph.ph-file-text:before {
+  content: "\e23a";
+}
+.ph.ph-google-logo:before {
+  content: "\e292";
+}
+.ph.ph-house-line:before {
+  content: "\e2c4";
+}
+.ph.ph-instagram-logo:before {
+  content: "\e2d0";
+}
+.ph.ph-magnifying-glass:before {
+  content: "\e30c";
+}
+.ph.ph-map-pin:before {
+  content: "\e316";
+}
+.ph.ph-map-trifold:before {
+  content: "\e31a";
+}
+.ph.ph-phone:before {
+  content: "\e3b8";
+}
+.ph.ph-plus:before {
+  content: "\e3d4";
+}
+.ph.ph-seal-check:before {
+  content: "\e606";
+}
+.ph.ph-shield-check:before {
+  content: "\e40c";
+}
+.ph.ph-stack:before {
+  content: "\e466";
+}
+.ph.ph-star:before {
+  content: "\e46a";
+}
+.ph.ph-umbrella:before {
+  content: "\e684";
+}
+.ph.ph-wrench:before {
+  content: "\e5d4";
+}
