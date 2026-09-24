@@ -47,6 +47,11 @@ if not loc["google_business_profile_url"]:
     missing.append("location.google_business_profile_url")
 if not any(h["opens"] for h in cfg["hours"]):
     missing.append("hours")
+media = ["assets/video/hero.mp4", "assets/img/hero.jpg", "assets/img/storm.jpg", "assets/img/og.jpg", biz["logo"]]
+media += [s["image"] for s in cfg["services"] if s.get("image")]
+for m in media:
+    if not (PUBLIC / m).is_file():
+        missing.append(f"public/{m}")
 
 has_address = bool(loc["street"] and not loc["service_area_business"])
 site_url = biz["website"].rstrip("/") + "/" if biz["website"] else ""
@@ -142,6 +147,7 @@ faq_schema = {
 # ---------- Render ----------
 env = Environment(loader=FileSystemLoader(ROOT / "templates"), autoescape=select_autoescape(["html"]),
                   trim_blocks=True, lstrip_blocks=True)
+env.globals["exists"] = lambda rel: (PUBLIC / rel).is_file()
 html = env.get_template("index.html.j2").render(
     cfg=cfg, biz=biz, loc=loc, offers=offers, city=city, state=state, state_abbr=state_abbr,
     place=place, phone=phone, tel=tel, areas=areas, has_address=has_address, site_url=site_url,

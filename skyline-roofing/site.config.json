@@ -1,6 +1,5 @@
 {
   "_readme": "Every business fact on the site comes from this file. Empty values either hide their section or show a visible [placeholder] until filled. Run `python3 build.py` after editing.",
-
   "business": {
     "name": "Skyline Roofing Pro LLC",
     "short_name": "Skyline Roofing Pro",
@@ -11,7 +10,6 @@
     "license_number": "",
     "logo": "assets/img/logo.png"
   },
-
   "location": {
     "city": "",
     "state": "",
@@ -24,23 +22,65 @@
     "google_business_profile_url": "",
     "google_maps_embed_url": ""
   },
-
   "service_areas": [],
-
   "services": [
-    { "name": "Roof replacement", "icon": "house-line", "image": "assets/img/replacement.jpg", "summary": "Full tear-off and new roof system: decking checks, underlayment, flashing, ventilation and shingles installed to the manufacturer's specs." },
-    { "name": "Roof repair", "icon": "wrench", "summary": "Leaks, missing or lifted shingles, failed flashing and worn pipe boots, found and fixed before they spread." },
-    { "name": "Storm and hail damage", "icon": "cloud-lightning", "summary": "Inspection after wind and hail, photo documentation, and repairs or replacement once you have a plan." },
-    { "name": "Roof inspections", "icon": "magnifying-glass", "summary": "A full roof check with photos, for buying or selling a home or just knowing where you stand." },
-    { "name": "Metal roofing", "icon": "stack", "summary": "Standing-seam and exposed-fastener metal roofs for homes, shops and outbuildings." },
-    { "name": "Gutters and ventilation", "icon": "drop", "summary": "Gutters, ridge vents and intake vents so water and heat leave the roof the way they should." }
+    {
+      "name": "Roof replacement",
+      "icon": "house-line",
+      "image": "assets/img/replacement.jpg",
+      "summary": "Full tear-off and new roof system: decking checks, underlayment, flashing, ventilation and shingles installed to the manufacturer's specs.",
+      "alt": "Roofers installing new architectural shingles on a house"
+    },
+    {
+      "name": "Roof repair",
+      "icon": "wrench",
+      "summary": "Leaks, missing or lifted shingles, failed flashing and worn pipe boots, found and fixed before they spread.",
+      "image": "assets/img/repair.jpg",
+      "alt": "Close-up of a roofer replacing damaged shingles"
+    },
+    {
+      "name": "Storm and hail damage",
+      "icon": "cloud-lightning",
+      "summary": "Inspection after wind and hail, photo documentation, and repairs or replacement once you have a plan.",
+      "image": "assets/img/storm-damage.jpg",
+      "alt": "Hail-damaged asphalt shingles after a storm"
+    },
+    {
+      "name": "Roof inspections",
+      "icon": "magnifying-glass",
+      "summary": "A full roof check with photos, for buying or selling a home or just knowing where you stand.",
+      "image": "assets/img/inspection.jpg",
+      "alt": "Roof inspector checking shingles and flashing"
+    },
+    {
+      "name": "Metal roofing",
+      "icon": "stack",
+      "summary": "Standing-seam and exposed-fastener metal roofs for homes, shops and outbuildings.",
+      "image": "assets/img/metal.jpg",
+      "alt": "Standing-seam metal roof on a modern home"
+    },
+    {
+      "name": "Gutters and ventilation",
+      "icon": "drop",
+      "summary": "Gutters, ridge vents and intake vents so water and heat leave the roof the way they should.",
+      "image": "assets/img/gutters.jpg",
+      "alt": "Roof edge with new gutters and ridge vent"
+    }
   ],
-
   "hours": [
-    { "days": "Mo-Fr", "label": "Monday to Friday", "opens": "", "closes": "" },
-    { "days": "Sa", "label": "Saturday", "opens": "", "closes": "" }
+    {
+      "days": "Mo-Fr",
+      "label": "Monday to Friday",
+      "opens": "",
+      "closes": ""
+    },
+    {
+      "days": "Sa",
+      "label": "Saturday",
+      "opens": "",
+      "closes": ""
+    }
   ],
-
   "offers": {
     "free_inspection": false,
     "insurance_claim_help": false,
@@ -49,19 +89,16 @@
     "workmanship_warranty_years": "",
     "manufacturer_certification": ""
   },
-
   "social": {
     "instagram": "https://www.instagram.com/skylineroofingprollc/",
     "facebook": "https://www.facebook.com/people/Skyline-Roofing-LLC/61592681033590/"
   },
-
   "reviews": {
     "_note": "Only real reviews, copied with the customer's permission. Leave empty to show a link to your Google reviews instead.",
     "rating": "",
     "count": "",
     "items": []
   },
-
   "form": {
     "_note": "Optional: a Formspree (or similar) endpoint. Without it, the form opens an email to business.email.",
     "endpoint": ""

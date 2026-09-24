@@ -103,3 +103,9 @@
 .ph.ph-wrench:before {
   content: "\e5d4";
 }
+.ph.ph-pause:before {
+  content: "\e39e";
+}
+.ph.ph-play:before {
+  content: "\e3d0";
+}

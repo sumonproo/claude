@@ -127,7 +127,23 @@ address { font-style: normal; }
     radial-gradient(70% 60% at 10% 10%, rgb(60 96 160 / 0.45), transparent 60%),
     linear-gradient(180deg, #152238 0%, #0e1726 70%);
 }
-.hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.38; mix-blend-mode: luminosity; }
+/* Drone video or photo behind the hero; the shade keeps text at AA contrast over any footage */
+.hero-media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero-shade {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(90deg, rgb(14 23 38 / 0.94) 0%, rgb(14 23 38 / 0.8) 42%, rgb(14 23 38 / 0.45) 75%, rgb(14 23 38 / 0.3) 100%),
+    linear-gradient(0deg, rgb(14 23 38 / 0.6), transparent 35%);
+}
+.video-toggle {
+  position: absolute; right: var(--gutter); bottom: clamp(84px, 10vw, 136px); z-index: 1;
+  display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px;
+  border: 0; border-radius: 999px; cursor: pointer; font: inherit; font-size: 13.5px; font-weight: 600; color: #fff;
+  background: rgb(14 23 38 / 0.55); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.25);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+}
+.video-toggle:hover { background: rgb(14 23 38 / 0.75); }
+.video-toggle i { font-size: 16px; }
 /* Roofline silhouette: a simple gable skyline cut with clip-path */
 .hero-ridge {
   position: absolute; left: 0; right: 0; bottom: -1px; height: clamp(70px, 9vw, 120px);
@@ -200,6 +216,9 @@ select { appearance: none; padding-right: 40px; cursor: pointer; }
 .service-feature p { color: rgb(255 255 255 / 0.78) !important; }
 .service-feature .service-icon { color: var(--accent) !important; }
 .service-photo { min-height: 260px; }
+.service:not(.service-feature) .service-photo { min-height: 0; aspect-ratio: 2 / 1; }
+.service:not(.service-feature) .service-photo img { transition: transform 900ms var(--ease); }
+.service:hover .service-photo img { transform: scale(1.04); }
 .service-body { padding: 28px; }
 .service-icon { font-size: 32px; color: var(--accent-text); }
 .service h3 { font-size: 22px; font-weight: 700; margin-top: 16px; }
@@ -335,6 +354,7 @@ select { appearance: none; padding-right: 40px; cursor: pointer; }
 }
 @media (max-width: 640px) {
   body { font-size: 16px; padding-bottom: 72px; }
+  .video-toggle { bottom: 76px; }
   .container { padding: 0 16px; }
   .header-inner { height: 64px; }
   .header-actions .btn, .phone-link span { display: none; }

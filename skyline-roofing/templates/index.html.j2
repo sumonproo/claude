@@ -14,13 +14,13 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="Roofing Contractor in {{ place }} | {{ biz.short_name }}">
   <meta property="og:description" content="Roof replacement, repair and storm damage work in {{ place }}.">
-  {% if site_url %}<meta property="og:url" content="{{ site_url }}">
-  <meta property="og:image" content="{{ site_url }}assets/img/og.jpg">{% endif %}
+  {% if site_url %}<meta property="og:url" content="{{ site_url }}">{% endif %}
+  {% if site_url and exists("assets/img/og.jpg") %}<meta property="og:image" content="{{ site_url }}assets/img/og.jpg">{% endif %}
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/icons/phosphor.css">
   <link rel="stylesheet" href="styles.css">
-  <link rel="icon" href="{{ biz.logo }}">
+  {% if exists(biz.logo) %}<link rel="icon" href="{{ biz.logo }}">{% endif %}
   <script type="application/ld+json">
 {{ org_json|safe }}
   </script>
@@ -34,7 +34,7 @@
   <header class="header">
     <div class="container header-inner">
       <a class="brand" href="#top" aria-label="{{ biz.short_name }} home">
-        <img class="brand-logo" src="{{ biz.logo }}" alt="" width="44" height="44" onerror="this.remove()">
+        {% if exists(biz.logo) %}<img class="brand-logo" src="{{ biz.logo }}" alt="" width="44" height="44" >{% endif %}
         <span class="brand-name">{{ biz.short_name.split(" ", 1)[0] }}{% if " " in biz.short_name %}<span> {{ biz.short_name.split(" ", 1)[1] }}</span>{% endif %}</span>
       </a>
       <nav aria-label="Primary">
@@ -56,8 +56,23 @@
   <main id="main">
     <!-- Hero with lead form -->
     <section class="hero" id="top">
-      <div class="hero-sky" aria-hidden="true"><img class="hero-bg" src="assets/img/hero.jpg" alt="" onerror="this.remove()"></div>
+      <div class="hero-sky" aria-hidden="true">
+        {% if exists("assets/video/hero.mp4") %}
+        <video class="hero-media" id="hero-video" muted loop playsinline preload="none"{% if exists("assets/img/hero.jpg") %} poster="assets/img/hero.jpg"{% endif %}>
+          {% if exists("assets/video/hero.webm") %}<source src="assets/video/hero.webm" type="video/webm">{% endif %}
+          <source src="assets/video/hero.mp4" type="video/mp4">
+        </video>
+        {% elif exists("assets/img/hero.jpg") %}
+        <img class="hero-media" src="assets/img/hero.jpg" alt="" fetchpriority="high">
+        {% endif %}
+      </div>
+      {% if exists("assets/video/hero.mp4") or exists("assets/img/hero.jpg") %}<div class="hero-shade" aria-hidden="true"></div>{% endif %}
       <div class="hero-ridge" aria-hidden="true"></div>
+      {% if exists("assets/video/hero.mp4") %}
+      <button class="video-toggle" type="button" id="video-toggle" aria-pressed="false" hidden>
+        <i class="ph ph-pause" aria-hidden="true"></i><span>Pause video</span>
+      </button>
+      {% endif %}
       <div class="container hero-grid">
         <div class="hero-copy">
           <p class="eyebrow load" style="--i:0"><i class="ph ph-map-pin" aria-hidden="true"></i>Roofing contractor in {{ place }}</p>
@@ -134,9 +149,9 @@
         <div class="service-grid">
           {% for s in cfg.services %}
           <article class="service reveal{% if loop.first %} service-feature{% endif %}" style="--d:{{ loop.index0 }}">
-            {% if loop.first %}
+            {% if loop.first or (s.image and exists(s.image)) %}
             <div class="service-photo photo">
-              {% if s.image %}<img src="{{ s.image }}" alt="New roof being installed on a home in {{ city }}" loading="lazy" onerror="this.remove()">{% endif %}
+              {% if s.image and exists(s.image) %}<img src="{{ s.image }}" alt="{{ s.alt }}" loading="lazy" width="1200" height="800">{% endif %}
             </div>
             {% endif %}
             <div class="service-body">
@@ -167,7 +182,7 @@
     <section class="section storm" id="storm">
       <div class="container storm-grid">
         <div class="storm-photo photo reveal">
-          <img src="assets/img/storm.jpg" alt="Roof with storm damage being inspected in {{ city }}" loading="lazy" onerror="this.remove()">
+          {% if exists("assets/img/storm.jpg") %}<img src="assets/img/storm.jpg" alt="Roofer inspecting hail damage on asphalt shingles" loading="lazy" width="1200" height="1500">{% endif %}
         </div>
         <div class="storm-copy">
           <h2 class="section-title reveal">Storm damage in {{ city }}? Start here.</h2>
@@ -269,7 +284,7 @@
     <div class="container footer-grid">
       <div class="footer-brand">
         <a class="brand" href="#top">
-          <img class="brand-logo" src="{{ biz.logo }}" alt="" width="44" height="44" loading="lazy" onerror="this.remove()">
+          {% if exists(biz.logo) %}<img class="brand-logo" src="{{ biz.logo }}" alt="" width="44" height="44" loading="lazy" >{% endif %}
           <span class="brand-name">{{ biz.short_name.split(" ", 1)[0] }}{% if " " in biz.short_name %}<span> {{ biz.short_name.split(" ", 1)[1] }}</span>{% endif %}</span>
         </a>
         <!-- NAP: keep identical to the Google Business Profile -->

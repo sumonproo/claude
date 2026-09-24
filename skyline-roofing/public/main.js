@@ -15,6 +15,27 @@ if ("IntersectionObserver" in window) {
   revealEls.forEach((el) => el.classList.add("in"));
 }
 
+// Hero drone video: only load and play when motion and data use are welcome.
+const video = document.getElementById("hero-video");
+const toggle = document.getElementById("video-toggle");
+if (video) {
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const saveData = navigator.connection && navigator.connection.saveData;
+  if (!reduceMotion && !saveData) {
+    video.preload = "auto";
+    video.play().then(() => { if (toggle) toggle.hidden = false; }).catch(() => {});
+  }
+  if (toggle) {
+    toggle.addEventListener("click", () => {
+      const pause = !video.paused;
+      if (pause) video.pause(); else video.play();
+      toggle.setAttribute("aria-pressed", String(pause));
+      toggle.querySelector("span").textContent = pause ? "Play video" : "Pause video";
+      toggle.querySelector("i").className = `ph ${pause ? "ph-play" : "ph-pause"}`;
+    });
+  }
+}
+
 // Lead form
 const form = document.getElementById("lead-form");
 const success = document.getElementById("form-success");
