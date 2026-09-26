@@ -1,0 +1,10 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "kovarik-construction",
+  "compatibility_date": "2026-09-01",
+  // Static site: serve the preview pages as-is (client review / staging).
+  "assets": {
+    "directory": "./preview",
+    "html_handling": "auto-trailing-slash"
+  }
+}

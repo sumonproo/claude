@@ -113,3 +113,15 @@ python3 build.py        # no dependencies
 - All CSS is scoped under the `.kc` class, so it won't restyle other parts of WordPress, and theme styles won't break it.
 - Icons are inline SVG, so no icon font or plugin is needed.
 - On phones, a fixed **Call Now / Get an Estimate** bar appears at the bottom of every page (part of the footer).
+
+## Cloudflare preview (for client review)
+
+`wrangler.jsonc` deploys `preview/` as a static site, so Jan can review the design before it goes into WordPress. The preview sends a `noindex` header, so Google won't index it.
+
+Cloudflare dashboard → *Workers & Pages* → *Create* → *Import a repository* → pick this repo, then:
+- **Root directory:** `kovarik-construction`
+- **Build command:** leave empty
+- **Deploy command:** `npx wrangler deploy` (the default)
+- **Production branch:** the branch that has these files
+
+Cloudflare gives you a `kovarik-construction.<your-subdomain>.workers.dev` link and redeploys on every push. Run `python3 build.py` and commit before pushing, because Cloudflare serves the committed `preview/` folder.
