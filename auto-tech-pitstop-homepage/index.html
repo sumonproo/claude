@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Auto Tech Pitstop – Homepage (Desktop reference)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..800&amp;family=IBM+Plex+Mono:wght@500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0B0E13;font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit}a:hover{opacity:.92}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #36A3E6;outline-offset:3px}
+details summary::-webkit-details-marker{display:none}
+.cta-photo{background-image:linear-gradient(90deg,rgba(11,14,19,0.97) 0%,rgba(11,14,19,0.88) 50%,rgba(11,14,19,0.55) 100%),url(assets/cta-lift.webp);background-size:cover;background-position:center 40%}
+</style>
+<style>body{background:#07090D}</style>
+</head>
+<body>
+<div id="app"></div>
+<template id="design-template">
+<div style="width: 1440px; margin: 0 auto; background: #0B0E13; color: #EEF1F5; font-family: 'IBM Plex Sans', system-ui, sans-serif">
+
+<!-- UTILITY BAR -->
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 0 120px; height: 40px; background: #07090D; border-bottom: 1px solid #1B212B; font-size: 13px; color: #A3ADBB">
+<div style="display: flex; gap: 24px; align-items: center">
+<span>Walk-ins welcome · Appointments preferred</span>
+<span style="color: #3A4352">|</span>
+<span>Mon–Sat 9:30 am – 6:00 pm · Sun closed</span>
+</div>
+<div style="display: flex; gap: 24px; align-items: center">
+<span>Towing available upon request</span>
+<a href="https://www.autotechpitstop.com/" style="color: #EEF1F5; text-decoration: none; font-weight: 500">Pitstop Apparel Co.</a>
+</div>
+</div>
+
+<!-- HEADER -->
+<header style="position: sticky; top: 0; z-index: 30; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 80px; height: 80px; background: rgba(11,14,19,0.96); border-bottom: 1px solid #1B212B">
+<a href="#top" aria-label="Auto Tech Pitstop home" style="display: flex; align-items: center; min-height: 44px; text-decoration: none">
+<img src="assets/logo-transparent.webp" alt="Auto Tech Pitstop" width="162" height="40" style="display: block; width: 162px; height: 40px">
+</a>
+<nav aria-label="Main" style="display: flex; gap: 20px; font-size: 14px; font-weight: 500; white-space: nowrap">
+<a href="#top" style="text-decoration: none; color: #EEF1F5">Home</a>
+<a href="#services" style="text-decoration: none; color: #C9D0DA">Services</a>
+<a href="#choose-location" style="text-decoration: none; color: #C9D0DA">Locations</a>
+<a href="#gallery" style="text-decoration: none; color: #C9D0DA">Gallery</a>
+<a href="#reviews" style="text-decoration: none; color: #C9D0DA">Reviews</a>
+<a href="#blog" style="text-decoration: none; color: #C9D0DA">Blog</a>
+<a href="#footer" style="text-decoration: none; color: #C9D0DA">Contact</a>
+</nav>
+<div style="display: flex; align-items: center; gap: 10px; position: relative; flex-shrink: 0">
+<button type="button" onClick="{{toggleDd}}" aria-haspopup="listbox" aria-expanded="{{ddOpen}}" style="white-space: nowrap; flex-shrink: 0; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border-radius: 10px; background: #151A22; border: 1px solid #2B3340; color: #EEF1F5; font: 500 14px/1 'IBM Plex Sans', sans-serif; cursor: pointer">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+<span>{{locLabel}}</span>
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+</button>
+<a href="{{g.quote}}" onClick="{{g.quoteClick}}" style="white-space: nowrap; flex-shrink: 0; display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 10px; border: 1px solid #3A4352; color: #EEF1F5; text-decoration: none; font-weight: 600; font-size: 14px">Request a Quote</a>
+<a href="{{g.book}}" onClick="{{g.bookClick}}" style="white-space: nowrap; flex-shrink: 0; display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 10px; background: {{accent}}; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 14px">Book Appointment</a>
+<sc-if value="{{ddOpen}}" hint-placeholder-val="{{ false }}">
+<div role="listbox" aria-label="Choose your location" style="position: absolute; top: 56px; left: 0; width: 320px; padding: 8px; border-radius: 14px; background: #151A22; border: 1px solid #2B3340; box-shadow: 0 24px 48px rgba(0,0,0,0.45); display: flex; flex-direction: column; gap: 4px">
+<sc-for list="{{locList}}" as="l" hint-placeholder-count="2">
+<button type="button" onClick="{{l.pick}}" style="display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 12px 14px; border-radius: 10px; background: {{l.ddBg}}; border: none; color: #EEF1F5; text-align: left; cursor: pointer; font-family: 'IBM Plex Sans', sans-serif">
+<span style="font-weight: 600; font-size: 15px">{{l.name}}</span>
+<span style="font-size: 13px; color: #A3ADBB">{{l.addr1}}, {{l.addr2}}</span>
+</button>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</header>
+
+<!-- HERO -->
+<section id="top" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 64px; align-items: center; padding: 80px 120px 88px; background-color: #0B0E13; background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 120px)">
+<div style="display: flex; flex-direction: column; gap: 28px">
+<div style="display: inline-flex; align-self: flex-start; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 999px; border: 1px solid #2B3340; background: #11151C; font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.08em; color: #C9D0DA">
+<span style="width: 8px; height: 8px; border-radius: 50%; background: #3DDC97"></span>
+<span>LOCALLY OWNED · 10+ YEARS · 2 SHOPS</span>
+</div>
+<h1 style="margin: 0; font-family: 'Archivo', 'Helvetica Neue', sans-serif; font-stretch: 125%; font-weight: 800; font-size: 64px; line-height: 1.02; letter-spacing: -0.01em">Premium Auto Repair in Queens &amp; Long Island</h1>
+<p style="margin: 0; max-width: 540px; font-size: 19px; line-height: 1.55; color: #C9D0DA">From routine maintenance and advanced diagnostics to brakes, alignments, rim repair and roadside help — reliable service, clear communication and easy online booking.</p>
+<div style="display: flex; gap: 12px; flex-wrap: wrap">
+<a href="{{g.book}}" onClick="{{g.bookClick}}" style="display: inline-flex; align-items: center; gap: 10px; min-height: 56px; padding: 0 28px; border-radius: 12px; background: {{accent}}; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 17px">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M8 2v4M16 2v4M3 10h18"></path></svg>
+<span>Book an Appointment</span>
+</a>
+<a href="{{g.quote}}" onClick="{{g.quoteClick}}" style="display: inline-flex; align-items: center; gap: 10px; min-height: 56px; padding: 0 28px; border-radius: 12px; background: #EEF1F5; color: #0B0E13; text-decoration: none; font-weight: 600; font-size: 17px">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6M8 13h8M8 17h5"></path></svg>
+<span>Request a Quote</span>
+</a>
+</div>
+<div style="display: flex; gap: 24px; font-size: 15px; font-weight: 500">
+<a href="tel:+13474333740" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: #EEF1F5; text-decoration: none">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"></path></svg>
+<span>Call (347) 433-3740</span>
+</a>
+<a href="{{g.dir}}" onClick="{{g.dirClick}}" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: #EEF1F5; text-decoration: none">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+<span>Get Directions</span>
+</a>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 20px; padding-top: 24px; border-top: 1px solid #1F2630">
+<sc-for list="{{heroTrust}}" as="t" hint-placeholder-count="6">
+<div style="display: flex; align-items: center; gap: 8px; font-size: 14px; color: #C9D0DA">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#36A3E6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+<span>{{t}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="position: relative; height: 620px">
+<div style="position: absolute; inset: 0 0 40px 60px; border-radius: 20px; overflow: hidden; border: 1px solid #242B36; background: #161B24">
+<img src="assets/hero-gwagon.webp" alt="Performance SUV in a brightly lit service bay while technicians work on wheels and tires" fetchpriority="high" style="display: block; width: 100%; height: 100%; object-fit: cover">
+</div>
+<div style="position: absolute; left: 0; bottom: 0; width: 240px; height: 240px; border-radius: 16px; overflow: hidden; border: 4px solid #0B0E13; background: #1D232E; box-shadow: 0 24px 48px rgba(0,0,0,0.45)">
+<img src="assets/hero-inset-lift.webp" alt="Car raised on a two-post lift during service" loading="lazy" style="display: block; width: 100%; height: 100%; object-fit: cover">
+</div>
+<div style="position: absolute; right: 28px; top: 28px; width: 260px; padding: 20px; border-radius: 16px; background: #FFFFFF; color: #10141B; box-shadow: 0 24px 48px rgba(0,0,0,0.35); display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; align-items: center; gap: 8px">
+<span style="color: #E8A317; font-size: 18px; letter-spacing: 2px">★★★★★</span>
+</div>
+<div style="font-family: 'Archivo', sans-serif; font-stretch: 125%; font-weight: 800; font-size: 30px; line-height: 1">350+</div>
+<div style="font-size: 14px; line-height: 1.4; color: #4A5361">Five-star Google reviews across both locations</div>
+</div>
+</div>
+</section>
+
+<!-- CHOOSE LOCATION -->
+<section id="choose-location" style="padding: 104px 120px; background: #F4F5F7; color: #10141B; display: flex; flex-direction: column; gap: 48px">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 48px">
+<div style="display: flex; flex-direction: column; gap: 14px; max-width: 720px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.1em; color: {{accent}}">STEP 1 · PICK YOUR SHOP</span>
+<h2 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 125%; font-weight: 800; font-size: 44px; line-height: 1.08">Choose Your Auto Tech Pitstop Location</h2>
+<p style="margin: 0; font-size: 18px; line-height: 1.55; color: #4A5361">Select the location closest to you to book service, request a quote, call our team, get directions and view local reviews.</p>
+</div>
+<sc-if value="{{hasLoc}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; background: #FFFFFF; border: 1px solid #D5DAE1; font-size: 14px">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1B8A5A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+<span>Your shop: <strong>{{cur.name}}</strong></span>
+<button type="button" onClick="{{clearLoc}}" style="min-height: 36px; padding: 0 10px; border: none; background: transparent; color: #16639A; font: 600 14px 'IBM Plex Sans', sans-serif; cursor: pointer; text-decoration: underline">Change</button>
+</div>
+</sc-if>
+</div>
+<sc-if value="{{showNeed}}" hint-placeholder-val="{{ false }}">
+<div role="status" style="display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-radius: 12px; background: #E3F1FA; border: 1px solid #A9D4EF; color: #0C3553; font-size: 16px; font-weight: 500">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+<span>Pick a shop below to {{needLabel}} — each location has its own booking calendar and directions.</span>
+</div>
+</sc-if>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px">
+<sc-for list="{{locList}}" as="l" hint-placeholder-count="2">
+<article style="display: flex; flex-direction: column; border-radius: 20px; background: #FFFFFF; border: 2px solid {{l.border}}; overflow: hidden; box-shadow: 0 1px 2px rgba(16,20,27,0.06)">
+<div role="img" aria-label="{{l.mapAlt}}" style="position: relative; height: 200px; background-color: #E3E7EC; background-image: repeating-linear-gradient(0deg, rgba(16,20,27,0.06) 0 1px, transparent 1px 32px), repeating-linear-gradient(90deg, rgba(16,20,27,0.06) 0 1px, transparent 1px 32px); display: flex; align-items: center; justify-content: center">
+<span style="display: flex; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 50%; background: {{accent}}; color: #FFFFFF; box-shadow: 0 0 0 10px rgba(36,138,202,0.22)">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+</span>
+<span style="position: absolute; left: 20px; bottom: 16px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.08em; color: #4A5361">STATIC MAP IMAGE · CLICK LOADS GOOGLE MAPS</span>
+<sc-if value="{{l.selected}}" hint-placeholder-val="{{ false }}">
+<span style="position: absolute; right: 16px; top: 16px; padding: 6px 12px; border-radius: 999px; background: #10141B; color: #FFFFFF; font-size: 13px; font-weight: 600">Your shop</span>
+</sc-if>
+</div>
+<div style="display: flex; flex-direction: column; gap: 22px; padding: 32px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.1em; color: #5B6472">LOCATION {{l.idx}}</span>
+<h3 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 115%; font-weight: 800; font-size: 28px; line-height: 1.15">{{l.title}}</h3>
+<span style="font-size: 15px; color: #4A5361">{{l.area}}</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; font-size: 15px; line-height: 1.5">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; color: #5B6472">ADDRESS</span>
+<span>{{l.addr1}}</span>
+<span>{{l.addr2}}</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; color: #5B6472">HOURS</span>
+<span>Mon–Sat 9:30 am – 6:00 pm</span>
+<span>Sunday closed</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; color: #5B6472">PHONE</span>
+<a href="{{l.tel}}" style="color: #10141B; font-weight: 600; text-decoration: none">{{l.phone}}</a>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; color: #5B6472">GOOGLE RATING</span>
+<span><span style="color: #B7791F">★★★★★</span> [4.9] · [000] reviews</span>
+</div>
+</div>
+<blockquote style="margin: 0; padding: 16px 18px; border-radius: 12px; background: #F4F5F7; font-size: 15px; line-height: 1.5; color: #2B323D">“{{l.snippet}}” <span style="display: block; margin-top: 6px; font-size: 13px; color: #5B6472">— [Customer first name], Google review</span></blockquote>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<a href="{{l.book}}" style="display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; border-radius: 10px; background: {{accent}}; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 15px">Book Appointment</a>
+<a href="{{l.quote}}" style="display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; border-radius: 10px; background: #10141B; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 15px">Request a Quote</a>
+<a href="{{l.tel}}" style="display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; border-radius: 10px; border: 1px solid #C9CFD8; color: #10141B; text-decoration: none; font-weight: 600; font-size: 15px">Call Now</a>
+<a href="{{l.dir}}" style="display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; border-radius: 10px; border: 1px solid #C9CFD8; color: #10141B; text-decoration: none; font-weight: 600; font-size: 15px">Get Directions</a>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: center; padding-top: 18px; border-top: 1px solid #E3E7EC">
+<button type="button" onClick="{{l.pick}}" aria-pressed="{{l.selected}}" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border-radius: 10px; border: 1px solid #C9CFD8; background: #FFFFFF; color: #10141B; font: 600 14px 'IBM Plex Sans', sans-serif; cursor: pointer">{{l.pickLabel}}</button>
+<a href="{{l.page}}" style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; color: #16639A; font-weight: 600; font-size: 15px; text-decoration: none">{{l.details}} →</a>
+</div>
+</div>
+</article>
+</sc-for>
+</div>
+</section>
+
+<!-- TRUST -->
+<section style="padding: 104px 120px; background: #0B0E13; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 48px 24px">
+<div style="grid-column: span 5; display: flex; flex-direction: column; gap: 20px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.1em; color: #36A3E6">WHY DRIVERS CHOOSE US</span>
+<h2 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 125%; font-weight: 800; font-size: 44px; line-height: 1.08">Auto Repair Built Around Your Time and Peace of Mind</h2>
+<p style="margin: 0; font-size: 18px; line-height: 1.6; color: #C9D0DA">Whether you need a quick repair, scheduled maintenance, diagnostic testing or emergency roadside help, Auto Tech Pitstop makes the process simple — knowledgeable technicians, straightforward updates and convenient service options.</p>
+<img src="assets/alignment-tech.webp" alt="Technician attaching wheel alignment equipment to an SUV" loading="lazy" style="display: block; width: 100%; height: 340px; object-fit: cover; object-position: 50% 30%; border-radius: 16px; margin-top: 8px">
+</div>
+<div style="grid-column: 7 / span 6; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: #1F2630; border: 1px solid #1F2630; border-radius: 16px; overflow: hidden">
+<sc-for list="{{trust}}" as="t" hint-placeholder-count="8">
+<div style="display: flex; flex-direction: column; gap: 8px; padding: 24px; background: #0F131A">
+<div style="display: flex; align-items: center; gap: 10px">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#36A3E6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+<h3 style="margin: 0; font-size: 17px; font-weight: 600">{{t.title}}</h3>
+</div>
+<p style="margin: 0; font-size: 15px; line-height: 1.5; color: #A3ADBB">{{t.text}}</p>
+</div>
+</sc-for>
+</div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" style="padding: 104px 120px; background: #FFFFFF; color: #10141B; display: flex; flex-direction: column; gap: 48px">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 48px">
+<div style="display: flex; flex-direction: column; gap: 14px; max-width: 760px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.1em; color: {{accent}}">SERVICES</span>
+<h2 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 125%; font-weight: 800; font-size: 44px; line-height: 1.08">Complete Auto Repair and Maintenance Services</h2>
+<p style="margin: 0; font-size: 18px; line-height: 1.55; color: #4A5361">From routine maintenance to complex repairs, reliable service for drivers across Queens, NYC and Long Island.</p>
+</div>
+<a href="https://www.autotechpitstop.com/auto-repair" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 20px; border-radius: 10px; border: 1px solid #C9CFD8; color: #10141B; text-decoration: none; font-weight: 600; font-size: 15px; white-space: nowrap">All services →</a>
+</div>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px">
+<sc-for list="{{services}}" as="s" hint-placeholder-count="14">
+<a href="{{s.href}}" style="display: flex; flex-direction: column; gap: 12px; padding: 0 22px 22px; border-radius: 16px; background: #F4F5F7; border: 1px solid #E3E7EC; color: #10141B; text-decoration: none; overflow: hidden">
+<sc-if value="{{s.hasImg}}" hint-placeholder-val="{{ true }}">
+<img src="{{s.img}}" alt="{{s.alt}}" loading="lazy" style="display: block; width: calc(100% + 44px); height: 150px; margin: 0 -22px 4px; object-fit: cover; object-position: {{s.pos}}">
+</sc-if>
+<sc-if value="{{s.noImg}}" hint-placeholder-val="{{ false }}">
+<div aria-hidden="true" style="display: flex; align-items: flex-end; width: calc(100% + 44px); height: 150px; margin: 0 -22px 4px; padding: 12px 16px; box-sizing: border-box; background-color: #E3E7EC; background-image: repeating-linear-gradient(45deg, rgba(16,20,27,0.05) 0 1px, transparent 1px 16px); font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.08em; color: #5B6472">SHOP PHOTO NEEDED</div>
+</sc-if>
+<div style="display: flex; justify-content: space-between; align-items: center">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #5B6472">{{s.n}}</span>
+<sc-if value="{{s.isNew}}" hint-placeholder-val="{{ false }}">
+<span style="padding: 3px 8px; border-radius: 6px; background: #E3F1FA; color: #16639A; font-size: 11px; font-weight: 600; letter-spacing: 0.04em">NEW PAGE</span>
+</sc-if>
+</div>
+<h3 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 110%; font-weight: 700; font-size: 19px; line-height: 1.25">{{s.title}}</h3>
+<p style="margin: 0; font-size: 14px; line-height: 1.5; color: #4A5361; flex-grow: 1">{{s.text}}</p>
+<span style="font-size: 14px; font-weight: 600; color: #16639A">Learn more →</span>
+</a>
+</sc-for>
+<div style="grid-column: span 2; display: flex; flex-direction: column; justify-content: space-between; gap: 20px; padding: 28px; border-radius: 16px; background: #10141B; color: #EEF1F5">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h3 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 115%; font-weight: 800; font-size: 24px">Not Sure What Your Vehicle Needs?</h3>
+<p style="margin: 0; font-size: 15px; line-height: 1.5; color: #A3ADBB">Describe the problem and we’ll send a quote by the next business day — or talk it through with our team.</p>
+</div>
+<div style="display: flex; gap: 10px; flex-wrap: wrap">
+<a href="{{g.quote}}" onClick="{{g.quoteClick}}" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 18px; border-radius: 10px; background: {{accent}}; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 15px">Request a Quote</a>
+<a href="{{g.book}}" onClick="{{g.bookClick}}" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 18px; border-radius: 10px; background: #EEF1F5; color: #0B0E13; text-decoration: none; font-weight: 600; font-size: 15px">Book an Appointment</a>
+<a href="tel:+13474333740" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 18px; border-radius: 10px; border: 1px solid #3A4352; color: #EEF1F5; text-decoration: none; font-weight: 600; font-size: 15px">Call Our Team</a>
+</div>
+</div>
+</div>
+</section>
+
+<!-- BOOKING CTA -->
+<section style="padding: 0 120px 104px; background: #FFFFFF">
+<div class="cta-photo" style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; align-items: center; padding: 72px 64px; border-radius: 24px; background-color: #0B0E13; color: #EEF1F5">
+<div style="grid-column: span 7; display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 125%; font-weight: 800; font-size: 48px; line-height: 1.05">Ready to Get Back on the Road?</h2>
+<p style="margin: 0; font-size: 18px; line-height: 1.55; color: #C9D0DA; max-width: 560px">Book your service online, request an estimate, or call the Auto Tech Pitstop team for fast, professional help.</p>
+</div>
+<div style="grid-column: 9 / span 4; display: flex; flex-direction: column; gap: 12px">
+<span style="font-size: 13px; font-weight: 600; letter-spacing: 0.06em; color: #A3ADBB">BOOKING FOR</span>
+<div role="radiogroup" aria-label="Booking location" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 12px; background: #151A22; border: 1px solid #2B3340">
+<sc-for list="{{locList}}" as="l" hint-placeholder-count="2">
+<button type="button" role="radio" aria-checked="{{l.selected}}" onClick="{{l.pick}}" style="min-height: 44px; border-radius: 9px; border: none; background: {{l.segBg}}; color: {{l.segFg}}; font: 600 14px 'IBM Plex Sans', sans-serif; cursor: pointer">{{l.name}}</button>
+</sc-for>
+</div>
+<a href="{{g.book}}" onClick="{{g.bookClick}}" style="display: flex; align-items: center; justify-content: center; min-height: 56px; border-radius: 12px; background: {{accent}}; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 17px">Book an Appointment</a>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<a href="{{g.quote}}" onClick="{{g.quoteClick}}" style="display: flex; align-items: center; justify-content: center; min-height: 50px; border-radius: 12px; background: #EEF1F5; color: #0B0E13; text-decoration: none; font-weight: 600; font-size: 15px">Request a Quote</a>
+<a href="tel:+13474333740" style="display: flex; align-items: center; justify-content: center; min-height: 50px; border-radius: 12px; border: 1px solid #3A4352; color: #EEF1F5; text-decoration: none; font-weight: 600; font-size: 15px">Call Now</a>
+</div>
+</div>
+</div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews" style="padding: 104px 120px; background: #F4F5F7; color: #10141B; display: flex; flex-direction: column; gap: 40px">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 48px">
+<div style="display: flex; flex-direction: column; gap: 14px; max-width: 760px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.1em; color: {{accent}}">GOOGLE REVIEWS</span>
+<h2 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 125%; font-weight: 800; font-size: 44px; line-height: 1.08">Trusted by Drivers Across Queens and Long Island</h2>
+</div>
+<div role="tablist" aria-label="Reviews by location" style="display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: #FFFFFF; border: 1px solid #D5DAE1">
+<sc-for list="{{tabs}}" as="t" hint-placeholder-count="2">
+<button type="button" role="tab" aria-selected="{{t.on}}" onClick="{{t.pick}}" style="min-height: 44px; padding: 0 18px; border-radius: 9px; border: none; background: {{t.bg}}; color: {{t.fg}}; font: 600 15px 'IBM Plex Sans', sans-serif; cursor: pointer">{{t.label}}</button>
+</sc-for>
+</div>
+</div>
+<div role="tabpanel" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px">
+<div style="display: flex; flex-direction: column; gap: 16px; padding: 28px; border-radius: 16px; background: #10141B; color: #EEF1F5">
+<div style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #C9D0DA">
+<span style="display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: #FFFFFF; color: #1C75B3; font-weight: 700; font-size: 15px">G</span>
+<span>Google · {{rev.name}}</span>
+</div>
+<div style="display: flex; align-items: baseline; gap: 10px">
+<span style="font-family: 'Archivo', sans-serif; font-stretch: 125%; font-weight: 800; font-size: 56px; line-height: 1">[4.9]</span>
+<span style="color: #E8A317; font-size: 18px; letter-spacing: 2px">★★★★★</span>
+</div>
+<span style="font-size: 15px; color: #A3ADBB">Based on [000] Google reviews</span>
+<div style="display: flex; flex-direction: column; gap: 10px; margin-top: auto">
+<a href="{{rev.readHref}}" style="display: flex; align-items: center; justify-content: center; min-height: 48px; border-radius: 10px; background: #EEF1F5; color: #0B0E13; text-decoration: none; font-weight: 600; font-size: 15px">Read More Google Reviews</a>
+<a href="{{rev.leaveHref}}" style="display: flex; align-items: center; justify-content: center; min-height: 48px; border-radius: 10px; border: 1px solid #3A4352; color: #EEF1F5; text-decoration: none; font-weight: 600; font-size: 15px">Leave a Google Review</a>
+</div>
+</div>
+<sc-for list="{{rev.items}}" as="r" hint-placeholder-count="3">
+<article style="display: flex; flex-direction: column; gap: 14px; padding: 28px; border-radius: 16px; background: #FFFFFF; border: 1px solid #E3E7EC">
+<span style="color: #B7791F; font-size: 16px; letter-spacing: 2px">★★★★★</span>
+<p style="margin: 0; font-size: 16px; line-height: 1.6; color: #2B323D; flex-grow: 1">“{{r.text}}”</p>
+<div style="display: flex; align-items: center; gap: 12px; padding-top: 14px; border-top: 1px solid #E3E7EC">
+<span style="display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: #E3E7EC; font-weight: 600; font-size: 14px; color: #4A5361">[A]</span>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="font-weight: 600; font-size: 15px">{{r.who}}</span>
+<span style="font-size: 13px; color: #5B6472">{{r.service}}</span>
+</div>
+</div>
+</article>
+</sc-for>
+</div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery" style="position: relative; padding: 104px 120px; background: #0B0E13; display: flex; flex-direction: column; gap: 36px">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 48px">
+<div style="display: flex; flex-direction: column; gap: 14px; max-width: 720px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.1em; color: #36A3E6">PHOTO &amp; VIDEO GALLERY</span>
+<h2 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 125%; font-weight: 800; font-size: 44px; line-height: 1.08">See the Work. Trust the Results.</h2>
+<p style="margin: 0; font-size: 18px; line-height: 1.55; color: #C9D0DA">Real repair work, vehicle transformations, wheel restoration, powder coating and behind-the-scenes shop content.</p>
+</div>
+<a href="https://www.autotechpitstop.com/gallery" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 20px; border-radius: 10px; border: 1px solid #3A4352; color: #EEF1F5; text-decoration: none; font-weight: 600; font-size: 15px; white-space: nowrap">View Full Gallery →</a>
+</div>
+<div role="toolbar" aria-label="Filter gallery" style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{filters}}" as="f" hint-placeholder-count="8">
+<button type="button" aria-pressed="{{f.on}}" onClick="{{f.pick}}" style="min-height: 42px; padding: 0 16px; border-radius: 999px; border: 1px solid {{f.bd}}; background: {{f.bg}}; color: {{f.fg}}; font: 500 14px 'IBM Plex Sans', sans-serif; cursor: pointer">{{f.label}}</button>
+</sc-for>
+</div>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 220px; gap: 16px">
+<sc-for list="{{gallery}}" as="it" hint-placeholder-count="8">
+<button type="button" onClick="{{it.open}}" aria-label="Open: {{it.title}}" style="grid-row: {{it.row}}; position: relative; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; gap: 6px; padding: 18px; border-radius: 14px; border: 1px solid #242B36; background-color: #161B24; background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 1px, transparent 1px 22px); color: #EEF1F5; text-align: left; cursor: pointer; font-family: 'IBM Plex Sans', sans-serif">
+<sc-if value="{{it.video}}" hint-placeholder-val="{{ false }}">
+<span style="position: absolute; z-index: 2; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 50%; background: rgba(255,255,255,0.92); color: #0B0E13">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+</span>
+</sc-if>
+<sc-if value="{{it.hasImg}}" hint-placeholder-val="{{ false }}">
+<img src="{{it.img}}" alt="{{it.title}}" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: {{it.pos}}; border-radius: 13px">
+<span aria-hidden="true" style="position: absolute; inset: 0; border-radius: 13px; background: linear-gradient(to top, rgba(5,7,10,0.88) 0%, rgba(5,7,10,0) 55%)"></span>
+</sc-if>
+<sc-if value="{{it.noImg}}" hint-placeholder-val="{{ true }}">
+<span style="position: absolute; top: 14px; left: 14px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.08em; color: #8C97A6">{{it.kind}} SLOT</span>
+</sc-if>
+<span style="position: relative; padding: 4px 8px; border-radius: 6px; background: rgba(54,163,230,0.24); color: #BFE3F8; font-size: 12px; font-weight: 600">{{it.tag}}</span>
+<span style="position: relative; font-size: 15px; font-weight: 600; line-height: 1.35">{{it.title}}</span>
+</button>
+</sc-for>
+</div>
+<sc-if value="{{lbOpen}}" hint-placeholder-val="{{ false }}">
+<div role="dialog" aria-modal="true" aria-label="Gallery lightbox" style="position: absolute; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center; padding: 64px; background: rgba(5,7,10,0.92)">
+<div style="display: flex; flex-direction: column; gap: 16px; width: 960px">
+<div style="position: relative; height: 560px; border-radius: 16px; background-color: #161B24; background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 1px, transparent 1px 22px); border: 1px solid #2B3340; display: flex; align-items: center; justify-content: center">
+<sc-if value="{{lb.hasImg}}" hint-placeholder-val="{{ false }}">
+<img src="{{lb.img}}" alt="{{lb.title}}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 15px; background: #07090D">
+</sc-if>
+<sc-if value="{{lb.noImg}}" hint-placeholder-val="{{ true }}">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.08em; color: #8C97A6">FULL-SIZE {{lb.kind}} · LAZY-LOADED ON OPEN</span>
+</sc-if>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 18px; font-weight: 600">{{lb.title}}</span>
+<span style="font-size: 14px; color: #A3ADBB">{{lb.tag}} · [Location tag]</span>
+</div>
+<div style="display: flex; gap: 8px">
+<button type="button" onClick="{{lbPrev}}" aria-label="Previous item" style="min-height: 44px; min-width: 44px; border-radius: 10px; border: 1px solid #3A4352; background: transparent; color: #EEF1F5; font-size: 18px; cursor: pointer">←</button>
+<button type="button" onClick="{{lbNext}}" aria-label="Next item" style="min-height: 44px; min-width: 44px; border-radius: 10px; border: 1px solid #3A4352; background: transparent; color: #EEF1F5; font-size: 18px; cursor: pointer">→</button>
+<button type="button" onClick="{{lbClose}}" style="min-height: 44px; padding: 0 16px; border-radius: 10px; border: none; background: #EEF1F5; color: #0B0E13; font: 600 14px 'IBM Plex Sans', sans-serif; cursor: pointer">Close</button>
+</div>
+</div>
+</div>
+</div>
+</sc-if>
+</section>
+
+<!-- INSTAGRAM -->
+<section style="padding: 104px 120px; background: #FFFFFF; color: #10141B; display: flex; flex-direction: column; gap: 36px">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 48px">
+<div style="display: flex; flex-direction: column; gap: 14px; max-width: 720px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.1em; color: {{accent}}">INSTAGRAM</span>
+<h2 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 125%; font-weight: 800; font-size: 44px; line-height: 1.08">Follow the Work @AutoTechPitstop</h2>
+<p style="margin: 0; font-size: 18px; line-height: 1.55; color: #4A5361">Recent repairs, customer vehicles, rim transformations, shop updates and behind-the-scenes content.</p>
+</div>
+<a href="https://instagram.com/autotechpitstop" style="display: inline-flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 22px; border-radius: 12px; background: #10141B; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 15px; white-space: nowrap">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><path d="M17.5 6.5h.01"></path></svg>
+<span>Follow Us on Instagram</span>
+</a>
+</div>
+<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px">
+<sc-for list="{{insta}}" as="p" hint-placeholder-count="6">
+<a href="https://instagram.com/autotechpitstop" aria-label="{{p.label}}" style="position: relative; display: flex; align-items: flex-end; aspect-ratio: 1 / 1; padding: 12px; border-radius: 12px; background-color: #E3E7EC; background-image: repeating-linear-gradient(45deg, rgba(16,20,27,0.05) 0 1px, transparent 1px 16px); color: #4A5361; text-decoration: none">
+<img src="{{p.img}}" alt="" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: {{p.pos}}; border-radius: 12px">
+<sc-if value="{{p.reel}}" hint-placeholder-val="{{ false }}">
+<span style="position: absolute; top: 10px; right: 10px; padding: 3px 7px; border-radius: 6px; background: #10141B; color: #FFFFFF; font-size: 11px; font-weight: 600">REEL</span>
+</sc-if>
+</a>
+</sc-for>
+</div>
+</section>
+
+<!-- LOCAL SEO -->
+<section style="padding: 104px 120px; background: #F4F5F7; color: #10141B; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 40px 24px">
+<div style="grid-column: span 5; display: flex; flex-direction: column; gap: 18px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.1em; color: {{accent}}">SERVING QUEENS &amp; LONG ISLAND</span>
+<h2 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 125%; font-weight: 800; font-size: 40px; line-height: 1.1">Trusted Auto Repair in Queens, NYC, and Long Island</h2>
+<p style="margin: 0; font-size: 17px; line-height: 1.65; color: #4A5361">For more than a decade, Auto Tech Pitstop has been the locally owned shop drivers rely on for honest, high-quality auto repair. With two full-service locations, expert help is close whether you drive through southeast Queens or Long Island’s South Shore.</p>
+</div>
+<div style="grid-column: 7 / span 6; display: flex; flex-direction: column; gap: 32px">
+<div style="display: flex; flex-direction: column; gap: 10px; padding-bottom: 32px; border-bottom: 1px solid #D5DAE1">
+<h3 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 110%; font-weight: 700; font-size: 22px">Auto Repair in Queens, NY</h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.65; color: #4A5361">Our Queens shop on Rockaway Boulevard serves drivers in Jamaica, Rosedale, Springfield Gardens and the surrounding neighborhoods. Stop in for brake service, check engine light diagnostics, suspension work and wheel alignments — walk-ins are welcome and many repairs are finished the same day.</p>
+<a href="https://www.autotechpitstop.com/nyc-queens-location" style="align-self: flex-start; display: inline-flex; align-items: center; min-height: 44px; color: #16639A; font-weight: 600; font-size: 15px; text-decoration: none">Explore the Queens / NYC shop →</a>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<h3 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 110%; font-weight: 700; font-size: 22px">Auto Repair in Rockville Centre, Long Island</h3>
+<p style="margin: 0; font-size: 16px; line-height: 1.65; color: #4A5361">On South Long Beach Road in Rockville Centre, our Long Island location brings the same standards to Nassau County drivers — from routine maintenance and engine or transmission repair to rim repair, powder coating and carbon cleaning.</p>
+<a href="https://www.autotechpitstop.com/long-island-location" style="align-self: flex-start; display: inline-flex; align-items: center; min-height: 44px; color: #16639A; font-weight: 600; font-size: 15px; text-decoration: none">Explore the Long Island shop →</a>
+</div>
+</div>
+</section>
+
+<!-- FAQ -->
+<section style="padding: 0 120px 104px; background: #F4F5F7; color: #10141B; display: flex; flex-direction: column; gap: 28px">
+<div style="display: flex; justify-content: space-between; align-items: flex-end">
+<h2 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 125%; font-weight: 800; font-size: 32px">Quick Answers</h2>
+<a href="https://www.autotechpitstop.com/faqs" style="display: inline-flex; align-items: center; min-height: 44px; color: #16639A; font-weight: 600; font-size: 15px; text-decoration: none">All FAQs →</a>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<sc-for list="{{faqs}}" as="q" hint-placeholder-count="6">
+<details style="padding: 20px 24px; border-radius: 14px; background: #FFFFFF; border: 1px solid #E3E7EC">
+<summary style="list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 28px; cursor: pointer; font-size: 17px; font-weight: 600">{{q.q}}<span aria-hidden="true" style="font-size: 22px; color: #5B6472">+</span></summary>
+<p style="margin: 12px 0 0; font-size: 16px; line-height: 1.6; color: #4A5361">{{q.a}}</p>
+</details>
+</sc-for>
+</div>
+</section>
+
+<!-- BLOG -->
+<section id="blog" style="padding: 104px 120px; background: #FFFFFF; color: #10141B; display: flex; flex-direction: column; gap: 36px">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 48px">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; letter-spacing: 0.1em; color: {{accent}}">FROM THE BLOG</span>
+<h2 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 125%; font-weight: 800; font-size: 44px; line-height: 1.08">Car Care Tips from the Pitstop</h2>
+</div>
+<a href="https://www.autotechpitstop.com/blog" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 20px; border-radius: 10px; border: 1px solid #C9CFD8; color: #10141B; text-decoration: none; font-weight: 600; font-size: 15px">View all posts →</a>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+<sc-for list="{{posts}}" as="b" hint-placeholder-count="3">
+<a href="https://www.autotechpitstop.com/blog" style="display: flex; flex-direction: column; gap: 16px; color: #10141B; text-decoration: none">
+<sc-if value="{{b.hasImg}}" hint-placeholder-val="{{ false }}">
+<img src="{{b.img}}" alt="{{b.alt}}" loading="lazy" style="display: block; width: 100%; height: 220px; object-fit: cover; border-radius: 14px">
+</sc-if>
+<sc-if value="{{b.noImg}}" hint-placeholder-val="{{ true }}">
+<div role="img" aria-label="Featured image slot" style="height: 220px; border-radius: 14px; background-color: #E3E7EC; background-image: repeating-linear-gradient(0deg, rgba(16,20,27,0.05) 0 1px, transparent 1px 28px); display: flex; align-items: flex-end; padding: 14px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.08em; color: #5B6472">FEATURED IMAGE · 16:9</span>
+</div>
+</sc-if>
+<div style="display: flex; gap: 10px; align-items: center; font-size: 13px; color: #5B6472">
+<span style="padding: 3px 8px; border-radius: 6px; background: #F4F5F7; font-weight: 600; color: #2B323D">{{b.cat}}</span>
+<span>[Publish date] · [X] min read</span>
+</div>
+<h3 style="margin: 0; font-family: 'Archivo', sans-serif; font-stretch: 105%; font-weight: 700; font-size: 21px; line-height: 1.3">{{b.title}}</h3>
+<span style="font-size: 15px; font-weight: 600; color: #16639A">Read article →</span>
+</a>
+</sc-for>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer id="footer" style="flex-grow: 1; padding: 88px 120px 40px; background: #07090D; color: #C9D0DA; display: flex; flex-direction: column; gap: 56px">
+<div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px">
+<div style="grid-column: span 4; display: flex; flex-direction: column; gap: 18px">
+<img src="assets/logo-transparent.webp" alt="Auto Tech Pitstop" loading="lazy" width="194" height="48" style="display: block; width: 194px; height: 48px">
+<p style="margin: 0; font-size: 15px; line-height: 1.6; max-width: 320px">Locally owned auto repair and maintenance in Queens and Long Island. Personal and fleet vehicles. Walk-ins welcome.</p>
+<div style="display: flex; gap: 10px">
+<a href="https://facebook.com/400862044028010" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 10px; border: 1px solid #2B3340; color: #EEF1F5; text-decoration: none; font-size: 14px; font-weight: 500">Facebook</a>
+<a href="https://instagram.com/autotechpitstop" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 10px; border: 1px solid #2B3340; color: #EEF1F5; text-decoration: none; font-size: 14px; font-weight: 500">Instagram</a>
+<a href="https://yelp.com/biz/auto-tech-pitstop-queens" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 10px; border: 1px solid #2B3340; color: #EEF1F5; text-decoration: none; font-size: 14px; font-weight: 500">Yelp</a>
+</div>
+<a href="mailto:autotechpitstop@gmail.com" style="color: #EEF1F5; font-size: 15px; text-decoration: none">autotechpitstop@gmail.com</a>
+</div>
+<sc-for list="{{locList}}" as="l" hint-placeholder-count="2">
+<div style="grid-column: span 3; display: flex; flex-direction: column; gap: 8px; font-size: 15px; line-height: 1.55">
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.08em; color: #8C97A6">{{l.footLabel}}</span>
+<span style="color: #EEF1F5">{{l.addr1}}</span>
+<span>{{l.addr2}}</span>
+<a href="{{l.tel}}" style="color: #EEF1F5; text-decoration: none; font-weight: 600">{{l.phone}}</a>
+<span>Mon–Sat 9:30 am – 6:00 pm · Sun closed</span>
+<a href="{{l.dir}}" style="display: inline-flex; align-items: center; min-height: 44px; color: #36A3E6; font-weight: 600; text-decoration: none">Get directions →</a>
+</div>
+</sc-for>
+<nav aria-label="Footer" style="grid-column: span 2; display: flex; flex-direction: column; gap: 10px; font-size: 15px">
+<span style="font-size: 12px; font-weight: 600; letter-spacing: 0.08em; color: #8C97A6">EXPLORE</span>
+<a href="https://www.autotechpitstop.com/auto-repair" style="color: #C9D0DA; text-decoration: none">Services</a>
+<a href="https://www.autotechpitstop.com/our-story" style="color: #C9D0DA; text-decoration: none">Our Story</a>
+<a href="https://www.autotechpitstop.com/reviews" style="color: #C9D0DA; text-decoration: none">Reviews</a>
+<a href="https://www.autotechpitstop.com/gallery" style="color: #C9D0DA; text-decoration: none">Gallery</a>
+<a href="https://www.autotechpitstop.com/faqs" style="color: #C9D0DA; text-decoration: none">FAQs</a>
+<a href="https://www.autotechpitstop.com/blog" style="color: #C9D0DA; text-decoration: none">Blog</a>
+<a href="https://www.autotechpitstop.com/contact" style="color: #C9D0DA; text-decoration: none">Contact</a>
+</nav>
+</div>
+<div style="display: flex; justify-content: space-between; padding-top: 28px; border-top: 1px solid #1B212B; font-size: 13px; color: #8C97A6">
+<span>© 2026 Auto Tech Pitstop. All rights reserved.</span>
+<div style="display: flex; gap: 20px">
+<a href="#" style="color: #8C97A6; text-decoration: none">Privacy Policy</a>
+<a href="#" style="color: #8C97A6; text-decoration: none">Accessibility</a>
+<a href="https://www.autotechpitstop.com/" style="color: #8C97A6; text-decoration: none">Pitstop Apparel Co.</a>
+</div>
+</div>
+</footer>
+
+</div>
+</template>
+<script>
+/* Tiny template runtime: renders the design's {{holes}}, <sc-for>, <sc-if> and on* handlers.
+   Reference build only — rebuild as real components (Elementor widgets, theme templates, etc.). */
+class DCLogic {
+  constructor(props) { this.props = props || {}; if (!this.state) this.state = {}; }
+  setState(patch) { Object.assign(this.state, patch); if (this.__render) this.__render(); }
+}
+(function () {
+  const HOLE = /\{\{\s*([^}]+?)\s*\}\}/g;
+  const WHOLE = /^\{\{\s*([^}]+?)\s*\}\}$/;
+  function get(scope, path) {
+    if (path === 'true') return true; if (path === 'false') return false;
+    if (/^-?\d+(\.\d+)?$/.test(path)) return Number(path);
+    return path.split('.').reduce((o, k) => (o == null ? undefined : o[k]), scope);
+  }
+  function str(v) { return v == null ? '' : String(v); }
+  function walk(node, scope, out) {
+    if (node.nodeType === 3) { out.appendChild(document.createTextNode(node.nodeValue.replace(HOLE, (_, p) => str(get(scope, p))))); return; }
+    if (node.nodeType !== 1) return;
+    const tag = node.tagName.toLowerCase();
+    if (tag === 'sc-for') {
+      const list = get(scope, (node.getAttribute('list').match(WHOLE) || [])[1]) || [];
+      const as = node.getAttribute('as') || 'item';
+      list.forEach((item, i) => { const s = Object.create(scope); s[as] = item; s.$index = i; node.childNodes.forEach(c => walk(c, s, out)); });
+      return;
+    }
+    if (tag === 'sc-if') {
+      const m = node.getAttribute('value').match(WHOLE);
+      if (m && get(scope, m[1])) node.childNodes.forEach(c => walk(c, scope, out));
+      return;
+    }
+    const el = document.createElementNS(node.namespaceURI, node.localName);
+    for (const a of node.attributes) {
+      if (a.name.startsWith('hint-')) continue;
+      const whole = a.value.match(WHOLE);
+      if (a.name.startsWith('on') && whole) { const fn = get(scope, whole[1]); if (typeof fn === 'function') el.addEventListener(a.name.slice(2), fn); continue; }
+      el.setAttribute(a.name, a.value.replace(HOLE, (_, p) => str(get(scope, p))));
+    }
+    const src = tag === 'template' ? node.content : node;
+    src.childNodes.forEach(c => walk(c, scope, el));
+    out.appendChild(el);
+  }
+  window.mountDesign = function (Component, props) {
+    const tpl = document.getElementById('design-template').content;
+    const root = document.getElementById('app');
+    const inst = new Component(props);
+    inst.__render = function () {
+      const openDetails = [...root.querySelectorAll('details')].map(d => d.open);
+      const frag = document.createDocumentFragment();
+      tpl.childNodes.forEach(c => walk(c, inst.renderVals(), frag));
+      root.replaceChildren(frag);
+      root.querySelectorAll('details').forEach((d, i) => { if (openDetails[i]) d.open = true; });
+    };
+    inst.__render();
+  };
+})();
+
+</script>
+<script>
+class Component extends DCLogic {
+  state = { loc: null, dd: false, need: null, tab: 'queens', filter: 'all', lb: -1 };
+
+  renderVals() {
+    const accent = this.props.accent ?? '#1C75B3';
+    const LOCS = {
+      queens: {
+        id: 'queens', idx: '01', name: 'Queens / NYC', title: 'Auto Tech Pitstop – Queens / NYC', footLabel: 'QUEENS / NYC',
+        area: 'Serving Jamaica, Rosedale, Springfield Gardens & southeast Queens',
+        addr1: '153-36 Rockaway Blvd', addr2: 'Jamaica, NY 11434',
+        phone: '(347) 433-3740', tel: 'tel:+13474333740',
+        book: 'https://app.shopmonkey.cloud/public/scheduler/6412799e7ea84c0022b0ac6c?fullPage=true',
+        quote: 'https://app.shopmonkey.cloud/public/quote-request/6412799e7ea84c0022b0ac6c?noExternalScripts=1',
+        dir: 'https://www.google.com/maps/dir/?api=1&destination=153-36+Rockaway+Blvd+Jamaica+NY+11434',
+        page: 'https://www.autotechpitstop.com/nyc-queens-location',
+        details: 'View Queens / NYC location details',
+        mapAlt: 'Map preview of the Queens shop on Rockaway Blvd',
+        snippet: '[One short, verified Google review from a Queens customer]'
+      },
+      li: {
+        id: 'li', idx: '02', name: 'Long Island', title: 'Auto Tech Pitstop – Long Island', footLabel: 'LONG ISLAND',
+        area: 'Serving Rockville Centre & Nassau County',
+        addr1: '76 S Long Beach Rd', addr2: 'Rockville Centre, NY 11570',
+        phone: '(347) 433-3740', tel: 'tel:+13474333740',
+        book: 'https://app.shopmonkey.cloud/public/scheduler/cf86a4ec-d561-483b-9fa8-29b956ef36f2?fullPage=true',
+        quote: 'https://app.shopmonkey.cloud/public/quote-request/cf86a4ec-d561-483b-9fa8-29b956ef36f2?noExternalScripts=1',
+        dir: 'https://www.google.com/maps/dir/?api=1&destination=76+S+Long+Beach+Rd+Rockville+Centre+NY+11570',
+        page: 'https://www.autotechpitstop.com/long-island-location',
+        details: 'View Long Island location details',
+        mapAlt: 'Map preview of the Long Island shop on S Long Beach Rd',
+        snippet: '[One short, verified Google review from a Long Island customer]'
+      }
+    };
+    const s = this.state;
+    const cur = s.loc ? LOCS[s.loc] : null;
+    const setLoc = (id) => this.setState({ loc: id, dd: false, need: null, tab: id });
+    const guard = (kind) => () => { if (!this.state.loc) this.setState({ need: kind }); };
+    const g = {
+      book: cur ? cur.book : '#choose-location',
+      quote: cur ? cur.quote : '#choose-location',
+      dir: cur ? cur.dir : '#choose-location',
+      bookClick: guard('book'), quoteClick: guard('quote'), dirClick: guard('dir')
+    };
+    const needLabels = { book: 'book an appointment', quote: 'request a quote', dir: 'get directions' };
+
+    const locList = ['queens', 'li'].map((id) => {
+      const l = LOCS[id];
+      const sel = s.loc === id;
+      return Object.assign({}, l, {
+        selected: sel,
+        border: sel ? accent : '#E3E7EC',
+        ddBg: sel ? '#222A36' : 'transparent',
+        segBg: sel ? '#EEF1F5' : 'transparent',
+        segFg: sel ? '#0B0E13' : '#C9D0DA',
+        pickLabel: sel ? '✓ Your shop' : 'Set as my shop',
+        pick: () => setLoc(id)
+      });
+    });
+
+    const revFor = (id) => ({
+      name: LOCS[id].name,
+      readHref: '#reviews',
+      leaveHref: '#reviews',
+      items: [1, 2, 3].map(() => ({
+        who: '[First name + last initial]',
+        service: '[Service received]',
+        text: '[Paste a short, verified Google review excerpt for ' + LOCS[id].name + ' — two or three lines max.]'
+      }))
+    });
+    const tabs = ['queens', 'li'].map((id) => ({
+      label: LOCS[id].name + ' Reviews', on: s.tab === id,
+      bg: s.tab === id ? '#10141B' : 'transparent', fg: s.tab === id ? '#FFFFFF' : '#4A5361',
+      pick: () => this.setState({ tab: id })
+    }));
+
+    const FILTERS = [
+      ['all', 'All Work'], ['repairs', 'Repairs'], ['ba', 'Before & After'], ['rim', 'Rim Repair'],
+      ['powder', 'Powder Coating'], ['cars', 'Customer Vehicles'], ['shop', 'Shop Life'], ['video', 'Video']
+    ];
+    const ITEMS = [
+      { cats: ['rim', 'ba'], title: 'Before & after — curb-rash rim repair', tag: 'Rim Repair', tall: true },
+      { cats: ['powder'], title: 'Powder-coated wheel set', tag: 'Powder Coating' },
+      { cats: ['repairs'], title: 'Brake rotor inspection on the lift', tag: 'Repairs', img: 'assets/brake-rotor-lift.webp', pos: '72% 55%' },
+      { cats: ['video', 'shop'], title: 'Reel: a day in the shop', tag: 'Video', video: true, tall: true, img: 'assets/tile-lift-tall.webp' },
+      { cats: ['cars'], title: 'Customer vehicle after service', tag: 'Customer Vehicles', img: 'assets/tile-gwagon.webp' },
+      { cats: ['repairs'], title: 'Engine bay inspection & diagnostics', tag: 'Repairs', img: 'assets/tile-engine.webp' },
+      { cats: ['cars'], title: 'Exotic in for service', tag: 'Customer Vehicles', tall: true, img: 'assets/lambo-portrait.webp', pos: '60% 60%' },
+      { cats: ['shop'], title: 'Meet the team', tag: 'Shop Life', img: 'assets/tech-portrait-bw.webp', pos: '45% 40%' },
+      { cats: ['video', 'rim'], title: 'Reel: rim straightening, start to finish', tag: 'Video', video: true },
+      { cats: ['repairs'], title: 'Oil & fluid service', tag: 'Repairs', img: 'assets/oil-pour.webp', pos: '40% 50%' }
+    ];
+    const filtered = ITEMS.filter((it) => s.filter === 'all' || it.cats.indexOf(s.filter) > -1);
+    const gallery = filtered.map((it, i) => Object.assign({}, it, {
+      row: it.tall ? 'span 2' : 'span 1',
+      kind: it.video ? 'VIDEO' : 'PHOTO',
+      video: !!it.video,
+      img: it.img || '', hasImg: !!it.img, noImg: !it.img, pos: it.pos || 'center',
+      open: () => this.setState({ lb: i })
+    }));
+    const filters = FILTERS.map(([id, label]) => {
+      const on = s.filter === id;
+      return { label, on, bg: on ? '#EEF1F5' : 'transparent', fg: on ? '#0B0E13' : '#C9D0DA', bd: on ? '#EEF1F5' : '#2B3340',
+        pick: () => this.setState({ filter: id, lb: -1 }) };
+    });
+    const lbOpen = s.lb > -1 && s.lb < gallery.length;
+    const lb = lbOpen ? gallery[s.lb] : { title: '', tag: '', kind: '', img: '', hasImg: false, noImg: true };
+    const n = gallery.length || 1;
+
+    return {
+      accent, g, cur, hasLoc: !!cur,
+      locLabel: cur ? cur.name : 'Choose Location',
+      ddOpen: s.dd,
+      toggleDd: () => this.setState({ dd: !this.state.dd }),
+      clearLoc: () => this.setState({ loc: null }),
+      showNeed: !!s.need && !cur,
+      needLabel: needLabels[s.need] || 'continue',
+      locList,
+      heroTrust: ['350+ 5-star Google reviews', 'Same-day service available', 'Walk-ins welcome', 'Appointments preferred', 'Experienced technicians', 'Roadside assistance'],
+      trust: [
+        { title: 'Same-Day Service', text: 'Many repairs are completed the day you bring the car in.' },
+        { title: 'Walk-Ins Welcome', text: 'Appointments preferred, but drop in any time during business hours.' },
+        { title: 'Overnight Drop-Off', text: 'Leave your vehicle after hours and we start first thing.' },
+        { title: 'Roadside Assistance', text: 'Jump starts, tire changes, lockouts and local part pickup.' },
+        { title: 'Insurance & Warranty Support', text: 'All major third-party warranty and insurance companies — we handle the paperwork.' },
+        { title: 'Comfortable Waiting Area', text: 'Free Wi-Fi and a flat-screen TV while you wait.' },
+        { title: 'Fleet & Personal Vehicles', text: 'One shop for your daily driver and your business vehicles.' },
+        { title: 'Clear Communication', text: 'Honest recommendations, status updates and quotes by the next business day.' }
+      ],
+      services: [
+        { n: '01', title: 'General Auto Repair', text: 'Everyday repairs done right, with clear updates along the way.', href: 'https://www.autotechpitstop.com/auto-repair', img: 'assets/dipstick.webp', alt: 'General auto repair inspection', pos: '50% 40%', hasImg: true, noImg: false },
+        { n: '02', title: 'Diagnostics & Check Engine Light', text: 'Advanced scan tools to find the real cause, fast.', href: '#', isNew: true, img: 'assets/diag-scanner.webp', alt: 'Technician using a diagnostic scan tool', pos: '50% 50%', hasImg: true, noImg: false },
+        { n: '03', title: 'Brake Repair & Service', text: 'Inspections, pads, rotors and full system overhauls.', href: 'https://www.autotechpitstop.com/brake-services', img: 'assets/brake-rotor-lift.webp', alt: 'Brake rotor exposed on a car raised on a lift', pos: '70% 55%', hasImg: true, noImg: false },
+        { n: '04', title: 'Engine Repair', text: 'Precise diagnosis and repair for smooth, reliable power.', href: 'https://www.autotechpitstop.com/engine-and-transmission', img: 'assets/engine-wipe.webp', alt: 'Technician working in an engine bay', pos: '50% 50%', hasImg: true, noImg: false },
+        { n: '05', title: 'Transmission Repair', text: 'Maintenance and repair to keep every shift smooth.', href: 'https://www.autotechpitstop.com/engine-and-transmission', img: 'assets/tech-under-lift.webp', alt: 'Technician inspecting a car from under the lift', pos: '50% 55%', hasImg: true, noImg: false },
+        { n: '06', title: 'Suspension Repair', text: 'Shocks, struts and components for a stable ride.', href: 'https://www.autotechpitstop.com/suspension-services', img: 'assets/underbody-work.webp', alt: 'Technician working on the underside of a car', pos: '50% 55%', hasImg: true, noImg: false },
+        { n: '07', title: 'Tires & Wheel Alignment', text: 'Alignments, rotations, repairs and replacements.', href: 'https://www.autotechpitstop.com/tire-and-wheel-services', img: 'assets/tire-pressure.webp', alt: 'Technician checking tire pressure', pos: '50% 60%', hasImg: true, noImg: false },
+        { n: '08', title: 'Rim Repair', text: 'Bends, cracks and curb rash restored to original condition.', href: 'https://www.autotechpitstop.com/rim-repair-and-powder-coating', img: '', alt: '', pos: 'center', hasImg: false, noImg: true },
+        { n: '09', title: 'Powder Coating', text: 'A durable, high-quality finish for your wheels.', href: 'https://www.autotechpitstop.com/rim-repair-and-powder-coating', img: '', alt: '', pos: 'center', hasImg: false, noImg: true },
+        { n: '10', title: 'Carbon Cleaning', text: 'Remove deposits to restore power and fuel economy.', href: 'https://www.autotechpitstop.com/carbon-cleaning', img: 'assets/engine-bw.webp', alt: 'Close-up of an engine bay', pos: '50% 60%', hasImg: true, noImg: false },
+        { n: '11', title: 'Roadside Assistance', text: 'Jump starts, tire changes and local part pickup.', href: 'https://www.autotechpitstop.com/roadside-assistance-and-lockout-services', img: 'assets/under-car-ramps.webp', alt: 'Technician working under a car on ramps', pos: '50% 50%', hasImg: true, noImg: false },
+        { n: '12', title: 'Lockout Services', text: 'Locked out? Prompt, professional help.', href: 'https://www.autotechpitstop.com/roadside-assistance-and-lockout-services', img: '', alt: '', pos: 'center', hasImg: false, noImg: true },
+        { n: '13', title: 'Preventive Maintenance', text: 'Scheduled service that heads off costly repairs.', href: '#', isNew: true, img: 'assets/oil-pour.webp', alt: 'Fresh oil being poured into an engine', pos: '40% 50%', hasImg: true, noImg: false },
+        { n: '14', title: 'Fleet Vehicle Service', text: 'Keep business vehicles on the road with less downtime.', href: '#', isNew: true, img: '', alt: '', pos: 'center', hasImg: false, noImg: true }
+      ],
+      tabs, rev: revFor(s.tab),
+      filters, gallery, lbOpen, lb,
+      lbClose: () => this.setState({ lb: -1 }),
+      lbNext: () => this.setState({ lb: (this.state.lb + 1) % n }),
+      lbPrev: () => this.setState({ lb: (this.state.lb - 1 + n) % n }),
+      insta: [
+        { label: 'Supercar in the service bay', img: 'assets/lambo-front.webp', pos: '50% 50%', reel: false },
+        { label: 'Diagnostic scan in progress', img: 'assets/diag-scanner.webp', pos: '50% 50%', reel: true },
+        { label: 'Tire pressure check', img: 'assets/tire-pressure.webp', pos: '50% 60%', reel: false },
+        { label: 'Under-car inspection', img: 'assets/tech-under-lift.webp', pos: '50% 60%', reel: false },
+        { label: 'Engine bay detail', img: 'assets/engine-bw.webp', pos: '50% 60%', reel: true },
+        { label: 'Fluid level check', img: 'assets/dipstick.webp', pos: '60% 60%', reel: false }
+      ],
+      faqs: [
+        { q: 'Do I need an appointment?', a: 'Appointments are preferred, but walk-ins are always welcome during business hours.' },
+        { q: 'What are your hours?', a: 'Monday to Saturday, 9:30 am – 6:00 pm. Closed Sunday.' },
+        { q: 'Do you work with insurance and extended warranties?', a: 'Yes. We accept all major third-party warranty and insurance companies and handle the necessary paperwork.' },
+        { q: 'How quickly will I get a quote?', a: 'Quotes are provided by the next business day. Request one online any time.' },
+        { q: 'Do you offer towing or roadside help?', a: 'Towing is available on request, and our roadside team handles jump starts, tire changes, lockouts and local part pickup, depending on location.' },
+        { q: 'Do you service fleet vehicles?', a: 'Yes — we service both personal and fleet vehicles.' }
+      ],
+      posts: [
+        { cat: '[Category]', title: '[Latest post title — pulled automatically from WordPress]', img: 'assets/blog-engine.webp', hasImg: true, noImg: false, alt: 'Technician checking an open engine bay' },
+        { cat: '[Category]', title: '[Second most recent post title]', img: 'assets/alignment-tech.webp', hasImg: true, noImg: false, alt: 'Technician performing a wheel alignment' },
+        { cat: '[Category]', title: '[Third most recent post title]', img: 'assets/dipstick.webp', hasImg: true, noImg: false, alt: 'Technician checking engine oil level' }
+      ]
+    };
+  }
+}
+mountDesign(Component, {});
+</script>
+</body>
+</html>
