@@ -1,0 +1,178 @@
+<!-- ============================================================
+     PROJECTS / GALLERY PAGE  (slug: /projects/)
+     Template "Elementor Full Width" · one HTML widget · paste this file.
+     To add a photo: copy one <button class="kc-gallery__item"> block,
+     set data-cat (remodeling, bathroom, adu, flooring, outdoor),
+     the image URL (Media Library > copy URL), alt text and caption.
+     ============================================================ -->
+<div class="kc">
+
+  <section class="kc-pagehead">
+    <div class="kc-container">
+      <nav class="kc-crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>Projects</span></nav>
+      <h1 class="kc-h1">Our projects</h1>
+      <p class="kc-lead">Real homes, real work. A look at recent remodeling, bathroom, ADU, flooring and outdoor projects across the Monterey Peninsula.</p>
+    </div>
+  </section>
+
+  <!-- FEATURED PROJECT WITH BEFORE / AFTER -->
+  <section class="kc-section">
+    <div class="kc-container kc-split">
+      <div class="kc-ba" data-kc-ba>
+        <img src="{{img:Before}}" alt="[Project] before the remodel" width="1200" height="800">
+        <img class="kc-ba__after" src="{{img:After}}" alt="[Project] after the remodel" width="1200" height="800">
+        <span class="kc-ba__label kc-ba__label--before">Before</span>
+        <span class="kc-ba__label kc-ba__label--after">After</span>
+        <span class="kc-ba__line"></span>
+        <input type="range" min="0" max="100" value="50" aria-label="Drag to compare before and after">
+      </div>
+      <div>
+        <p class="kc-eyebrow">Featured Project</p>
+        <h2 class="kc-h2">[Project name]</h2>
+        <p class="kc-meta">{{ico:pin}} [City] · [Service]</p>
+        <p>[What the homeowner wanted and what the space was like before.]</p>
+        <p>[What was done: scope, key materials and finishes.]</p>
+        <ul class="kc-checks">
+          <li>{{ico:check}} [Highlight 1, e.g. new layout]</li>
+          <li>{{ico:check}} [Highlight 2, e.g. materials used]</li>
+          <li>{{ico:check}} [Highlight 3, e.g. result]</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="kc-section kc-section--soft">
+    <div class="kc-container">
+      <div class="kc-section-head kc-center">
+        <p class="kc-eyebrow">Gallery</p>
+        <h2 class="kc-h2">Browse by project type</h2>
+      </div>
+      <div class="kc-filters" role="group" aria-label="Filter projects">
+        <button class="kc-filter" type="button" data-filter="all" aria-pressed="true">All</button>
+        <button class="kc-filter" type="button" data-filter="remodeling" aria-pressed="false">General Remodeling</button>
+        <button class="kc-filter" type="button" data-filter="bathroom" aria-pressed="false">Bathroom</button>
+        <button class="kc-filter" type="button" data-filter="adu" aria-pressed="false">ADU &amp; Garage</button>
+        <button class="kc-filter" type="button" data-filter="flooring" aria-pressed="false">Flooring &amp; Tile</button>
+        <button class="kc-filter" type="button" data-filter="outdoor" aria-pressed="false">Outdoor</button>
+      </div>
+      <div class="kc-gallery" data-kc-gallery>
+        <button class="kc-gallery__item" type="button" data-cat="bathroom">
+          <img src="{{img:Bathroom remodel}}" alt="[Bathroom remodel in Carmel-by-the-Sea: describe the photo]" width="1200" height="800" loading="lazy">
+          <span class="kc-gallery__cap"><strong>Bathroom remodel</strong>Carmel-by-the-Sea</span>
+        </button>
+        <button class="kc-gallery__item" type="button" data-cat="remodeling">
+          <img src="{{img:Kitchen remodel}}" alt="[Kitchen remodel in Monterey: describe the photo]" width="1200" height="800" loading="lazy">
+          <span class="kc-gallery__cap"><strong>Kitchen remodel</strong>Monterey</span>
+        </button>
+        <button class="kc-gallery__item" type="button" data-cat="outdoor">
+          <img src="{{img:Wood fence}}" alt="[Wood fence in Pacific Grove: describe the photo]" width="1200" height="800" loading="lazy">
+          <span class="kc-gallery__cap"><strong>Wood fence</strong>Pacific Grove</span>
+        </button>
+        <button class="kc-gallery__item" type="button" data-cat="adu">
+          <img src="{{img:Garage conversion}}" alt="[Garage conversion in Seaside: describe the photo]" width="1200" height="800" loading="lazy">
+          <span class="kc-gallery__cap"><strong>Garage conversion</strong>Seaside</span>
+        </button>
+        <button class="kc-gallery__item" type="button" data-cat="flooring">
+          <img src="{{img:Tile flooring}}" alt="[Tile flooring in Pebble Beach: describe the photo]" width="1200" height="800" loading="lazy">
+          <span class="kc-gallery__cap"><strong>Tile flooring</strong>Pebble Beach</span>
+        </button>
+        <button class="kc-gallery__item" type="button" data-cat="bathroom">
+          <img src="{{img:Walk-in shower}}" alt="[Walk-in shower in Monterey: describe the photo]" width="1200" height="800" loading="lazy">
+          <span class="kc-gallery__cap"><strong>Walk-in shower</strong>Monterey</span>
+        </button>
+        <button class="kc-gallery__item" type="button" data-cat="remodeling">
+          <img src="{{img:Whole-home remodel}}" alt="[Whole-home remodel in Carmel-by-the-Sea: describe the photo]" width="1200" height="800" loading="lazy">
+          <span class="kc-gallery__cap"><strong>Whole-home remodel</strong>Carmel-by-the-Sea</span>
+        </button>
+        <button class="kc-gallery__item" type="button" data-cat="outdoor">
+          <img src="{{img:Paver patio}}" alt="[Paver patio in Monterey: describe the photo]" width="1200" height="800" loading="lazy">
+          <span class="kc-gallery__cap"><strong>Paver patio</strong>Monterey</span>
+        </button>
+        <button class="kc-gallery__item" type="button" data-cat="flooring">
+          <img src="{{img:Hardwood floors}}" alt="[Hardwood floors in Pacific Grove: describe the photo]" width="1200" height="800" loading="lazy">
+          <span class="kc-gallery__cap"><strong>Hardwood floors</strong>Pacific Grove</span>
+        </button>
+        <button class="kc-gallery__item" type="button" data-cat="adu">
+          <img src="{{img:Detached ADU}}" alt="[Detached ADU in Monterey: describe the photo]" width="1200" height="800" loading="lazy">
+          <span class="kc-gallery__cap"><strong>Detached ADU</strong>Monterey</span>
+        </button>
+        <button class="kc-gallery__item" type="button" data-cat="bathroom">
+          <img src="{{img:Guest bathroom}}" alt="[Guest bathroom in Seaside: describe the photo]" width="1200" height="800" loading="lazy">
+          <span class="kc-gallery__cap"><strong>Guest bathroom</strong>Seaside</span>
+        </button>
+        <button class="kc-gallery__item" type="button" data-cat="outdoor">
+          <img src="{{img:Concrete walkway}}" alt="[Concrete walkway in Carmel-by-the-Sea: describe the photo]" width="1200" height="800" loading="lazy">
+          <span class="kc-gallery__cap"><strong>Concrete walkway</strong>Carmel-by-the-Sea</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="kc-cta">
+    <div class="kc-container">
+      <div>
+        <h2 class="kc-h2">Want results like these?</h2>
+        <p>Tell us about your project and upload a few photos of the space.</p>
+      </div>
+      <div class="kc-btn-row">
+        <a class="kc-btn kc-btn--light" href="/request-an-estimate/">Request an Estimate</a>
+        <a class="kc-btn kc-btn--ghost-light" href="tel:{{phone_tel}}">{{ico:phone}} {{phone}}</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="kc-lightbox" data-kc-lightbox role="dialog" aria-modal="true" aria-label="Project photo">
+    <button class="kc-lightbox__btn kc-lightbox__close" type="button" aria-label="Close">{{ico:close}}</button>
+    <button class="kc-lightbox__btn kc-lightbox__prev" type="button" aria-label="Previous photo">{{ico:arrow}}</button>
+    <figure><img src="" alt=""><figcaption></figcaption></figure>
+    <button class="kc-lightbox__btn kc-lightbox__next" type="button" aria-label="Next photo">{{ico:arrow}}</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  // Before / after slider
+  document.querySelectorAll('[data-kc-ba]').forEach(function (ba) {
+    var input = ba.querySelector('input'), after = ba.querySelector('.kc-ba__after'), line = ba.querySelector('.kc-ba__line');
+    function set() { after.style.clipPath = 'inset(0 0 0 ' + input.value + '%)'; line.style.left = input.value + '%'; }
+    input.addEventListener('input', set); set();
+  });
+
+  // Filters
+  var gallery = document.querySelector('[data-kc-gallery]');
+  if (!gallery) return;
+  var items = Array.prototype.slice.call(gallery.querySelectorAll('.kc-gallery__item'));
+  document.querySelectorAll('.kc-filter').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var f = btn.getAttribute('data-filter');
+      document.querySelectorAll('.kc-filter').forEach(function (b) { b.setAttribute('aria-pressed', b === btn); });
+      items.forEach(function (it) { it.hidden = f !== 'all' && it.getAttribute('data-cat') !== f; });
+    });
+  });
+
+  // Lightbox
+  var lb = document.querySelector('[data-kc-lightbox]');
+  var img = lb.querySelector('img'), cap = lb.querySelector('figcaption'), idx = 0, last = null;
+  function visible() { return items.filter(function (it) { return !it.hidden; }); }
+  function show(i) {
+    var v = visible(); idx = (i + v.length) % v.length;
+    var src = v[idx].querySelector('img');
+    img.src = src.currentSrc || src.src; img.alt = src.alt;
+    cap.textContent = v[idx].querySelector('.kc-gallery__cap').textContent.replace(/\s+/g, ' ').trim();
+  }
+  function open(it) { last = it; show(visible().indexOf(it)); lb.classList.add('is-open'); lb.querySelector('.kc-lightbox__close').focus(); }
+  function close() { lb.classList.remove('is-open'); if (last) last.focus(); }
+  items.forEach(function (it) { it.addEventListener('click', function () { open(it); }); });
+  lb.querySelector('.kc-lightbox__close').addEventListener('click', close);
+  lb.querySelector('.kc-lightbox__prev').addEventListener('click', function () { show(idx - 1); });
+  lb.querySelector('.kc-lightbox__next').addEventListener('click', function () { show(idx + 1); });
+  lb.addEventListener('click', function (e) { if (e.target === lb) close(); });
+  document.addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('is-open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') show(idx - 1);
+    if (e.key === 'ArrowRight') show(idx + 1);
+  });
+})();
+</script>

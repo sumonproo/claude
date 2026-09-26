@@ -1,0 +1,93 @@
+<!-- ============================================================
+     KOVARIK CONSTRUCTION — HEADER
+     Elementor Pro: Templates > Theme Builder > Header > Add New.
+     Drop in one HTML widget, paste this whole file, set Display
+     Conditions to "Entire Site". Set the container to Full Width,
+     padding 0. For a sticky header: Container > Advanced >
+     Motion Effects > Sticky: Top.
+     ============================================================ -->
+<header class="kc kc-header">
+  <div class="kc-topbar">
+    <div class="kc-container">
+      <ul class="kc-topbar__items">
+        <li class="kc-topbar__item kc-topbar__item--license">{{ico:shield}} Licensed CA General Contractor · {{license}}</li>
+        <li class="kc-topbar__item kc-topbar__item--area">{{ico:pin}} Serving the Monterey Peninsula</li>
+      </ul>
+      <a class="kc-topbar__item" href="tel:{{phone_tel}}">{{ico:phone}} {{phone}}</a>
+    </div>
+  </div>
+
+  <div class="kc-nav">
+    <div class="kc-container">
+      <a class="kc-logo" href="/" aria-label="{{name}} home">
+        <!-- Replace the two spans below with <img src="YOUR-LOGO-URL" alt="{{name}}"> when the logo is ready -->
+        <span class="kc-logo__mark" aria-hidden="true">K</span>
+        <span class="kc-logo__text">
+          <span class="kc-logo__name">Kovarik Construction</span>
+          <span class="kc-logo__sub">Inc. · Monterey, CA</span>
+        </span>
+      </a>
+
+      <nav aria-label="Main">
+        <ul class="kc-menu">
+          <li>
+            <a class="kc-menu__link" href="/services/">Services {{ico:chev}}</a>
+            <div class="kc-dropdown">
+              <a href="/general-remodeling/">{{ico:wrench}} General Remodeling</a>
+              <a href="/bathroom-remodeling/">{{ico:bath}} Bathroom Remodeling</a>
+              <a href="/adu-garage-conversions/">{{ico:adu}} ADUs &amp; Garage Conversions</a>
+              <a href="/flooring-tile/">{{ico:tile}} Flooring &amp; Tile</a>
+              <a href="/outdoor-improvements/">{{ico:fence}} Outdoor Improvements</a>
+            </div>
+          </li>
+          <li><a class="kc-menu__link" href="/projects/">Projects</a></li>
+          <li><a class="kc-menu__link" href="/monterey-peninsula-service-area/">Service Area</a></li>
+          <li><a class="kc-menu__link" href="/about/">About</a></li>
+          <li><a class="kc-menu__link" href="/contact/">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="kc-nav__cta">
+        <a class="kc-nav__phone" href="tel:{{phone_tel}}">{{ico:phone}} {{phone}}</a>
+        <a class="kc-btn kc-btn--primary kc-btn--sm" href="/request-an-estimate/">Request an Estimate</a>
+        <button class="kc-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="kc-mobile-menu" data-kc-burger>{{ico:menu}}</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="kc-mobile-menu" id="kc-mobile-menu">
+    <nav aria-label="Mobile">
+      <a href="/services/">Services</a>
+      <div class="kc-sub">
+        <a href="/general-remodeling/">General Remodeling</a>
+        <a href="/bathroom-remodeling/">Bathroom Remodeling</a>
+        <a href="/adu-garage-conversions/">ADUs &amp; Garage Conversions</a>
+        <a href="/flooring-tile/">Flooring &amp; Tile</a>
+        <a href="/outdoor-improvements/">Outdoor Improvements</a>
+      </div>
+      <a href="/projects/">Projects</a>
+      <a href="/monterey-peninsula-service-area/">Service Area</a>
+      <a href="/about/">About</a>
+      <a href="/contact/">Contact</a>
+      <a class="kc-btn kc-btn--primary" href="/request-an-estimate/">Request an Estimate</a>
+    </nav>
+  </div>
+</header>
+<script>
+(function () {
+  var btn = document.querySelector('[data-kc-burger]');
+  var menu = document.getElementById('kc-mobile-menu');
+  if (!btn || !menu) return;
+  btn.addEventListener('click', function () {
+    var open = menu.classList.toggle('is-open');
+    btn.setAttribute('aria-expanded', open);
+    btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+  // Highlight the current page in the menu
+  var here = location.pathname.replace(/index\.html$/, '');
+  document.querySelectorAll('.kc-menu__link').forEach(function (a) {
+    var p = a.getAttribute('href');
+    if (p && p !== '/' && here.indexOf(p.replace(/\.html$/, '')) !== -1) a.setAttribute('aria-current', 'page');
+  });
+})();
+</script>

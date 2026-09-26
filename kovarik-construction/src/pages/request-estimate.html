@@ -1,0 +1,187 @@
+<!-- ============================================================
+     REQUEST AN ESTIMATE  (slug: /request-an-estimate/)
+     Template "Elementor Full Width" · one HTML widget · paste this file.
+
+     FORM — pick one:
+     A) Recommended: replace the <form> ... </form> block below with the
+        Elementor Pro "Form" widget (fields listed in README), give that
+        widget the CSS class  kc-elementor-form , turn on reCAPTCHA v3 and
+        set Actions After Submit: Email + Redirect to /thank-you/.
+     B) Keep this HTML form and set form_action in site.config.json to a
+        form service endpoint (e.g. Formspree) that emails the business.
+     ============================================================ -->
+<div class="kc">
+
+  <section class="kc-pagehead">
+    <div class="kc-container">
+      <nav class="kc-crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>Request an Estimate</span></nav>
+      <h1 class="kc-h1">Request an estimate</h1>
+      <p class="kc-lead">Tell us about your project and send a few photos. The more we know up front, the more useful our first conversation will be.</p>
+    </div>
+  </section>
+
+  <section class="kc-section kc-section--soft">
+    <div class="kc-container kc-split kc-split--wide" style="align-items:start">
+
+      <div class="kc-form-card">
+        <form class="kc-form" action="{{form_action}}" method="POST" enctype="multipart/form-data" data-kc-form>
+
+          <fieldset>
+            <legend><span>1</span> Your contact details</legend>
+            <div class="kc-field">
+              <label for="kc-name">Full name <em>*</em></label>
+              <input id="kc-name" name="name" type="text" autocomplete="name" required>
+            </div>
+            <div class="kc-field">
+              <label for="kc-email">Email address <em>*</em></label>
+              <input id="kc-email" name="email" type="email" autocomplete="email" required>
+            </div>
+            <div class="kc-field">
+              <label for="kc-phone">Phone number <em>*</em></label>
+              <input id="kc-phone" name="phone" type="tel" autocomplete="tel" required>
+            </div>
+            <div class="kc-field">
+              <label for="kc-address">Property address <em>*</em></label>
+              <input id="kc-address" name="property_address" type="text" autocomplete="street-address" placeholder="Street, city" required>
+            </div>
+            <div class="kc-field kc-field--full">
+              <span class="kc-label" id="kc-contact-label">Preferred contact method</span>
+              <div class="kc-radios" role="radiogroup" aria-labelledby="kc-contact-label">
+                <label><input type="radio" name="contact_method" value="Phone call" checked> Phone call</label>
+                <label><input type="radio" name="contact_method" value="Text message"> Text message</label>
+                <label><input type="radio" name="contact_method" value="Email"> Email</label>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend><span>2</span> Your project</legend>
+            <div class="kc-field">
+              <label for="kc-type">Project type <em>*</em></label>
+              <select id="kc-type" name="project_type" required>
+                <option value="">Select one…</option>
+                <option>General / whole-home remodeling</option>
+                <option>Kitchen remodeling</option>
+                <option>Bathroom remodeling</option>
+                <option>ADU or garage conversion</option>
+                <option>Flooring</option>
+                <option>Tile</option>
+                <option>Fence or exterior carpentry</option>
+                <option>Concrete, pavers or hardscape</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="kc-field">
+              <label for="kc-budget">Approximate budget</label>
+              <select id="kc-budget" name="budget">
+                <option value="">Select a range…</option>
+                <option>Under $10,000</option>
+                <option>$10,000 – $25,000</option>
+                <option>$25,000 – $50,000</option>
+                <option>$50,000 – $100,000</option>
+                <option>$100,000 – $250,000</option>
+                <option>$250,000+</option>
+                <option>Not sure yet</option>
+              </select>
+            </div>
+            <div class="kc-field kc-field--full">
+              <label for="kc-timeline">Preferred start timeline</label>
+              <select id="kc-timeline" name="timeline">
+                <option value="">Select one…</option>
+                <option>As soon as possible</option>
+                <option>Within 1–3 months</option>
+                <option>In 3–6 months</option>
+                <option>6+ months from now</option>
+                <option>Just planning / flexible</option>
+              </select>
+            </div>
+            <div class="kc-field kc-field--full">
+              <label for="kc-desc">Project description <em>*</em></label>
+              <textarea id="kc-desc" name="description" placeholder="What would you like done? Rough size of the space, materials you have in mind, anything we should know." required></textarea>
+            </div>
+            <div class="kc-field kc-field--full">
+              <span class="kc-label">Photos or plans (optional)</span>
+              <label class="kc-upload" data-kc-upload style="position:relative">
+                {{ico:upload}}
+                <strong>Click to upload or drag photos here</strong>
+                <span class="kc-muted" style="font-size:14px">JPG, PNG, HEIC or PDF · up to 10 files</span>
+                <span class="kc-upload__files" aria-live="polite"></span>
+                <input type="file" name="attachments" multiple accept="image/*,.pdf,.heic">
+              </label>
+            </div>
+          </fieldset>
+
+          <!-- Spam trap: real visitors never see or fill this field -->
+          <div class="kc-hp" aria-hidden="true">
+            <label>Leave this empty <input type="text" name="_gotcha" tabindex="-1" autocomplete="off"></label>
+          </div>
+
+          <label class="kc-consent">
+            <input type="checkbox" name="consent" value="yes" required>
+            <span>I agree that {{short_name}} may contact me about this request by phone, text or email. See our <a href="/privacy-policy/">Privacy Policy</a>.</span>
+          </label>
+
+          <div class="kc-form__msg" role="status" data-kc-form-msg></div>
+
+          <div class="kc-form__submit">
+            <button class="kc-btn kc-btn--primary" type="submit">Send My Request {{ico:arrow}}</button>
+            <span class="kc-form__note">Prefer to talk? Call <a href="tel:{{phone_tel}}">{{phone}}</a></span>
+          </div>
+        </form>
+      </div>
+
+      <aside class="kc-aside">
+        <h2 class="kc-h3">What happens next</h2>
+        <ol class="kc-steps-mini" style="list-style:none;margin:18px 0 0;padding:0">
+          <li><b>1</b><div><strong>We review your request</strong>We look over your details and photos.</div></li>
+          <li><b>2</b><div><strong>We get in touch</strong>We reach out by your preferred method to talk it through.</div></li>
+          <li><b>3</b><div><strong>Site visit</strong>If it is a good fit, we schedule a visit to see the space.</div></li>
+          <li><b>4</b><div><strong>Written estimate</strong>You receive a clear scope and price for your project.</div></li>
+        </ol>
+        <div class="kc-aside__call">
+          <span>Questions? Call us</span><br>
+          <a class="kc-bigphone" href="tel:{{phone_tel}}">{{ico:phone}} {{phone}}</a>
+          <p style="margin-top:14px;font-size:14px">{{hours}}<br>{{name}} · {{license}}</p>
+        </div>
+      </aside>
+
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function () {
+  var form = document.querySelector('[data-kc-form]');
+  if (!form) return;
+  var drop = form.querySelector('[data-kc-upload]');
+  var input = drop.querySelector('input[type=file]');
+  var list = drop.querySelector('.kc-upload__files');
+  var msg = form.querySelector('[data-kc-form-msg]');
+
+  function showFiles() {
+    var n = input.files.length;
+    list.textContent = n ? n + (n === 1 ? ' file selected: ' : ' files selected: ') +
+      Array.prototype.map.call(input.files, function (f) { return f.name; }).join(', ') : '';
+  }
+  input.addEventListener('change', showFiles);
+  ['dragenter', 'dragover'].forEach(function (e) { drop.addEventListener(e, function (ev) { ev.preventDefault(); drop.classList.add('is-drag'); }); });
+  ['dragleave', 'drop'].forEach(function (e) { drop.addEventListener(e, function () { drop.classList.remove('is-drag'); }); });
+  drop.addEventListener('drop', function (ev) { ev.preventDefault(); input.files = ev.dataTransfer.files; showFiles(); });
+
+  form.addEventListener('submit', function (ev) {
+    if (input.files.length > 10) {
+      ev.preventDefault();
+      msg.textContent = 'Please choose up to 10 files.';
+      msg.classList.add('is-visible');
+      return;
+    }
+    // Not connected to a form service yet (form_action is "#")
+    if (form.getAttribute('action') === '#') {
+      ev.preventDefault();
+      msg.textContent = 'This form is not connected yet. Please call {{phone}} or email {{email}}.';
+      msg.classList.add('is-visible');
+    }
+  });
+})();
+</script>

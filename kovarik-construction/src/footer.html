@@ -1,0 +1,73 @@
+<!-- ============================================================
+     KOVARIK CONSTRUCTION — FOOTER
+     Elementor Pro: Templates > Theme Builder > Footer > Add New.
+     One HTML widget, paste this file, Display Conditions "Entire Site".
+     Container: Full Width, padding 0.
+     ============================================================ -->
+<footer class="kc kc-footer">
+  <div class="kc-container kc-footer__main">
+    <div>
+      <a class="kc-logo" href="/" aria-label="{{name}} home">
+        <span class="kc-logo__mark" aria-hidden="true">K</span>
+        <span class="kc-logo__text">
+          <span class="kc-logo__name">Kovarik Construction</span>
+          <span class="kc-logo__sub">Inc. · Monterey, CA</span>
+        </span>
+      </a>
+      <p class="kc-footer__about">Remodeling and general construction for homeowners in Monterey, Carmel, Pacific Grove, Pebble Beach and Seaside.</p>
+      <span class="kc-footer__license">{{ico:shield}} {{license}}</span>
+      <!-- Social links: add Facebook / Instagram / Yelp / Google links here once the profiles are live -->
+    </div>
+
+    <div>
+      <p class="kc-footer__title">Services</p>
+      <ul class="kc-footer__links">
+        <li><a href="/general-remodeling/">General Remodeling</a></li>
+        <li><a href="/bathroom-remodeling/">Bathroom Remodeling</a></li>
+        <li><a href="/adu-garage-conversions/">ADUs &amp; Garage Conversions</a></li>
+        <li><a href="/flooring-tile/">Flooring &amp; Tile</a></li>
+        <li><a href="/outdoor-improvements/">Outdoor Improvements</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="kc-footer__title">Company</p>
+      <ul class="kc-footer__links">
+        <li><a href="/about/">About Us</a></li>
+        <li><a href="/projects/">Projects</a></li>
+        <li><a href="/monterey-peninsula-service-area/">Service Area</a></li>
+        <li><a href="/request-an-estimate/">Request an Estimate</a></li>
+        <li><a href="/contact/">Contact</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="kc-footer__title">Get in Touch</p>
+      <ul class="kc-footer__contact">
+        <li>{{ico:phone}} <a href="tel:{{phone_tel}}">{{phone}}</a></li>
+        <li>{{ico:mail}} <a href="mailto:{{email}}">{{email}}</a></li>
+        <li>{{ico:clock}} <span>{{hours}}</span></li>
+        <li>{{ico:pin}} <span>Monterey, Carmel, Pacific Grove, Pebble Beach &amp; Seaside, CA</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="kc-footer__bottom">
+    <div class="kc-container">
+      <span>© <span data-kc-year>{{year}}</span> {{name}} · California {{license}}</span>
+      <nav aria-label="Legal">
+        <a href="/privacy-policy/">Privacy Policy</a>
+        <a href="/terms/">Terms</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Click-to-call bar, shows on phones only -->
+  <div class="kc-mobilebar">
+    <a href="tel:{{phone_tel}}">{{ico:phone}} Call Now</a>
+    <a href="/request-an-estimate/">{{ico:file}} Get an Estimate</a>
+  </div>
+</footer>
+<script>
+document.querySelectorAll('[data-kc-year]').forEach(function (el) { el.textContent = new Date().getFullYear(); });
+</script>

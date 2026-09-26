@@ -1,0 +1,16 @@
+{
+  "_note": "Business facts used on every page. Edit here, then run: python3 build.py",
+  "name": "Kovarik Construction Inc.",
+  "short_name": "Kovarik Construction",
+  "license": "CSLB #1147953",
+  "license_number": "1147953",
+  "website": "https://kovarikconstruction.com",
+  "phone": "(831) 555-0100",
+  "phone_tel": "+18315550100",
+  "email": "info@kovarikconstruction.com",
+  "address": "Monterey, CA",
+  "hours": "Mon–Fri, 7:00 am – 5:00 pm",
+  "region": "Monterey Peninsula, California",
+  "form_action": "#",
+  "_placeholders": ["phone", "phone_tel", "email", "address", "hours"]
+}
