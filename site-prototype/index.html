@@ -1,0 +1,980 @@
+<title>Open Studio Collective</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a gallery wall. Generous white space, artworks hung in uneven grids, each with a museum wall label in mono beneath it. */
+:root {
+  --paper: #f4f5f7;
+  --surface: #ffffff;
+  --ink: #14161b;
+  --muted: #565c6b;
+  --line: #dcdfe6;
+  --accent: #2236c4;      /* ultramarine */
+  --accent-ink: #ffffff;
+  --wash: #e7eafb;
+  --focus: #2236c4;
+  --danger: #b3261e;
+  --ok: #1d6b45;
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --radius: 6px;
+  --gutter: clamp(16px, 4vw, 48px);
+  --max: 1240px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0f1116; --surface: #171a21; --ink: #eceef3; --muted: #a2a8b8; --line: #2a2f3a;
+    --accent: #95a2ff; --accent-ink: #0b0e2a; --wash: #1b2042; --focus: #95a2ff; --danger: #ff8a80; --ok: #7fd3a6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0f1116; --surface: #171a21; --ink: #eceef3; --muted: #a2a8b8; --line: #2a2f3a;
+  --accent: #95a2ff; --accent-ink: #0b0e2a; --wash: #1b2042; --focus: #95a2ff; --danger: #ff8a80; --ok: #7fd3a6;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.6 var(--body); -webkit-font-smoothing: antialiased; }
+img, canvas { max-width: 100%; display: block; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.08; margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+h1 { font-size: clamp(38px, 5.2vw, 64px); font-weight: 800; }
+h2 { font-size: clamp(26px, 3.2vw, 40px); font-weight: 600; }
+h3 { font-size: 21px; font-weight: 600; }
+p { margin: 0; }
+.wrap { max-width: var(--max); margin: 0 auto; padding-inline: var(--gutter); }
+.label { font: 500 12px/1.4 var(--mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.lede { font-size: clamp(18px, 1.6vw, 21px); color: var(--muted); max-width: 58ch; }
+.sr-only { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.skip { position: absolute; left: 16px; top: -60px; z-index: 50; background: var(--accent); color: var(--accent-ink); padding: 10px 16px; border-radius: var(--radius); text-decoration: none; font-weight: 700; }
+.skip:focus { top: 12px; }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 22px; border-radius: 999px; border: 2px solid var(--ink); background: transparent; color: var(--ink); font: 700 16px/1 var(--body); text-decoration: none; cursor: pointer; transition: background .15s, color .15s, transform .15s; }
+.btn:hover { background: var(--ink); color: var(--paper); }
+.btn--primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn--primary:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.btn--small { min-height: 40px; padding: 0 16px; font-size: 15px; }
+.btn[disabled] { opacity: .45; cursor: not-allowed; }
+.link { color: var(--accent); font-weight: 700; text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.arrow::after { content: "→"; margin-left: 6px; transition: transform .15s; display: inline-block; }
+.arrow:hover::after { transform: translateX(3px); }
+
+/* Header */
+.site-header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 72px; }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; font: 800 20px/1 var(--display); letter-spacing: -0.02em; }
+.brand-mark { width: 30px; height: 30px; border-radius: 50%; background: conic-gradient(from 210deg, #2236c4, #e0a526, #c2412d, #1f7a63, #2236c4); }
+.nav { display: flex; align-items: center; gap: 4px; }
+.nav a { padding: 10px 14px; border-radius: 999px; text-decoration: none; font-weight: 700; color: var(--muted); }
+.nav a:hover { color: var(--ink); background: var(--wash); }
+.nav a[aria-current="page"] { color: var(--ink); background: var(--wash); }
+.nav .btn { margin-left: 8px; color: var(--accent-ink); }
+.nav .btn:hover { color: var(--paper); background: var(--ink); }
+.header-tools { display: flex; align-items: center; gap: 8px; }
+.icon-btn { width: 44px; height: 44px; display: inline-grid; place-items: center; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.icon-btn svg { width: 20px; height: 20px; }
+.menu-btn { display: none; }
+@media (max-width: 880px) {
+  .menu-btn { display: inline-grid; }
+  .nav { position: absolute; left: 0; right: 0; top: 100%; flex-direction: column; align-items: stretch; padding: 12px var(--gutter) 20px; background: var(--paper); border-bottom: 1px solid var(--line); }
+  .nav[hidden] { display: none !important; }
+  .nav a { padding: 14px 12px; font-size: 18px; }
+  .nav .btn { margin: 8px 0 0; }
+}
+@media (min-width: 881px) { .nav[hidden] { display: flex !important; } }
+
+main { display: block; min-height: 70vh; }
+main:focus { outline: none; }
+section { padding-block: clamp(48px, 8vw, 104px); }
+.section-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 16px 32px; margin-bottom: 32px; }
+.section-head > div { display: grid; gap: 10px; min-width: 0; }
+
+/* Artwork tiles */
+.art { position: relative; overflow: hidden; border-radius: var(--radius); background: var(--line); aspect-ratio: var(--ratio, 4 / 5); }
+.art canvas { width: 100%; height: 100%; }
+.wall-label { display: grid; gap: 2px; padding-top: 12px; }
+.wall-label strong { font: 600 19px/1.25 var(--display); }
+
+/* Home hero */
+.hero { padding-block: clamp(32px, 6vw, 72px) clamp(48px, 7vw, 88px); }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); align-items: center; }
+.hero-copy { display: grid; gap: 24px; }
+.hero-copy h1 em { font-style: normal; color: var(--accent); }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.hero-stats { display: flex; flex-wrap: wrap; gap: 28px; padding-top: 8px; border-top: 1px solid var(--line); margin-top: 8px; }
+.hero-stats div { display: grid; padding-top: 16px; }
+.hero-stats b { font: 800 30px/1 var(--display); font-variant-numeric: tabular-nums; }
+.hang { display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(6, 64px); gap: 12px; }
+.hang a { display: block; border-radius: var(--radius); overflow: hidden; transition: transform .25s ease; }
+.hang a:hover { transform: translateY(-4px); }
+.hang a .art { height: 100%; aspect-ratio: auto; }
+.hang a:nth-child(1) { grid-column: 1 / 4; grid-row: 1 / 5; }
+.hang a:nth-child(2) { grid-column: 4 / 7; grid-row: 1 / 3; }
+.hang a:nth-child(3) { grid-column: 4 / 6; grid-row: 3 / 7; }
+.hang a:nth-child(4) { grid-column: 1 / 4; grid-row: 5 / 7; }
+.hang a:nth-child(5) { grid-column: 6 / 7; grid-row: 3 / 7; }
+@media (max-width: 880px) {
+  .hero .wrap { grid-template-columns: 1fr; }
+  .hang { grid-template-rows: repeat(6, 44px); }
+}
+
+/* Artist cards */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 40px 24px; }
+.card { display: grid; text-decoration: none; color: inherit; }
+.card .art { transition: transform .3s ease; }
+.card:hover .art { transform: scale(1.015); }
+.card:hover strong { color: var(--accent); }
+.badge { display: inline-flex; align-items: center; gap: 6px; font: 500 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .06em; padding: 6px 10px; border-radius: 999px; background: var(--wash); color: var(--ink); }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--pig); flex: none; }
+.featured-flag { position: absolute; top: 12px; left: 12px; background: var(--surface); color: var(--ink); }
+
+/* Directory filters */
+.page-head { padding-block: clamp(40px, 6vw, 72px) 24px; display: grid; gap: 14px; }
+.filters { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 73px); z-index: 10; background: var(--paper); border-block: 1px solid var(--line); padding-block: 16px; }
+.filters form { display: grid; grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr)); gap: 12px; align-items: end; }
+.field { display: grid; gap: 6px; min-width: 0; }
+.field label, .field legend { font-weight: 700; font-size: 15px; }
+.input, select.input, textarea.input { width: 100%; min-height: 48px; padding: 10px 14px; border: 1.5px solid var(--line); border-radius: var(--radius); background: var(--surface); color: var(--ink); font: 400 16px/1.4 var(--body); }
+.input:hover { border-color: var(--muted); }
+.input:focus-visible { outline: 3px solid var(--focus); outline-offset: 1px; border-color: var(--focus); }
+.search-wrap { position: relative; }
+.search-wrap svg { position: absolute; left: 14px; top: 50%; translate: 0 -50%; width: 18px; height: 18px; color: var(--muted); pointer-events: none; }
+.search-wrap .input { padding-left: 42px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.chip { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); font: 700 15px/1 var(--body); cursor: pointer; }
+.chip:hover { border-color: var(--muted); }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.results-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-block: 24px; }
+.results-bar p { font-weight: 700; }
+.empty { display: grid; justify-items: start; gap: 14px; padding: 48px; border: 1.5px dashed var(--line); border-radius: var(--radius); }
+.more { display: flex; flex-direction: column; align-items: center; gap: 10px; padding-top: 48px; }
+@media (max-width: 880px) {
+  .filters { position: static; }
+  .filters form { grid-template-columns: 1fr 1fr; }
+  .filters .field--search { grid-column: 1 / -1; }
+}
+@media (max-width: 480px) { .filters form { grid-template-columns: 1fr; } }
+
+/* Artist profile */
+.profile { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); padding-block: clamp(32px, 5vw, 64px); align-items: start; }
+.profile-info { display: grid; gap: 22px; position: sticky; top: 110px; }
+.crumbs { display: flex; gap: 8px; font-size: 15px; color: var(--muted); }
+.crumbs a { color: var(--muted); }
+.meta-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.bio { display: grid; gap: 14px; max-width: 60ch; font-size: 18px; }
+.links { display: flex; flex-wrap: wrap; gap: 10px; }
+.gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.gallery button { padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: var(--radius); }
+.gallery button:first-child { grid-column: 1 / -1; }
+.gallery button:first-child .art { --ratio: 4 / 3; }
+.gallery .art { --ratio: 1; }
+@media (max-width: 880px) { .profile { grid-template-columns: 1fr; } .profile-info { position: static; } }
+
+/* Event rows */
+.event-list { display: grid; border-top: 1px solid var(--line); }
+.event-row { display: grid; grid-template-columns: 88px minmax(0, 1fr) auto; gap: 20px; align-items: center; padding-block: 20px; border-bottom: 1px solid var(--line); text-decoration: none; color: inherit; }
+.event-row:hover h3 { color: var(--accent); }
+.datebox { display: grid; justify-items: center; align-content: center; width: 88px; height: 88px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+.datebox .m { font: 500 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--accent); }
+.datebox .d { font: 800 34px/1.05 var(--display); }
+.datebox .w { font: 400 12px/1 var(--mono); color: var(--muted); }
+.event-row .info { display: grid; gap: 6px; min-width: 0; }
+.event-row .where { color: var(--muted); }
+.tag-past { opacity: .62; }
+@media (max-width: 600px) {
+  .event-row { grid-template-columns: 72px minmax(0, 1fr); }
+  .event-row .btn { display: none; }
+  .datebox { width: 72px; height: 72px; }
+  .datebox .d { font-size: 28px; }
+}
+
+/* Calendar */
+.cal-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding-block: 24px; }
+.cal-nav { display: flex; align-items: center; gap: 8px; }
+.cal-nav h2 { min-width: 9ch; text-align: center; font-size: clamp(24px, 3vw, 34px); }
+.segmented { display: inline-flex; padding: 4px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); }
+.segmented button { min-height: 40px; padding: 0 18px; border: 0; border-radius: 999px; background: transparent; color: var(--muted); font: 700 15px/1 var(--body); cursor: pointer; }
+.segmented button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.cal { width: 100%; border-collapse: collapse; table-layout: fixed; background: var(--surface); border-radius: var(--radius); overflow: hidden; }
+.cal th { padding: 12px 8px; font: 500 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); text-align: left; border-bottom: 1px solid var(--line); }
+.cal td { height: 128px; padding: 8px; vertical-align: top; border: 1px solid var(--line); overflow: hidden; }
+.cal td.out { background: var(--paper); }
+.cal .num { display: inline-grid; place-items: center; min-width: 30px; height: 30px; font: 500 14px/1 var(--mono); font-variant-numeric: tabular-nums; border-radius: 50%; }
+.cal .today .num { background: var(--accent); color: var(--accent-ink); }
+.cal .past .num { color: var(--muted); }
+.cal .wd { display: none; }
+.cal ul { list-style: none; margin: 6px 0 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 4px; }
+.cal li { min-width: 0; }
+.cal li a { display: block; padding: 5px 8px; border-radius: 4px; background: var(--wash); border-left: 3px solid var(--pig); text-decoration: none; font-size: 14px; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cal li a:hover { background: var(--ink); color: var(--paper); }
+.cal li .t { font: 500 12px/1 var(--mono); margin-right: 4px; }
+.cal li.cont a { opacity: .7; }
+@media (max-width: 760px) {
+  .cal, .cal tbody, .cal tr, .cal td { display: block; width: 100%; }
+  .cal thead { display: none; }
+  .cal td { height: auto; border-width: 0 0 1px; padding: 14px 4px; }
+  .cal td:not(.has) { display: none; }
+  .cal .wd { display: inline; font-weight: 700; margin-left: 8px; }
+  .cal li a { white-space: normal; padding: 10px 12px; font-size: 16px; }
+}
+
+/* Event page */
+.event-hero { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); padding-block: clamp(32px, 5vw, 64px); align-items: start; }
+.event-hero .art { --ratio: 16 / 10; }
+.ticket { display: grid; gap: 20px; padding: 28px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.ticket dl { display: grid; gap: 16px; margin: 0; }
+.ticket dt { font: 500 12px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.ticket dd { margin: 2px 0 0; font-size: 18px; font-weight: 700; }
+.ticket .actions { display: grid; gap: 10px; }
+.status { display: inline-flex; align-self: start; gap: 6px; align-items: center; font: 500 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .08em; padding: 8px 12px; border-radius: 999px; background: var(--wash); }
+@media (max-width: 880px) { .event-hero { grid-template-columns: 1fr; } }
+
+/* Mission band */
+.band { background: var(--ink); color: var(--paper); }
+.band .wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; }
+.band .lede { color: color-mix(in srgb, var(--paper) 75%, transparent); }
+.band .btn { border-color: var(--paper); color: var(--paper); }
+.band .btn:hover { background: var(--paper); color: var(--ink); }
+.pillars { display: grid; gap: 24px; }
+.pillars div { display: grid; gap: 6px; padding-top: 18px; border-top: 1px solid color-mix(in srgb, var(--paper) 25%, transparent); }
+.pillars .label { color: color-mix(in srgb, var(--paper) 65%, transparent); }
+@media (max-width: 880px) { .band .wrap { grid-template-columns: 1fr; } }
+
+/* Form */
+.form-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: clamp(32px, 5vw, 72px); padding-block: clamp(32px, 5vw, 64px); align-items: start; }
+.steps { display: grid; gap: 20px; counter-reset: s; list-style: none; padding: 0; margin: 8px 0 0; }
+.steps li { display: grid; grid-template-columns: 40px 1fr; gap: 14px; }
+.steps li::before { counter-increment: s; content: counter(s); display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid var(--ink); font: 500 15px/1 var(--mono); }
+.form-card { display: grid; gap: 22px; padding: clamp(20px, 4vw, 36px); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.hint { font-size: 14px; color: var(--muted); }
+.error { font-size: 14px; color: var(--danger); font-weight: 700; }
+.field.invalid .input { border-color: var(--danger); }
+fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 10px; }
+.check-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.check-grid label { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border: 1.5px solid var(--line); border-radius: 999px; cursor: pointer; font-weight: 700; font-size: 15px; }
+.check-grid input { accent-color: var(--accent); width: 18px; height: 18px; }
+.check-grid label:has(input:checked) { border-color: var(--accent); background: var(--wash); }
+.drop { display: grid; justify-items: center; gap: 8px; padding: 28px; border: 2px dashed var(--line); border-radius: var(--radius); text-align: center; cursor: pointer; }
+.drop:hover, .drop.drag { border-color: var(--accent); background: var(--wash); }
+.thumbs { display: flex; flex-wrap: wrap; gap: 8px; }
+.thumbs figure { position: relative; margin: 0; width: 84px; height: 84px; }
+.thumbs img { width: 84px; height: 84px; object-fit: cover; border-radius: 4px; }
+.thumbs button { position: absolute; top: -8px; right: -8px; width: 28px; height: 28px; border-radius: 50%; border: 0; background: var(--ink); color: var(--paper); cursor: pointer; font-size: 16px; line-height: 1; }
+.success { display: grid; gap: 16px; justify-items: start; padding: clamp(24px, 4vw, 40px); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.success .tick { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: var(--wash); color: var(--ok); }
+@media (max-width: 880px) { .form-layout { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .form-row { grid-template-columns: 1fr; } }
+
+/* Lightbox */
+dialog.lightbox { width: min(1100px, 100% - 32px); max-height: calc(100% - 32px); padding: 0; border: 0; border-radius: var(--radius); background: var(--surface); color: var(--ink); }
+dialog.lightbox::backdrop { background: rgb(5 6 10 / .82); }
+.lb-body { display: grid; gap: 0; }
+.lb-body .art { --ratio: 4 / 3; border-radius: 0; }
+.lb-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; }
+.lb-foot .ctrls { display: flex; gap: 8px; }
+
+/* Footer */
+.site-footer { border-top: 1px solid var(--line); padding-block: 56px 40px; margin-top: 40px; }
+.site-footer .wrap { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 32px; }
+.site-footer ul { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 8px; }
+.site-footer a { color: var(--muted); text-decoration: none; }
+.site-footer a:hover { color: var(--ink); text-decoration: underline; }
+.newsletter { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.newsletter .input { flex: 1 1 200px; }
+.fine { grid-column: 1 / -1; padding-top: 24px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 14px; }
+@media (max-width: 880px) { .site-footer .wrap { grid-template-columns: 1fr 1fr; } .site-footer .about-col { grid-column: 1 / -1; } }
+
+.toast { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 24px); translate: -50% 0; background: var(--ink); color: var(--paper); padding: 12px 20px; border-radius: 999px; font-weight: 700; z-index: 60; }
+
+.fade-in { animation: fade .35s ease both; }
+@keyframes fade { from { opacity: .001; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="#home" aria-label="Open Studio Collective, home"><span class="brand-mark" aria-hidden="true"></span>Open Studio</a>
+    <div class="header-tools">
+      <nav class="nav" id="nav" aria-label="Main" hidden>
+        <a href="#artists" data-nav="artists">Artists</a>
+        <a href="#events" data-nav="events">Events</a>
+        <a href="#about" data-nav="about">About</a>
+        <a class="btn btn--primary btn--small" href="#submit" data-nav="submit">Submit your work</a>
+      </nav>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="Switch to dark theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <button class="icon-btn menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="nav" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main" tabindex="-1"></main>
+<p class="sr-only" id="announcer" aria-live="polite"></p>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="about-col">
+      <a class="brand" href="#home"><span class="brand-mark" aria-hidden="true"></span>Open Studio</a>
+      <p class="hint" style="margin-top:12px;max-width:38ch">A nonprofit collective connecting the region's working artists with the people who live here.</p>
+      <form class="newsletter" id="newsletter">
+        <label class="sr-only" for="nl-email">Email for the monthly newsletter</label>
+        <input class="input" id="nl-email" type="email" placeholder="you@example.com" required>
+        <button class="btn btn--small" type="submit">Get the monthly</button>
+      </form>
+    </div>
+    <div><p class="label">Explore</p><ul><li><a href="#artists">Artist directory</a></li><li><a href="#events">Events calendar</a></li><li><a href="#submit">Submit your work</a></li></ul></div>
+    <div><p class="label">Organization</p><ul><li><a href="#about">Mission</a></li><li><a href="#about">Visit us</a></li><li><span class="hint">Shop (coming soon)</span></li></ul></div>
+    <div><p class="label">Visit</p><ul><li>120 Main Street</li><li>Wed–Sun, 11–6</li><li>Step-free access</li></ul></div>
+    <div class="fine"><span>© <span id="year"></span> Open Studio Collective. Prototype with demo content.</span><span>Artist names and works are examples.</span></div>
+  </div>
+</footer>
+
+<dialog class="lightbox" id="lightbox" aria-label="Artwork viewer">
+  <div class="lb-body">
+    <div class="art" id="lb-art"></div>
+    <div class="lb-foot">
+      <div class="wall-label" style="padding:0"><strong id="lb-title"></strong><span class="label" id="lb-meta"></span></div>
+      <div class="ctrls">
+        <button class="icon-btn" type="button" id="lb-prev" aria-label="Previous artwork">←</button>
+        <button class="icon-btn" type="button" id="lb-next" aria-label="Next artwork">→</button>
+        <button class="icon-btn" type="button" id="lb-close" aria-label="Close viewer">✕</button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- Data (mirrors `wp ade seed`) ---------- */
+  var DISCIPLINES = {
+    painting:    { name: 'Painting',    pig: '#c2412d', medium: 'Oil on linen' },
+    sculpture:   { name: 'Sculpture',   pig: '#6b7280', medium: 'Steel and reclaimed oak' },
+    photography: { name: 'Photography', pig: '#1f7a63', medium: 'Archival pigment print' },
+    music:       { name: 'Music',       pig: '#2236c4', medium: 'Live performance' },
+    dance:       { name: 'Dance',       pig: '#b4469b', medium: 'Site-specific performance' },
+    ceramics:    { name: 'Ceramics',    pig: '#c58b1b', medium: 'Wood-fired stoneware' }
+  };
+  var LOCATIONS = { downtown: 'Downtown', riverside: 'Riverside', northside: 'Northside', harbor: 'Harbor District' };
+  var A = function (slug, name, disc, loc, featured, handle, bio, added) {
+    return { slug: slug, name: name, disc: disc, loc: loc, featured: featured, handle: handle, bio: bio, added: added };
+  };
+  var ARTISTS = [
+    A('maya-okafor', 'Maya Okafor', ['painting'], 'downtown', true, 'mayaokafor', 'Large-scale oil paintings about migration, memory and the colors of West African textiles. Maya builds each canvas over months, scraping back layers until the cloth patterns of her grandmother’s market stall show through.', 12),
+    A('lucas-brennan', 'Lucas Brennan', ['sculpture'], 'riverside', false, 'lucasbrennan', 'Welded steel and reclaimed timber sculpture for public spaces and riverside parks. His benches double as sculpture and his sculptures double as places to sit.', 11),
+    A('ines-duarte', 'Ines Duarte', ['photography'], 'northside', true, 'inesduarte', 'Documentary photographer following working harbors, night shifts and the people who keep cities running. Her current series follows the 4 a.m. fish market for a full year.', 10),
+    A('theo-lindqvist', 'Theo Lindqvist', ['music'], 'harbor', false, 'theolindqvist', 'Composer and cellist blending Nordic folk melodies with ambient electronics. Theo records in churches and empty warehouses to use the room as an instrument.', 9),
+    A('amara-singh', 'Amara Singh', ['dance'], 'downtown', true, 'amarasingh', 'Contemporary dancer and choreographer rooted in Kathak, making site-specific work for libraries, stairwells and bus stations.', 8),
+    A('kenji-watanabe', 'Kenji Watanabe', ['ceramics'], 'riverside', false, 'kenjiwatanabe', 'Wood-fired stoneware and tea bowls shaped by slow kilns and river clay he digs himself each spring.', 7),
+    A('sofia-marchetti', 'Sofia Marchetti', ['painting', 'photography'], 'northside', false, 'sofiamarchetti', 'Mixed-media painter who layers her own street photography under translucent glazes, so each piece holds a city block and a mood at once.', 6),
+    A('daniel-mensah', 'Daniel Mensah', ['music', 'dance'], 'harbor', true, 'danielmensah', 'Percussionist and movement artist leading community drum-and-dance workshops for all ages. No experience needed, just comfortable shoes.', 5),
+    A('elena-petrova', 'Elena Petrova', ['sculpture', 'ceramics'], 'downtown', false, 'elenapetrova', 'Ceramic sculptor building architectural forms from hand-built porcelain slabs, some taller than she is.', 4),
+    A('omar-haddad', 'Omar Haddad', ['photography'], 'riverside', false, 'omarhaddad', 'Portrait photographer creating intimate series with musicians and makers in the places they work.', 3),
+    A('grace-whitfield', 'Grace Whitfield', ['painting'], 'northside', false, 'gracewhitfield', 'Watercolor landscapes of the northern wetlands, painted outdoors in every season, including the cold ones.', 2),
+    A('rafael-costa', 'Rafael Costa', ['music'], 'harbor', false, 'rafaelcosta', 'Jazz guitarist and bandleader, a regular at harbor venues and summer festivals for fifteen years.', 1)
+  ];
+  var VENUES = [
+    { name: 'Main Street Arts Center', addr: '120 Main Street, Downtown' },
+    { name: 'Riverside Pavilion', addr: '8 River Walk, Riverside' },
+    { name: 'Pier 4 Warehouse', addr: '4 Harbor Road, Harbor District' },
+    { name: 'Northside Chapel Hall', addr: '51 Elm Avenue, Northside' }
+  ];
+  var E = function (slug, title, offset, hour, hours, venue, artists, price, blurb) {
+    return { slug: slug, title: title, offset: offset, hour: hour, hours: hours, venue: venue, artists: artists, price: price, blurb: blurb };
+  };
+  var EVENTS_RAW = [
+    E('winter-open-studios', 'Winter Open Studios', -60, 11, 6, 0, ['maya-okafor', 'sofia-marchetti', 'grace-whitfield'], 'Free', 'Twelve studios open their doors for one afternoon. Watch work in progress and talk with the artists.'),
+    E('clay-and-fire-kiln-opening', 'Clay & Fire: Kiln Opening', -30, 14, 3, 1, ['kenji-watanabe', 'elena-petrova'], 'Free', 'After four days of firing, the anagama kiln is unbricked in front of an audience. Every pot is a surprise.'),
+    E('harbor-nights-photo-walk', 'Harbor Nights Photo Walk', -10, 19, 2, 2, ['ines-duarte', 'omar-haddad'], '$12', 'A guided walk along the working waterfront after dark. Bring any camera, including your phone.'),
+    E('cello-at-dusk', 'Cello at Dusk', 3, 19, 2, 3, ['theo-lindqvist'], '$18', 'An hour of solo cello and live electronics in the chapel’s eight-second echo.'),
+    E('rhythm-and-motion-workshop', 'Rhythm & Motion Workshop', 10, 10, 3, 0, ['amara-singh', 'daniel-mensah'], '$10, kids free', 'A family drum-and-dance morning. Instruments provided; come as you are.'),
+    E('new-paintings-opening', 'New Paintings: Opening Reception', 21, 18, 3, 1, ['maya-okafor', 'sofia-marchetti'], 'Free', 'First look at new work from two painters who share a riverside studio. Drinks from local makers.'),
+    E('riverside-sculpture-weekend', 'Riverside Sculpture Weekend', 35, 10, 56, 1, ['lucas-brennan', 'elena-petrova'], 'Free', 'Three days of large-scale sculpture along the river path, with artist talks each afternoon at 3.'),
+    E('harbor-jazz-night', 'Harbor Jazz Night', 50, 20, 3, 2, ['rafael-costa', 'daniel-mensah', 'theo-lindqvist'], '$22', 'Rafael Costa’s quartet with special guests in the old warehouse on Pier 4.')
+  ];
+  var now = new Date();
+  var EVENTS = EVENTS_RAW.map(function (e) {
+    var s = new Date(now.getFullYear(), now.getMonth(), now.getDate() + e.offset, e.hour, 0);
+    var en = new Date(s.getTime() + e.hours * 3600000);
+    return Object.assign({}, e, { start: s, end: en });
+  }).sort(function (a, b) { return a.start - b.start; });
+  var bySlug = function (list, slug) { return list.find(function (x) { return x.slug === slug; }); };
+
+  /* ---------- Generative artworks (canvas) ---------- */
+  function rng(seed) {
+    var h = 1779033703 ^ seed.length;
+    for (var i = 0; i < seed.length; i++) { h = Math.imul(h ^ seed.charCodeAt(i), 3432918353); h = (h << 13) | (h >>> 19); }
+    return function () { h = Math.imul(h ^ (h >>> 16), 2246822507); h = Math.imul(h ^ (h >>> 13), 3266489909); h ^= h >>> 16; return (h >>> 0) / 4294967296; };
+  }
+  function hexA(hex, a) { var n = parseInt(hex.slice(1), 16); return 'rgba(' + (n >> 16) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')'; }
+  var PALETTE = ['#c2412d', '#e0a526', '#1f7a63', '#2236c4', '#b4469b', '#e8dccb', '#14161b', '#7aa6c2', '#d97a5b'];
+
+  function paint(canvas, seed, disc) {
+    var r = canvas.getBoundingClientRect();
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = Math.max(40, Math.round(r.width)), h = Math.max(40, Math.round(r.height));
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    var c = canvas.getContext('2d'); c.scale(dpr, dpr);
+    var R = rng(seed), pick = function (arr) { return arr[Math.floor(R() * arr.length)]; };
+    var pig = DISCIPLINES[disc] ? DISCIPLINES[disc].pig : '#2236c4';
+    var bg = pick(['#efe6d8', '#e9edf2', '#f2e2d9', '#1b1d24', '#dfe8e1']);
+    c.fillStyle = bg; c.fillRect(0, 0, w, h);
+    var dark = bg === '#1b1d24';
+
+    if (disc === 'painting') {
+      for (var i = 0; i < 9; i++) {
+        c.fillStyle = hexA(i < 3 ? pig : pick(PALETTE), 0.55 + R() * 0.35);
+        c.beginPath();
+        var x = R() * w, y = R() * h, rad = (0.15 + R() * 0.35) * Math.min(w, h);
+        for (var a = 0; a <= Math.PI * 2 + 0.1; a += 0.35) {
+          var rr = rad * (0.75 + R() * 0.45);
+          c.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr);
+        }
+        c.closePath(); c.fill();
+      }
+      c.strokeStyle = hexA(dark ? '#f4f5f7' : '#14161b', 0.7); c.lineCap = 'round';
+      for (var k = 0; k < 4; k++) { c.lineWidth = 2 + R() * 10; c.beginPath(); c.moveTo(R() * w, R() * h); c.bezierCurveTo(R() * w, R() * h, R() * w, R() * h, R() * w, R() * h); c.stroke(); }
+    } else if (disc === 'photography') {
+      var g = c.createLinearGradient(0, 0, 0, h);
+      g.addColorStop(0, pick(['#24324a', '#3b2f4a', '#4a5a6a'])); g.addColorStop(0.55, pick(['#d97a5b', '#e0a526', '#7aa6c2'])); g.addColorStop(0.58, '#14161b'); g.addColorStop(1, '#2a2f3a');
+      c.fillStyle = g; c.fillRect(0, 0, w, h);
+      c.fillStyle = 'rgba(255,240,200,.85)';
+      for (var l = 0; l < 14; l++) { c.fillRect(R() * w, h * (0.5 + R() * 0.07), 2 + R() * 4, 2); }
+      c.fillStyle = '#0d0f14';
+      for (var b = 0; b < 6; b++) { var bw = w * (0.05 + R() * 0.12), bh = h * (0.08 + R() * 0.2); c.fillRect(R() * w, h * 0.58 - bh, bw, bh); }
+      var img = c.getImageData(0, 0, canvas.width, canvas.height), d = img.data;
+      for (var p = 0; p < d.length; p += 4) { var n = (R() - 0.5) * 34; d[p] += n; d[p + 1] += n; d[p + 2] += n; }
+      c.putImageData(img, 0, 0);
+    } else if (disc === 'ceramics') {
+      var cx = w / 2, cy = h * 0.58;
+      c.fillStyle = hexA(pig, 0.18); c.fillRect(0, h * 0.78, w, h);
+      var vw = Math.min(w, h) * (0.3 + R() * 0.12), vh = h * (0.42 + R() * 0.12);
+      var glaze = c.createLinearGradient(cx - vw, 0, cx + vw, 0);
+      glaze.addColorStop(0, '#5a3b22'); glaze.addColorStop(0.45, pick(['#8a6a45', '#5b7a6a', '#9a5a3a'])); glaze.addColorStop(1, '#2e2016');
+      c.fillStyle = glaze; c.beginPath();
+      c.moveTo(cx - vw * 0.35, cy - vh * 0.55);
+      c.bezierCurveTo(cx - vw * 1.1, cy - vh * 0.2, cx - vw * 0.9, cy + vh * 0.35, cx - vw * 0.4, cy + vh * 0.4);
+      c.lineTo(cx + vw * 0.4, cy + vh * 0.4);
+      c.bezierCurveTo(cx + vw * 0.9, cy + vh * 0.35, cx + vw * 1.1, cy - vh * 0.2, cx + vw * 0.35, cy - vh * 0.55);
+      c.closePath(); c.fill();
+      c.fillStyle = hexA('#e8dccb', 0.5);
+      for (var dd = 0; dd < 5; dd++) { c.beginPath(); c.ellipse(cx + (R() - 0.5) * vw, cy - vh * 0.5 + R() * 20, 4 + R() * 8, 12 + R() * 30, 0, 0, Math.PI * 2); c.fill(); }
+    } else if (disc === 'music') {
+      c.lineWidth = 1.6;
+      var lines = 26;
+      for (var m = 0; m < lines; m++) {
+        c.strokeStyle = hexA(m % 5 === 0 ? pig : (dark ? '#f4f5f7' : '#14161b'), m % 5 === 0 ? 0.95 : 0.5);
+        c.beginPath();
+        var base = h * (0.12 + 0.76 * m / lines), amp = 4 + R() * 26, f = 0.01 + R() * 0.03, ph = R() * 6;
+        for (var xx = 0; xx <= w; xx += 4) { var env = Math.sin(Math.PI * xx / w); c.lineTo(xx, base + Math.sin(xx * f + ph) * amp * env); }
+        c.stroke();
+      }
+    } else if (disc === 'dance') {
+      c.lineCap = 'round';
+      for (var s2 = 0; s2 < 7; s2++) {
+        c.strokeStyle = hexA(s2 < 3 ? pig : pick(PALETTE), 0.75); c.lineWidth = 6 + R() * 26;
+        c.beginPath(); c.arc(w * (0.2 + R() * 0.6), h * (0.2 + R() * 0.6), Math.min(w, h) * (0.15 + R() * 0.4), R() * 6, R() * 6 + 1.2 + R() * 2); c.stroke();
+      }
+    } else {
+      // sculpture
+      var gy = h * 0.82;
+      c.fillStyle = hexA(dark ? '#f4f5f7' : '#14161b', 0.08); c.fillRect(0, gy, w, h - gy);
+      var y0 = gy;
+      for (var q = 0; q < 4; q++) {
+        var bw2 = w * (0.18 + R() * 0.3), bh2 = h * (0.1 + R() * 0.16), bx = w / 2 - bw2 / 2 + (R() - 0.5) * w * 0.15;
+        c.fillStyle = q % 2 ? '#3a3f4a' : hexA(pig, 0.95);
+        if (R() > 0.5) { c.fillRect(bx, y0 - bh2, bw2, bh2); }
+        else { c.beginPath(); c.moveTo(bx, y0); c.lineTo(bx + bw2 / 2, y0 - bh2 * 1.4); c.lineTo(bx + bw2, y0); c.closePath(); c.fill(); }
+        c.fillStyle = 'rgba(255,255,255,.18)'; c.fillRect(bx, y0 - bh2, bw2 * 0.18, bh2);
+        y0 -= bh2 * 0.9;
+      }
+    }
+  }
+  function artEl(seed, disc, opts) {
+    opts = opts || {};
+    var wrap = document.createElement('div');
+    wrap.className = 'art';
+    if (opts.ratio) wrap.style.setProperty('--ratio', opts.ratio);
+    var cv = document.createElement('canvas');
+    cv.setAttribute('role', 'img');
+    cv.setAttribute('aria-label', opts.alt || '');
+    cv.dataset.seed = seed; cv.dataset.disc = disc;
+    wrap.appendChild(cv);
+    return wrap;
+  }
+  function paintAll(root) {
+    (root || document).querySelectorAll('canvas[data-seed]').forEach(function (cv) { paint(cv, cv.dataset.seed, cv.dataset.disc); });
+  }
+  var resizeTimer;
+  window.addEventListener('resize', function () { clearTimeout(resizeTimer); resizeTimer = setTimeout(function () { paintAll(); }, 200); });
+
+  /* ---------- Helpers ---------- */
+  var esc = function (s) { return String(s).replace(/[&<>"']/g, function (ch) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]; }); };
+  var fmt = function (d, o) { return d.toLocaleString('en-US', o); };
+  var timeStr = function (d) { return fmt(d, { hour: 'numeric', minute: '2-digit' }).replace(':00', '').toLowerCase(); };
+  function dateRange(e) {
+    var sameDay = e.start.toDateString() === e.end.toDateString();
+    if (sameDay) return fmt(e.start, { weekday: 'long', month: 'long', day: 'numeric' }) + ' · ' + timeStr(e.start) + '–' + timeStr(e.end);
+    return fmt(e.start, { weekday: 'short', month: 'short', day: 'numeric' }) + ' – ' + fmt(e.end, { weekday: 'short', month: 'short', day: 'numeric' }) + ' · from ' + timeStr(e.start);
+  }
+  var isPast = function (e) { return e.end < now; };
+  var discBadges = function (a) { return a.disc.map(function (d) { return '<span class="badge" style="--pig:' + DISCIPLINES[d].pig + '"><span class="dot"></span>' + DISCIPLINES[d].name + '</span>'; }).join(''); };
+  var eventsFor = function (slug) { return EVENTS.filter(function (e) { return e.artists.indexOf(slug) > -1; }); };
+  function gcalUrl(e) {
+    var z = function (d) { return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''); };
+    var v = VENUES[e.venue];
+    return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(e.title) + '&dates=' + z(e.start) + '/' + z(e.end) + '&location=' + encodeURIComponent(v.name + ', ' + v.addr) + '&details=' + encodeURIComponent(e.blurb);
+  }
+  var mapUrl = function (e) { var v = VENUES[e.venue]; return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(v.name + ', ' + v.addr); };
+  function toast(msg) {
+    var t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', 'status'); t.textContent = msg;
+    document.body.appendChild(t); setTimeout(function () { t.remove(); }, 2600);
+  }
+  var announcer = document.getElementById('announcer');
+  var announce = function (msg) { announcer.textContent = ''; setTimeout(function () { announcer.textContent = msg; }, 40); };
+
+  function artistCard(a) {
+    var disc = a.disc[0];
+    var el = document.createElement('a');
+    el.className = 'card'; el.href = '#artist-' + a.slug;
+    var art = artEl(a.slug + '-cover', disc, { alt: 'Artwork by ' + a.name });
+    if (a.featured) { var f = document.createElement('span'); f.className = 'badge featured-flag'; f.textContent = 'Featured'; art.appendChild(f); }
+    el.appendChild(art);
+    var lab = document.createElement('div'); lab.className = 'wall-label';
+    lab.innerHTML = '<strong>' + esc(a.name) + '</strong><span class="label">' + a.disc.map(function (d) { return DISCIPLINES[d].name; }).join(' · ') + ' — ' + LOCATIONS[a.loc] + '</span>';
+    el.appendChild(lab);
+    return el;
+  }
+  function eventRow(e, opts) {
+    opts = opts || {};
+    var v = VENUES[e.venue];
+    return '<a class="event-row' + (isPast(e) ? ' tag-past' : '') + '" href="#event-' + e.slug + '">' +
+      '<span class="datebox" aria-hidden="true"><span class="m">' + fmt(e.start, { month: 'short' }) + '</span><span class="d">' + e.start.getDate() + '</span><span class="w">' + fmt(e.start, { weekday: 'short' }) + '</span></span>' +
+      '<span class="info"><h3>' + esc(e.title) + '</h3><span class="where">' + esc(dateRange(e)) + ' · ' + esc(v.name) + '</span>' +
+      (opts.showArtists ? '<span class="label">With ' + e.artists.map(function (s) { return esc(bySlug(ARTISTS, s).name); }).join(', ') + '</span>' : '') + '</span>' +
+      '<span class="btn btn--small" aria-hidden="true">' + (isPast(e) ? 'Recap' : 'Details') + '</span></a>';
+  }
+
+  /* ---------- Views ---------- */
+  var main = document.getElementById('main');
+
+  function viewHome() {
+    var upcoming = EVENTS.filter(function (e) { return !isPast(e); }).slice(0, 3);
+    var featured = ARTISTS.filter(function (a) { return a.featured; });
+    main.innerHTML =
+      '<section class="hero"><div class="wrap">' +
+        '<div class="hero-copy fade-in">' +
+          '<p class="label">Artist directory &amp; events · est. 2009</p>' +
+          '<h1>Meet the artists <em>working</em> down the street.</h1>' +
+          '<p class="lede">Browse painters, photographers, musicians, dancers and makers from across the region, then see their work live this month.</p>' +
+          '<div class="hero-actions"><a class="btn btn--primary" href="#artists">Browse artists</a><a class="btn" href="#events">See what’s on</a></div>' +
+          '<div class="hero-stats"><div><b>' + ARTISTS.length + '</b><span class="label">Artists</span></div><div><b>' + Object.keys(DISCIPLINES).length + '</b><span class="label">Disciplines</span></div><div><b>' + EVENTS.filter(function (e) { return !isPast(e); }).length + '</b><span class="label">Upcoming events</span></div></div>' +
+        '</div>' +
+        '<div class="hang" id="hang" aria-label="Featured works"></div>' +
+      '</div></section>' +
+      '<section style="padding-top:0"><div class="wrap">' +
+        '<div class="section-head"><div><p class="label">On the wall this season</p><h2>Featured artists</h2></div><a class="link arrow" href="#artists">All ' + ARTISTS.length + ' artists</a></div>' +
+        '<div class="grid" id="featured"></div>' +
+      '</div></section>' +
+      '<section class="band"><div class="wrap">' +
+        '<div style="display:grid;gap:20px;align-content:start"><p class="label" style="color:inherit;opacity:.7">Our mission</p><h2>Art belongs in the neighborhood, not just the museum.</h2><p class="lede">We give local artists a public home: a searchable directory, free event listings and paid opportunities. Membership costs nothing.</p><div><a class="btn" href="#about">Read our mission</a></div></div>' +
+        '<div class="pillars"><div><span class="label">01 · Find</span><h3>A directory anyone can search</h3><p>Filter by discipline and neighborhood to find someone to commission, book or learn from.</p></div><div><span class="label">02 · Gather</span><h3>Events every week</h3><p>Openings, workshops and performances, most of them free.</p></div><div><span class="label">03 · Support</span><h3>Work that pays artists</h3><p>Commissions, teaching gigs and, soon, an online shop with 100% of sales to the artist.</p></div></div>' +
+      '</div></section>' +
+      '<section><div class="wrap">' +
+        '<div class="section-head"><div><p class="label">Coming up</p><h2>Next on the calendar</h2></div><a class="link arrow" href="#events">Full calendar</a></div>' +
+        '<div class="event-list">' + upcoming.map(function (e) { return eventRow(e, { showArtists: true }); }).join('') + '</div>' +
+      '</div></section>' +
+      '<section style="padding-top:0"><div class="wrap"><div class="success" style="grid-template-columns:minmax(0,1fr) auto;align-items:center;justify-items:stretch">' +
+        '<div style="display:grid;gap:8px"><h2>Are you a local artist?</h2><p class="lede">Join the directory in about five minutes. We review every submission within two weeks.</p></div>' +
+        '<a class="btn btn--primary" href="#submit">Submit your work</a>' +
+      '</div></div></section>';
+
+    var hang = document.getElementById('hang');
+    ['maya-okafor', 'ines-duarte', 'kenji-watanabe', 'amara-singh', 'theo-lindqvist'].forEach(function (s) {
+      var a = bySlug(ARTISTS, s), link = document.createElement('a');
+      link.href = '#artist-' + s; link.setAttribute('aria-label', a.name + ', ' + DISCIPLINES[a.disc[0]].name);
+      link.appendChild(artEl(s + '-cover', a.disc[0], { alt: 'Artwork by ' + a.name }));
+      hang.appendChild(link);
+    });
+    var fg = document.getElementById('featured');
+    featured.forEach(function (a) { fg.appendChild(artistCard(a)); });
+  }
+
+  var dirState = { q: '', disc: '', loc: '', sort: 'az', shown: 8 };
+  function viewArtists() {
+    main.innerHTML =
+      '<div class="wrap page-head"><p class="label">Directory</p><h1>Artists</h1><p class="lede">Search by name or keyword, or narrow by discipline and neighborhood.</p></div>' +
+      '<div class="filters"><div class="wrap">' +
+        '<form id="dir-form" role="search" aria-label="Filter artists">' +
+          '<div class="field field--search"><label for="f-q">Search</label><div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input class="input" id="f-q" type="search" placeholder="Name, medium or keyword" autocomplete="off"></div></div>' +
+          '<div class="field"><label for="f-disc">Discipline</label><select class="input" id="f-disc"><option value="">All disciplines</option>' + Object.keys(DISCIPLINES).map(function (k) { return '<option value="' + k + '">' + DISCIPLINES[k].name + '</option>'; }).join('') + '</select></div>' +
+          '<div class="field"><label for="f-loc">Location</label><select class="input" id="f-loc"><option value="">All locations</option>' + Object.keys(LOCATIONS).map(function (k) { return '<option value="' + k + '">' + LOCATIONS[k] + '</option>'; }).join('') + '</select></div>' +
+          '<div class="field"><label for="f-sort">Sort</label><select class="input" id="f-sort"><option value="az">Name A–Z</option><option value="za">Name Z–A</option><option value="new">Newest members</option></select></div>' +
+        '</form>' +
+        '<div class="chips" role="group" aria-label="Quick discipline filter"><button class="chip" type="button" data-disc="" aria-pressed="true">All</button>' + Object.keys(DISCIPLINES).map(function (k) { return '<button class="chip" type="button" data-disc="' + k + '" aria-pressed="false"><span class="dot" style="--pig:' + DISCIPLINES[k].pig + '"></span>' + DISCIPLINES[k].name + '</button>'; }).join('') + '</div>' +
+      '</div></div>' +
+      '<div class="wrap"><div class="results-bar"><p id="count" role="status" aria-live="polite"></p><button class="btn btn--small" type="button" id="clear" hidden>Clear filters</button></div>' +
+      '<div class="grid" id="results" tabindex="-1" aria-label="Artist results"></div>' +
+      '<div class="more" id="more"></div></div>';
+
+    var q = document.getElementById('f-q'), fd = document.getElementById('f-disc'), fl = document.getElementById('f-loc'), fs = document.getElementById('f-sort');
+    q.value = dirState.q; fd.value = dirState.disc; fl.value = dirState.loc; fs.value = dirState.sort;
+
+    function filtered() {
+      var term = dirState.q.trim().toLowerCase();
+      var list = ARTISTS.filter(function (a) {
+        if (dirState.disc && a.disc.indexOf(dirState.disc) < 0) return false;
+        if (dirState.loc && a.loc !== dirState.loc) return false;
+        if (term) {
+          var hay = (a.name + ' ' + a.bio + ' ' + a.disc.map(function (d) { return DISCIPLINES[d].name + ' ' + DISCIPLINES[d].medium; }).join(' ') + ' ' + LOCATIONS[a.loc]).toLowerCase();
+          return hay.indexOf(term) > -1;
+        }
+        return true;
+      });
+      list.sort(function (x, y) {
+        if (dirState.sort === 'new') return x.added - y.added; // lower = joined more recently
+        var c = x.name.localeCompare(y.name);
+        return dirState.sort === 'za' ? -c : c;
+      });
+      return list;
+    }
+    function render(appendFrom) {
+      var list = filtered(), res = document.getElementById('results'), more = document.getElementById('more');
+      var count = list.length;
+      document.getElementById('count').textContent = count ? count + (count === 1 ? ' artist' : ' artists') + (dirState.q || dirState.disc || dirState.loc ? ' match your filters' : ' in the directory') : 'No artists match';
+      document.getElementById('clear').hidden = !(dirState.q || dirState.disc || dirState.loc);
+      document.querySelectorAll('.chip').forEach(function (ch) { ch.setAttribute('aria-pressed', String(ch.dataset.disc === dirState.disc)); });
+      if (!count) {
+        res.innerHTML = '<div class="empty" style="grid-column:1/-1"><h3>No artists match those filters</h3><p class="hint">Try a different keyword, or widen the discipline or location.</p><button class="btn btn--small" type="button" data-clear>Clear all filters</button></div>';
+        more.innerHTML = '';
+        return;
+      }
+      var start = appendFrom || 0;
+      if (!appendFrom) res.innerHTML = '';
+      list.slice(start, dirState.shown).forEach(function (a) { res.appendChild(artistCard(a)); });
+      paintAll(res);
+      more.innerHTML = dirState.shown < count
+        ? '<span class="hint">Showing ' + Math.min(dirState.shown, count) + ' of ' + count + '</span><button class="btn" type="button" id="load-more">Load more artists</button>'
+        : (count > 8 ? '<span class="hint">That’s everyone. Showing all ' + count + '</span>' : '');
+      if (appendFrom) { var first = res.children[appendFrom]; if (first) first.focus(); }
+    }
+    function update() { dirState.shown = 8; render(); }
+    var t;
+    q.addEventListener('input', function () { clearTimeout(t); t = setTimeout(function () { dirState.q = q.value; update(); }, 200); });
+    fd.addEventListener('change', function () { dirState.disc = fd.value; update(); });
+    fl.addEventListener('change', function () { dirState.loc = fl.value; update(); });
+    fs.addEventListener('change', function () { dirState.sort = fs.value; update(); });
+    document.getElementById('dir-form').addEventListener('submit', function (e) { e.preventDefault(); dirState.q = q.value; update(); });
+    document.querySelector('.chips').addEventListener('click', function (e) {
+      var ch = e.target.closest('.chip'); if (!ch) return;
+      dirState.disc = ch.dataset.disc; fd.value = dirState.disc; update();
+    });
+    function clearAll() { dirState.q = dirState.disc = dirState.loc = ''; q.value = ''; fd.value = ''; fl.value = ''; update(); q.focus(); }
+    document.getElementById('clear').addEventListener('click', clearAll);
+    main.addEventListener('click', function (e) {
+      if (e.target.closest('[data-clear]')) clearAll();
+      if (e.target.id === 'load-more') { var from = dirState.shown; dirState.shown += 8; render(from); }
+    });
+    render();
+  }
+
+  function viewArtist(slug) {
+    var a = bySlug(ARTISTS, slug);
+    if (!a) return viewNotFound();
+    var evs = eventsFor(slug), up = evs.filter(function (e) { return !isPast(e); }), past = evs.filter(isPast);
+    var works = [1, 2, 3, 4].map(function (i) {
+      var d = a.disc[(i - 1) % a.disc.length];
+      return { seed: a.slug + '-work-' + i, disc: d, title: ['Untitled (Harbor)', 'Field Study No. ' + (i + 3), 'Before the Rain', 'Second Light'][i - 1], meta: DISCIPLINES[d].medium + ', ' + (2026 - (i % 3)) };
+    });
+    main.innerHTML =
+      '<div class="wrap"><div class="profile">' +
+        '<div class="profile-info">' +
+          '<nav class="crumbs" aria-label="Breadcrumb"><a href="#artists">Artists</a><span aria-hidden="true">/</span><span aria-current="page">' + esc(a.name) + '</span></nav>' +
+          '<div style="display:grid;gap:14px"><h1>' + esc(a.name) + '</h1><div class="meta-row">' + discBadges(a) + '<span class="badge">' + LOCATIONS[a.loc] + '</span>' + (a.featured ? '<span class="badge">Featured</span>' : '') + '</div></div>' +
+          '<div class="bio"><p>' + esc(a.bio) + '</p><p>Based in ' + LOCATIONS[a.loc] + ', ' + esc(a.name.split(' ')[0]) + ' exhibits across the region and teaches community classes through the collective.</p></div>' +
+          '<div class="links">' +
+            '<a class="btn btn--primary btn--small" href="https://example.com/' + a.handle + '" target="_blank" rel="noopener">Website</a>' +
+            '<a class="btn btn--small" href="https://www.instagram.com/' + a.handle + '" target="_blank" rel="noopener">Instagram</a>' +
+            (a.disc.indexOf('music') > -1 || a.disc.indexOf('dance') > -1 ? '<a class="btn btn--small" href="https://www.youtube.com/@' + a.handle + '" target="_blank" rel="noopener">YouTube</a>' : '') +
+          '</div>' +
+          '<div style="display:grid;gap:12px"><h2 style="font-size:24px">' + (up.length ? 'See ' + esc(a.name.split(' ')[0]) + ' live' : 'Past events') + '</h2>' +
+            (evs.length ? '<div class="event-list">' + (up.length ? up : past).map(function (e) { return eventRow(e); }).join('') + '</div>' : '<p class="hint">No events listed yet.</p>') +
+          '</div>' +
+          '<div style="display:grid;gap:6px;padding:18px;border:1.5px dashed var(--line);border-radius:var(--radius)"><p class="label">Shop</p><p>Prints and originals by ' + esc(a.name.split(' ')[0]) + ' will be available here when our online shop opens.</p></div>' +
+        '</div>' +
+        '<div style="display:grid;gap:14px"><p class="label">Selected works · select to enlarge</p><div class="gallery" id="gallery"></div></div>' +
+      '</div></div>';
+    var gal = document.getElementById('gallery');
+    works.forEach(function (w, i) {
+      var btn = document.createElement('button');
+      btn.type = 'button'; btn.setAttribute('aria-label', 'Enlarge “' + w.title + '”');
+      btn.appendChild(artEl(w.seed, w.disc, { alt: w.title + ' by ' + a.name }));
+      var lab = document.createElement('span'); lab.className = 'wall-label'; lab.style.textAlign = 'left';
+      lab.innerHTML = '<strong style="font-size:16px">' + esc(w.title) + '</strong><span class="label">' + esc(w.meta) + '</span>';
+      btn.appendChild(lab);
+      btn.addEventListener('click', function () { openLightbox(works, i, a); });
+      gal.appendChild(btn);
+    });
+  }
+
+  var calState = { y: now.getFullYear(), m: now.getMonth(), view: 'month', showPast: false };
+  function viewEvents() {
+    main.innerHTML =
+      '<div class="wrap page-head"><p class="label">Calendar</p><h1>Events</h1><p class="lede">Openings, workshops and performances. Most are free and all venues have step-free access.</p></div>' +
+      '<div class="wrap"><div class="cal-bar">' +
+        '<div class="cal-nav"><button class="icon-btn" type="button" id="prev" aria-label="Previous month">←</button><h2 id="cal-title" aria-live="polite"></h2><button class="icon-btn" type="button" id="next" aria-label="Next month">→</button><button class="btn btn--small" type="button" id="today">This month</button></div>' +
+        '<div class="segmented" role="group" aria-label="Calendar view"><button type="button" data-view="month">Month</button><button type="button" data-view="list">List</button></div>' +
+      '</div><div id="cal-body"></div></div>';
+    function draw() {
+      var first = new Date(calState.y, calState.m, 1), last = new Date(calState.y, calState.m + 1, 0, 23, 59);
+      var label = fmt(first, { month: 'long', year: 'numeric' });
+      document.getElementById('cal-title').textContent = label;
+      document.querySelectorAll('[data-view]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.view === calState.view)); });
+      document.getElementById('today').hidden = calState.y === now.getFullYear() && calState.m === now.getMonth();
+      var inMonth = EVENTS.filter(function (e) { return e.start <= last && e.end >= first; });
+      var body = document.getElementById('cal-body');
+      if (calState.view === 'list') {
+        body.innerHTML = inMonth.length ? '<div class="event-list">' + inMonth.map(function (e) { return eventRow(e, { showArtists: true }); }).join('') + '</div>'
+          : '<div class="empty"><h3>Nothing listed for ' + esc(label) + '</h3><p class="hint">Check the next month, or join the newsletter to hear about new events first.</p><button class="btn btn--small" type="button" id="jump">Jump to next event</button></div>';
+      } else {
+        var startDow = (first.getDay() + 6) % 7, days = last.getDate(), cells = Math.ceil((startDow + days) / 7) * 7;
+        var wd = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        var html = '<div style="overflow-x:auto"><table class="cal"><caption class="sr-only">' + esc(label) + '</caption><thead><tr>' + wd.map(function (d) { return '<th scope="col">' + d + '</th>'; }).join('') + '</tr></thead><tbody>';
+        for (var i = 0; i < cells; i++) {
+          if (i % 7 === 0) html += '<tr>';
+          var dn = i - startDow + 1;
+          if (dn < 1 || dn > days) html += '<td class="out"></td>';
+          else {
+            var day = new Date(calState.y, calState.m, dn), dayEnd = new Date(calState.y, calState.m, dn, 23, 59);
+            var items = inMonth.filter(function (e) { return e.start <= dayEnd && e.end >= day; });
+            var isToday = day.toDateString() === now.toDateString();
+            var cls = [isToday ? 'today' : '', day < new Date(now.getFullYear(), now.getMonth(), now.getDate()) ? 'past' : '', items.length ? 'has' : ''].join(' ');
+            html += '<td class="' + cls + '"><span class="num"' + (isToday ? ' aria-current="date"' : '') + '>' + dn + '</span><span class="wd">' + fmt(day, { weekday: 'long', month: 'long', day: 'numeric' }) + '</span>';
+            if (items.length) {
+              html += '<ul>' + items.map(function (e) {
+                var cont = e.start.toDateString() !== day.toDateString();
+                var pig = DISCIPLINES[bySlug(ARTISTS, e.artists[0]).disc[0]].pig;
+                return '<li class="' + (cont ? 'cont' : '') + '"><a href="#event-' + e.slug + '" style="--pig:' + pig + '">' + (cont ? '' : '<span class="t">' + timeStr(e.start) + '</span>') + esc(e.title) + '</a></li>';
+              }).join('') + '</ul>';
+            }
+            html += '</td>';
+          }
+          if (i % 7 === 6) html += '</tr>';
+        }
+        body.innerHTML = html + '</tbody></table></div>' + (inMonth.length ? '' : '<p class="hint" style="padding-top:16px">No events this month.</p>');
+      }
+      announce(label + ', ' + calState.view + ' view, ' + inMonth.length + (inMonth.length === 1 ? ' event' : ' events'));
+    }
+    function shift(n) { var d = new Date(calState.y, calState.m + n, 1); calState.y = d.getFullYear(); calState.m = d.getMonth(); draw(); }
+    document.getElementById('prev').addEventListener('click', function () { shift(-1); });
+    document.getElementById('next').addEventListener('click', function () { shift(1); });
+    document.getElementById('today').addEventListener('click', function () { calState.y = now.getFullYear(); calState.m = now.getMonth(); draw(); document.getElementById('next').focus(); });
+    document.querySelector('.segmented').addEventListener('click', function (e) { var b = e.target.closest('[data-view]'); if (b) { calState.view = b.dataset.view; draw(); } });
+    main.addEventListener('click', function (e) {
+      if (e.target.id === 'jump') { var nxt = EVENTS.find(function (ev) { return ev.start > new Date(calState.y, calState.m + 1, 0, 23, 59); }); if (nxt) { calState.y = nxt.start.getFullYear(); calState.m = nxt.start.getMonth(); draw(); } }
+    });
+    draw();
+  }
+
+  function viewEvent(slug) {
+    var e = bySlug(EVENTS, slug);
+    if (!e) return viewNotFound();
+    var v = VENUES[e.venue], lead = bySlug(ARTISTS, e.artists[0]), past = isPast(e);
+    var days = Math.round((new Date(e.start.getFullYear(), e.start.getMonth(), e.start.getDate()) - new Date(now.getFullYear(), now.getMonth(), now.getDate())) / 86400000);
+    var when = past ? 'This event has ended' : days === 0 ? 'Today' : days === 1 ? 'Tomorrow' : 'In ' + days + ' days';
+    main.innerHTML =
+      '<div class="wrap"><div class="event-hero">' +
+        '<div style="display:grid;gap:22px">' +
+          '<nav class="crumbs" aria-label="Breadcrumb"><a href="#events">Events</a><span aria-hidden="true">/</span><span aria-current="page">' + esc(e.title) + '</span></nav>' +
+          '<span class="status"><span class="dot" style="--pig:' + (past ? 'var(--muted)' : 'var(--ok)') + '"></span>' + when + '</span>' +
+          '<h1>' + esc(e.title) + '</h1>' +
+          '<div id="ev-art"></div>' +
+          '<div class="bio"><p>' + esc(e.blurb) + '</p><p>Doors open 30 minutes before the start. Free parking on the street nearby; the venue has step-free access and an accessible restroom.</p></div>' +
+        '</div>' +
+        '<aside class="ticket" aria-label="Event details">' +
+          '<dl><div><dt>When</dt><dd>' + esc(dateRange(e)) + '</dd></div><div><dt>Where</dt><dd>' + esc(v.name) + '<br><span class="hint" style="font-weight:400">' + esc(v.addr) + '</span></dd></div><div><dt>Admission</dt><dd>' + esc(e.price) + '</dd></div></dl>' +
+          '<div class="actions">' +
+            (past ? '<button class="btn btn--primary" type="button" disabled>Event has ended</button>' : (e.price === 'Free' ? '<a class="btn btn--primary" href="https://example.com/rsvp/' + e.slug + '" target="_blank" rel="noopener">RSVP (free)</a>' : '<a class="btn btn--primary" href="https://example.com/tickets/' + e.slug + '" target="_blank" rel="noopener">Get tickets</a>')) +
+            (past ? '' : '<a class="btn" href="' + gcalUrl(e) + '" target="_blank" rel="noopener">Add to Google Calendar</a>') +
+            '<a class="btn" href="' + mapUrl(e) + '" target="_blank" rel="noopener">Directions</a>' +
+          '</div>' +
+          (past ? '' : '<p class="hint">On the live site you can also download an .ics file for Apple or Outlook calendars.</p>') +
+        '</aside>' +
+      '</div>' +
+      '<section style="padding-top:24px"><div class="section-head"><div><p class="label">Lineup</p><h2>Artists at this event</h2></div></div><div class="grid" id="lineup"></div></section>' +
+      '</div>';
+    document.getElementById('ev-art').appendChild(artEl(e.slug + '-poster', lead.disc[0], { alt: 'Event image for ' + e.title, ratio: '16 / 9' }));
+    var lu = document.getElementById('lineup');
+    e.artists.forEach(function (s) { lu.appendChild(artistCard(bySlug(ARTISTS, s))); });
+  }
+
+  function viewSubmit() {
+    main.innerHTML =
+      '<div class="wrap"><div class="form-layout">' +
+        '<div style="display:grid;gap:22px;position:sticky;top:110px">' +
+          '<p class="label">Join the directory</p><h1>Submit your work</h1>' +
+          '<p class="lede">Listing is free for artists who live or work in the region.</p>' +
+          '<ol class="steps"><li><div><h3>Tell us about you</h3><p class="hint">Name, discipline, neighborhood and a short bio.</p></div></li><li><div><h3>Add a few images</h3><p class="hint">Up to 10 images of recent work, 8 MB each.</p></div></li><li><div><h3>We review within two weeks</h3><p class="hint">A volunteer panel checks every submission. We email you either way.</p></div></li></ol>' +
+        '</div>' +
+        '<div id="form-slot"></div>' +
+      '</div></div>';
+    var slot = document.getElementById('form-slot');
+    slot.innerHTML =
+      '<form class="form-card" id="submit-form" novalidate>' +
+        '<div class="form-row">' +
+          '<div class="field" data-f="name"><label for="s-name">Full name <span aria-hidden="true">*</span></label><input class="input" id="s-name" autocomplete="name" required aria-describedby="s-name-err"><span class="error" id="s-name-err" hidden></span></div>' +
+          '<div class="field" data-f="email"><label for="s-email">Email <span aria-hidden="true">*</span></label><input class="input" id="s-email" type="email" autocomplete="email" required aria-describedby="s-email-hint s-email-err"><span class="hint" id="s-email-hint">Private. We only use it to reply.</span><span class="error" id="s-email-err" hidden></span></div>' +
+        '</div>' +
+        '<fieldset class="field" data-f="disc"><legend>Discipline <span aria-hidden="true">*</span> <span class="hint">(choose all that apply)</span></legend><div class="check-grid">' + Object.keys(DISCIPLINES).map(function (k) { return '<label><input type="checkbox" name="disc" value="' + k + '">' + DISCIPLINES[k].name + '</label>'; }).join('') + '</div><span class="error" id="s-disc-err" hidden></span></fieldset>' +
+        '<div class="form-row">' +
+          '<div class="field"><label for="s-loc">Location</label><select class="input" id="s-loc">' + Object.keys(LOCATIONS).map(function (k) { return '<option value="' + k + '">' + LOCATIONS[k] + '</option>'; }).join('') + '</select></div>' +
+          '<div class="field" data-f="url"><label for="s-url">Portfolio link</label><input class="input" id="s-url" type="url" placeholder="https://" aria-describedby="s-url-err"><span class="error" id="s-url-err" hidden></span></div>' +
+        '</div>' +
+        '<div class="field" data-f="bio"><label for="s-bio">Short bio <span aria-hidden="true">*</span></label><textarea class="input" id="s-bio" rows="5" maxlength="800" required aria-describedby="s-bio-count s-bio-err"></textarea><span class="hint" id="s-bio-count">0 / 800 characters</span><span class="error" id="s-bio-err" hidden></span></div>' +
+        '<div class="field"><span style="font-weight:700;font-size:15px">Images of your work</span><label class="drop" id="drop" for="s-files"><strong>Drop images here or choose files</strong><span class="hint">JPG, PNG or WebP · up to 10</span></label><input class="sr-only" id="s-files" type="file" accept="image/jpeg,image/png,image/webp" multiple><div class="thumbs" id="thumbs"></div></div>' +
+        '<label style="display:flex;gap:10px;align-items:flex-start;font-size:15px"><input type="checkbox" id="s-ok" style="width:20px;height:20px;accent-color:var(--accent);margin-top:2px"> I confirm I made this work and agree to it being shown in the directory.</label>' +
+        '<span class="error" id="s-ok-err" hidden></span>' +
+        '<div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center"><button class="btn btn--primary" type="submit">Submit for review</button><span class="hint">Takes about five minutes.</span></div>' +
+      '</form>';
+
+    var files = [];
+    var input = document.getElementById('s-files'), thumbs = document.getElementById('thumbs'), drop = document.getElementById('drop');
+    function addFiles(list) {
+      Array.prototype.slice.call(list).filter(function (f) { return /^image\//.test(f.type); }).forEach(function (f) { if (files.length < 10) files.push(f); });
+      drawThumbs();
+    }
+    function drawThumbs() {
+      thumbs.innerHTML = '';
+      files.forEach(function (f, i) {
+        var fig = document.createElement('figure'), img = document.createElement('img'), rm = document.createElement('button');
+        img.alt = f.name; img.src = URL.createObjectURL(f);
+        rm.type = 'button'; rm.textContent = '×'; rm.setAttribute('aria-label', 'Remove ' + f.name);
+        rm.addEventListener('click', function () { files.splice(i, 1); drawThumbs(); });
+        fig.appendChild(img); fig.appendChild(rm); thumbs.appendChild(fig);
+      });
+    }
+    input.addEventListener('change', function () { addFiles(input.files); input.value = ''; });
+    ['dragenter', 'dragover'].forEach(function (t) { drop.addEventListener(t, function (e) { e.preventDefault(); drop.classList.add('drag'); }); });
+    ['dragleave', 'drop'].forEach(function (t) { drop.addEventListener(t, function (e) { e.preventDefault(); drop.classList.remove('drag'); }); });
+    drop.addEventListener('drop', function (e) { addFiles(e.dataTransfer.files); });
+    var bio = document.getElementById('s-bio');
+    bio.addEventListener('input', function () { document.getElementById('s-bio-count').textContent = bio.value.length + ' / 800 characters'; });
+
+    function setErr(id, msg, inputEl) {
+      var el = document.getElementById(id); el.textContent = msg || ''; el.hidden = !msg;
+      if (inputEl) { inputEl.setAttribute('aria-invalid', msg ? 'true' : 'false'); inputEl.closest('.field') && inputEl.closest('.field').classList.toggle('invalid', !!msg); }
+    }
+    document.getElementById('submit-form').addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var name = document.getElementById('s-name'), email = document.getElementById('s-email'), url = document.getElementById('s-url'), ok = document.getElementById('s-ok');
+      var discs = Array.prototype.slice.call(document.querySelectorAll('input[name=disc]:checked'));
+      var errs = [];
+      setErr('s-name-err', name.value.trim() ? '' : 'Enter your name.', name); if (!name.value.trim()) errs.push(name);
+      var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
+      setErr('s-email-err', emailOk ? '' : 'Enter an email address like name@example.com.', email); if (!emailOk) errs.push(email);
+      setErr('s-disc-err', discs.length ? '' : 'Choose at least one discipline.'); if (!discs.length) errs.push(document.querySelector('input[name=disc]'));
+      var urlOk = !url.value.trim() || /^https?:\/\/\S+\.\S+/.test(url.value.trim());
+      setErr('s-url-err', urlOk ? '' : 'Enter a full link starting with https://', url); if (!urlOk) errs.push(url);
+      setErr('s-bio-err', bio.value.trim().length >= 40 ? '' : 'Write at least 40 characters so the panel can get to know your work.', bio); if (bio.value.trim().length < 40) errs.push(bio);
+      setErr('s-ok-err', ok.checked ? '' : 'Please confirm before submitting.'); if (!ok.checked) errs.push(ok);
+      if (errs.length) { errs[0].focus(); announce(errs.length + (errs.length === 1 ? ' field needs' : ' fields need') + ' attention'); return; }
+      slot.innerHTML = '<div class="success fade-in" tabindex="-1" id="done"><span class="tick" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="m5 12 5 5 9-10"/></svg></span><h2>Submission preview complete</h2><p class="lede">This prototype doesn’t send anything. On the live site, this step creates a pending artist profile for ' + esc(name.value.trim()) + ' with ' + files.length + (files.length === 1 ? ' image' : ' images') + ', emails the review team, and shows this confirmation.</p><div class="hero-actions"><a class="btn btn--primary" href="#artists">Browse the directory</a><a class="btn" href="#events">See upcoming events</a></div></div>';
+      document.getElementById('done').focus();
+    });
+  }
+
+  function viewAbout() {
+    main.innerHTML =
+      '<div class="wrap page-head"><p class="label">About</p><h1>Art belongs in the neighborhood.</h1><p class="lede">Open Studio Collective is a volunteer-run nonprofit. We help people find the artists around them, and help artists find audiences, commissions and each other.</p></div>' +
+      '<section style="padding-top:24px"><div class="wrap" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:40px 32px">' +
+        '<div style="display:grid;gap:10px"><p class="label">What we do</p><h3>A free public directory</h3><p class="hint" style="font-size:17px">Every listed artist lives or works in the region. Listings are free and reviewed by a volunteer panel of practicing artists.</p></div>' +
+        '<div style="display:grid;gap:10px"><p class="label">How we’re funded</p><h3>Members and small grants</h3><p class="hint" style="font-size:17px">Pay-what-you-can memberships and local arts council grants cover our costs. Artists never pay to be listed.</p></div>' +
+        '<div style="display:grid;gap:10px"><p class="label">Visit</p><h3>Main Street Arts Center</h3><p class="hint" style="font-size:17px">120 Main Street, Downtown. Open Wednesday to Sunday, 11am to 6pm. Step-free entrance on Mill Lane.</p></div>' +
+      '</div></section>' +
+      '<section class="band"><div class="wrap"><div style="display:grid;gap:16px;align-content:start"><h2>Want to help?</h2><p class="lede">We need volunteers for openings, a few hours a month.</p></div><div class="pillars"><div><span class="label">Volunteer</span><p>Host the door at an opening or help hang a show.</p></div><div><span class="label">Contact</span><p>hello@openstudio.example</p></div></div></div></section>';
+  }
+
+  function viewNotFound() {
+    main.innerHTML = '<div class="wrap page-head"><p class="label">404</p><h1>We couldn’t find that page</h1><p class="lede">It may have moved. Try the directory or the calendar.</p><div class="hero-actions"><a class="btn btn--primary" href="#artists">Browse artists</a><a class="btn" href="#events">See events</a></div></div>';
+  }
+
+  /* ---------- Lightbox ---------- */
+  var lb = document.getElementById('lightbox'), lbState = null;
+  function openLightbox(works, i, artist) {
+    lbState = { works: works, i: i, artist: artist };
+    drawLb();
+    if (lb.showModal) lb.showModal(); else lb.setAttribute('open', '');
+    document.getElementById('lb-close').focus();
+  }
+  function drawLb() {
+    var w = lbState.works[lbState.i], holder = document.getElementById('lb-art');
+    holder.innerHTML = ''; holder.appendChild(artEl(w.seed, w.disc, { alt: w.title + ' by ' + lbState.artist.name }).firstChild);
+    document.getElementById('lb-title').textContent = w.title;
+    document.getElementById('lb-meta').textContent = lbState.artist.name + ' · ' + w.meta + ' · ' + (lbState.i + 1) + ' of ' + lbState.works.length;
+    requestAnimationFrame(function () { paintAll(holder); });
+  }
+  function stepLb(n) { lbState.i = (lbState.i + n + lbState.works.length) % lbState.works.length; drawLb(); }
+  document.getElementById('lb-prev').addEventListener('click', function () { stepLb(-1); });
+  document.getElementById('lb-next').addEventListener('click', function () { stepLb(1); });
+  document.getElementById('lb-close').addEventListener('click', function () { lb.close(); });
+  lb.addEventListener('keydown', function (e) { if (e.key === 'ArrowLeft') stepLb(-1); if (e.key === 'ArrowRight') stepLb(1); });
+  lb.addEventListener('click', function (e) { if (e.target === lb) lb.close(); });
+
+  /* ---------- Router ---------- */
+  var TITLES = { home: 'Open Studio Collective', artists: 'Artists', events: 'Events', submit: 'Submit your work', about: 'About' };
+  var nav = document.getElementById('nav'), menuBtn = document.getElementById('menu-btn');
+  function route(initial) {
+    var h = (location.hash || '#home').slice(1) || 'home';
+    if (h === 'main') return;
+    var section = h;
+    if (h.indexOf('artist-') === 0) { viewArtist(h.slice(7)); section = 'artists'; }
+    else if (h.indexOf('event-') === 0) { viewEvent(h.slice(6)); section = 'events'; }
+    else if (h === 'home') viewHome();
+    else if (h === 'artists') viewArtists();
+    else if (h === 'events') viewEvents();
+    else if (h === 'submit') viewSubmit();
+    else if (h === 'about') viewAbout();
+    else viewNotFound();
+    document.querySelectorAll('[data-nav]').forEach(function (a) { if (a.dataset.nav === section) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+    var h1 = main.querySelector('h1');
+    document.title = (h1 && section !== 'home' ? h1.textContent + ' · ' : '') + 'Open Studio Collective';
+    if (window.innerWidth <= 880) { nav.hidden = true; menuBtn.setAttribute('aria-expanded', 'false'); }
+    main.classList.remove('fade-in'); void main.offsetWidth; main.classList.add('fade-in');
+    requestAnimationFrame(function () { paintAll(main); });
+    if (!initial) { window.scrollTo(0, 0); main.focus({ preventScroll: true }); announce((h1 ? h1.textContent : TITLES[section] || '') + ' page'); }
+  }
+  window.addEventListener('hashchange', function () { route(false); });
+
+  menuBtn.addEventListener('click', function () {
+    var open = nav.hidden; nav.hidden = !open; menuBtn.setAttribute('aria-expanded', String(open));
+    if (open) nav.querySelector('a').focus();
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !nav.hidden && window.innerWidth <= 880) { nav.hidden = true; menuBtn.setAttribute('aria-expanded', 'false'); menuBtn.focus(); } });
+
+  var themeBtn = document.getElementById('theme-btn'), root = document.documentElement;
+  function isDark() { var t = root.getAttribute('data-theme'); return t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches; }
+  function syncThemeBtn() { themeBtn.setAttribute('aria-label', isDark() ? 'Switch to light theme' : 'Switch to dark theme'); }
+  themeBtn.addEventListener('click', function () { root.setAttribute('data-theme', isDark() ? 'light' : 'dark'); syncThemeBtn(); });
+  syncThemeBtn();
+
+  document.getElementById('newsletter').addEventListener('submit', function (e) { e.preventDefault(); e.target.reset(); toast('Preview only: newsletter sign-up connects on the live site'); });
+  document.getElementById('year').textContent = now.getFullYear();
+  if (window.innerWidth > 880) nav.hidden = false;
+  route(true);
+})();
+</script>
