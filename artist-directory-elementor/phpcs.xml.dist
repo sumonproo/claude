@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<ruleset name="Artist Directory for Elementor">
+	<description>WordPress Coding Standards for the plugin.</description>
+	<file>.</file>
+	<exclude-pattern>/vendor/*</exclude-pattern>
+	<exclude-pattern>/assets/*</exclude-pattern>
+	<arg name="extensions" value="php"/>
+	<arg value="sp"/>
+	<config name="minimum_wp_version" value="6.4"/>
+	<config name="testVersion" value="8.1-"/>
+	<rule ref="WordPress-Extra"/>
+	<rule ref="WordPress-Docs"/>
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="artist-directory-elementor"/>
+			</property>
+		</properties>
+	</rule>
+	<!-- The project brief mandates the 3-letter `ade_` prefix, which this sniff rejects as too short. -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<exclude name="WordPress.NamingConventions.PrefixAllGlobals"/>
+	</rule>
+</ruleset>

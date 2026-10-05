@@ -1,0 +1,11 @@
+/*
+Theme Name:   Hello Elementor Child
+Template:     hello-elementor
+Description:  Child theme for the Artist Directory + Events site. Declares WooCommerce support; all layout lives in Elementor Theme Builder.
+Version:      1.0.0
+Requires PHP: 8.1
+License:      GPL-2.0-or-later
+Text Domain:  hello-elementor-child
+*/
+
+/* Site-wide CSS that cannot be set in Elementor goes here. */
