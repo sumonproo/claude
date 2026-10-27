@@ -1,0 +1,94 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 56px;
+    }
+    #end-lockup {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+    #end-logo {
+      width: 170px;
+      height: 170px;
+      border-radius: 34px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px -20px rgb(40 50 52 / 0.35);
+    }
+    #end-logo img {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    #end-wordmark {
+      font-size: 132px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+    }
+    #end-cta {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 26px 30px 26px 44px;
+      border-radius: 999px;
+      background: var(--ink);
+      color: #f3f4f3;
+      font-size: 38px;
+      font-weight: 500;
+    }
+    #end-cta-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+  <div id="root" data-composition-id="end" data-width="1920" data-height="1080">
+    <div id="end-lockup" class="clip" data-start="0" data-duration="2.8">
+      <div id="end-logo"><img src="assets/brand-logo.jpg" alt="K&amp;J Gutters logo" /></div>
+      <div id="end-wordmark">K&amp;J Gutters</div>
+    </div>
+    <div id="end-cta" class="clip" data-start="0" data-duration="2.8">
+      <span id="end-cta-label" data-var-text="cta">Get a free estimate</span>
+      <span id="end-cta-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fbf7f3" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M7 17 17 7M9 7h8v8" />
+        </svg>
+      </span>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // Logo pops in on a premium spring
+    tl.fromTo(
+      "#end-logo",
+      { opacity: 0, scale: 0.6, filter: "blur(10px)" },
+      { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.6, ease: "back.out(1.4)" },
+      0.05,
+    );
+    // Wordmark wipes in beside it
+    tl.fromTo(
+      "#end-wordmark",
+      { clipPath: "inset(0 100% 0 0)" },
+      { clipPath: "inset(0 0% 0 0)", duration: 0.55, ease: "power3.out" },
+      0.35,
+    );
+    // Call to action blurs in, then holds
+    tl.fromTo(
+      "#end-cta",
+      { opacity: 0, filter: "blur(8px)" },
+      { opacity: 1, filter: "blur(0px)", duration: 0.3, ease: "power4.out" },
+      0.5,
+    );
+    window.__timelines["end"] = tl;
+  </script>
+</template>

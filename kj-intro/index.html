@@ -1,0 +1,109 @@
+<!doctype html>
+<html
+  lang="en"
+  data-composition-variables='[
+    {"id":"eyebrow","type":"string","label":"Eyebrow","default":"Seamless gutter systems"},
+    {"id":"cta","type":"string","label":"Call to action","default":"Get a free estimate"},
+    {"id":"accent","type":"color","label":"Accent","default":"#9a5a2c"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Geist";
+        src: url("assets/fonts/geist-latin.woff2") format("woff2");
+        font-weight: 300 700;
+      }
+      @font-face {
+        font-family: "Geist Mono";
+        src: url("assets/fonts/geist-mono-latin.woff2") format("woff2");
+        font-weight: 400 500;
+      }
+      /* K&J Gutters site palette (public/styles.css) */
+      :root {
+        --ground: #eceeed;
+        --surface: #f6f7f6;
+        --ink: #151819;
+        --muted: #5a6164;
+        --accent: #9a5a2c;
+        --font-display: "Geist", sans-serif;
+        --font-mono: "Geist Mono", monospace;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--ground);
+      }
+      #root {
+        width: 100%;
+        height: 100%;
+        font-family: var(--font-display);
+        color: var(--ink);
+      }
+      #bg {
+        position: absolute;
+        inset: 0;
+        background: var(--ground);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="10"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div id="bg"></div>
+      <div
+        id="title"
+        data-composition-id="title"
+        data-composition-src="compositions/title.html"
+        data-start="0"
+        data-duration="4.4"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+      <div
+        id="work"
+        data-composition-id="work"
+        data-composition-src="compositions/work.html"
+        data-start="4.4"
+        data-duration="2.8"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+      <div
+        id="end"
+        data-composition-id="end"
+        data-composition-src="compositions/end.html"
+        data-start="7.2"
+        data-duration="2.8"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+    </div>
+    <script>
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,61 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 36px;
+      text-align: center;
+    }
+    #title-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 30px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    #title-head {
+      font-size: 120px;
+      font-weight: 600;
+      line-height: 1.02;
+      letter-spacing: -0.035em;
+    }
+    #title-head .w {
+      display: inline-block;
+    }
+    #title-head .accent {
+      color: var(--accent);
+    }
+  </style>
+  <div id="root" data-composition-id="title" data-width="1920" data-height="1080">
+    <p id="title-eyebrow" class="clip" data-start="0" data-duration="4.4" data-var-text="eyebrow">
+      Seamless gutter systems
+    </p>
+    <h1 id="title-head" class="clip" data-start="0" data-duration="4.4">
+      <span class="w">Custom</span> <span class="w">gutters,</span><br />
+      <span class="w accent">formed</span> <span class="w accent">on</span>
+      <span class="w accent">site.</span>
+    </h1>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // Eyebrow holds from frame 0; title fades in word by word, blur to sharp, no translate
+    tl.fromTo(
+      "#title-head .w",
+      { opacity: 0, filter: "blur(10px)" },
+      { opacity: 1, filter: "blur(0px)", duration: 0.6, ease: "expo.out", stagger: 0.14 },
+      0.4,
+    );
+    // Hold dead still, then blur out word by word
+    tl.to(
+      ["#title-eyebrow", "#title-head .w"],
+      { opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power3.in", stagger: 0.03 },
+      3.95,
+    );
+    window.__timelines["title"] = tl;
+  </script>
+</template>
