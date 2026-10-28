@@ -1,0 +1,188 @@
+{
+ "bpm": 84,
+ "bar": 2.857142857142857,
+ "lines": [
+  [
+   {
+    "id": "l0w0",
+    "text": "Mist",
+    "start": 2.857,
+    "end": 3.214
+   },
+   {
+    "id": "l0w1",
+    "text": "on",
+    "start": 3.214,
+    "end": 3.393
+   },
+   {
+    "id": "l0w2",
+    "text": "the",
+    "start": 3.393,
+    "end": 3.571
+   },
+   {
+    "id": "l0w3",
+    "text": "river,",
+    "start": 3.571,
+    "end": 4.286
+   },
+   {
+    "id": "l0w4",
+    "text": "line",
+    "start": 4.286,
+    "end": 4.643
+   },
+   {
+    "id": "l0w5",
+    "text": "in",
+    "start": 4.643,
+    "end": 4.821
+   },
+   {
+    "id": "l0w6",
+    "text": "the",
+    "start": 4.821,
+    "end": 5.0
+   },
+   {
+    "id": "l0w7",
+    "text": "stream",
+    "start": 5.0,
+    "end": 5.714
+   }
+  ],
+  [
+   {
+    "id": "l1w0",
+    "text": "Cast",
+    "start": 5.714,
+    "end": 6.071
+   },
+   {
+    "id": "l1w1",
+    "text": "it",
+    "start": 6.071,
+    "end": 6.25
+   },
+   {
+    "id": "l1w2",
+    "text": "out",
+    "start": 6.25,
+    "end": 6.429
+   },
+   {
+    "id": "l1w3",
+    "text": "slow,",
+    "start": 6.429,
+    "end": 7.143
+   },
+   {
+    "id": "l1w4",
+    "text": "chasing",
+    "start": 7.143,
+    "end": 7.679
+   },
+   {
+    "id": "l1w5",
+    "text": "a",
+    "start": 7.679,
+    "end": 7.857
+   },
+   {
+    "id": "l1w6",
+    "text": "dream",
+    "start": 7.857,
+    "end": 8.571
+   }
+  ],
+  [
+   {
+    "id": "l2w0",
+    "text": "Waiting",
+    "start": 8.571,
+    "end": 8.929
+   },
+   {
+    "id": "l2w1",
+    "text": "for",
+    "start": 8.929,
+    "end": 9.107
+   },
+   {
+    "id": "l2w2",
+    "text": "the",
+    "start": 9.107,
+    "end": 9.286
+   },
+   {
+    "id": "l2w3",
+    "text": "tug",
+    "start": 9.286,
+    "end": 10.0
+   },
+   {
+    "id": "l2w4",
+    "text": "beneath",
+    "start": 10.0,
+    "end": 10.536
+   },
+   {
+    "id": "l2w5",
+    "text": "the",
+    "start": 10.536,
+    "end": 10.714
+   },
+   {
+    "id": "l2w6",
+    "text": "gray",
+    "start": 10.714,
+    "end": 11.429
+   }
+  ],
+  [
+   {
+    "id": "l3w0",
+    "text": "Let",
+    "start": 11.429,
+    "end": 11.607
+   },
+   {
+    "id": "l3w1",
+    "text": "the",
+    "start": 11.607,
+    "end": 11.786
+   },
+   {
+    "id": "l3w2",
+    "text": "river",
+    "start": 11.786,
+    "end": 12.143
+   },
+   {
+    "id": "l3w3",
+    "text": "keep",
+    "start": 12.143,
+    "end": 12.5
+   },
+   {
+    "id": "l3w4",
+    "text": "the",
+    "start": 12.5,
+    "end": 12.857
+   },
+   {
+    "id": "l3w5",
+    "text": "hours",
+    "start": 12.857,
+    "end": 13.393
+   },
+   {
+    "id": "l3w6",
+    "text": "away",
+    "start": 13.393,
+    "end": 14.993
+   }
+  ]
+ ]
+}

@@ -1,0 +1,118 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+    }
+    .ly-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 700px;
+      text-align: center;
+      overflow: visible;
+    }
+    .ly-inner {
+      display: inline-block;
+      padding: 26px 46px 30px;
+      border-radius: 36px;
+      background: rgb(10 26 23 / 0.46);
+    }
+    .ly-row {
+      font-size: 80px;
+      font-weight: 700;
+      font-style: italic;
+      line-height: 1.12;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+    .ly-row .w {
+      display: inline-block;
+      color: rgb(255 255 255 / 0.75);
+      text-shadow: 0 2px 18px rgb(0 0 0 / 0.35);
+    }
+  </style>
+  <div id="root" data-composition-id="lyrics" data-width="1080" data-height="1920">
+    <div id="ly-l0" class="clip ly-line" data-start="2.607" data-duration="2.857">
+      <div class="ly-inner" id="ly-l0-in">
+          <div class="ly-row"><span class="w" id="l0w0">Mist</span> <span class="w" id="l0w1">on</span> <span class="w" id="l0w2">the</span> <span class="w" id="l0w3">river,</span></div>
+          <div class="ly-row"><span class="w" id="l0w4">line</span> <span class="w" id="l0w5">in</span> <span class="w" id="l0w6">the</span> <span class="w" id="l0w7">stream</span></div>
+      </div>
+    </div>
+    <div id="ly-l1" class="clip ly-line" data-start="5.464" data-duration="2.857">
+      <div class="ly-inner" id="ly-l1-in">
+          <div class="ly-row"><span class="w" id="l1w0">Cast</span> <span class="w" id="l1w1">it</span> <span class="w" id="l1w2">out</span> <span class="w" id="l1w3">slow,</span></div>
+          <div class="ly-row"><span class="w" id="l1w4">chasing</span> <span class="w" id="l1w5">a</span> <span class="w" id="l1w6">dream</span></div>
+      </div>
+    </div>
+    <div id="ly-l2" class="clip ly-line" data-start="8.321" data-duration="2.858">
+      <div class="ly-inner" id="ly-l2-in">
+          <div class="ly-row"><span class="w" id="l2w0">Waiting</span> <span class="w" id="l2w1">for</span> <span class="w" id="l2w2">the</span> <span class="w" id="l2w3">tug</span></div>
+          <div class="ly-row"><span class="w" id="l2w4">beneath</span> <span class="w" id="l2w5">the</span> <span class="w" id="l2w6">gray</span></div>
+      </div>
+    </div>
+    <div id="ly-l3" class="clip ly-line" data-start="11.179" data-duration="3.021">
+      <div class="ly-inner" id="ly-l3-in">
+          <div class="ly-row"><span class="w" id="l3w0">Let</span> <span class="w" id="l3w1">the</span> <span class="w" id="l3w2">river</span> <span class="w" id="l3w3">keep</span></div>
+          <div class="ly-row"><span class="w" id="l3w4">the</span> <span class="w" id="l3w5">hours</span> <span class="w" id="l3w6">away</span></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const hl =
+      getComputedStyle(document.documentElement).getPropertyValue("--highlight").trim() || "#ffd27a";
+    // Karaoke: each word lights up in the highlight colour on its melody note, then settles to white
+    function sing(sel, start, end) {
+      tl.fromTo(sel, { color: "rgba(255,255,255,0.75)", scale: 1 },
+        { color: hl, scale: 1.08, duration: 0.09, ease: "power3.out" }, start);
+      tl.to(sel, { color: "#ffffff", scale: 1, duration: 0.3, ease: "power2.out" }, Math.max(start + 0.12, end - 0.1));
+    }
+    // Line 1
+    tl.fromTo("#ly-l0-in", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.22, ease: "power4.out" }, 2.607);
+    sing("#l0w0", 2.857, 3.214);
+    sing("#l0w1", 3.214, 3.393);
+    sing("#l0w2", 3.393, 3.571);
+    sing("#l0w3", 3.571, 4.286);
+    sing("#l0w4", 4.286, 4.643);
+    sing("#l0w5", 4.643, 4.821);
+    sing("#l0w6", 4.821, 5.0);
+    sing("#l0w7", 5.0, 5.714);
+    tl.to("#ly-l0-in", { opacity: 0, filter: "blur(8px)", duration: 0.18, ease: "power2.in" }, 5.264);
+    tl.set("#ly-l0-in", { opacity: 0, visibility: "hidden" }, 5.454);
+    // Line 2
+    tl.fromTo("#ly-l1-in", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.22, ease: "power4.out" }, 5.464);
+    sing("#l1w0", 5.714, 6.071);
+    sing("#l1w1", 6.071, 6.25);
+    sing("#l1w2", 6.25, 6.429);
+    sing("#l1w3", 6.429, 7.143);
+    sing("#l1w4", 7.143, 7.679);
+    sing("#l1w5", 7.679, 7.857);
+    sing("#l1w6", 7.857, 8.571);
+    tl.to("#ly-l1-in", { opacity: 0, filter: "blur(8px)", duration: 0.18, ease: "power2.in" }, 8.121);
+    tl.set("#ly-l1-in", { opacity: 0, visibility: "hidden" }, 8.311);
+    // Line 3
+    tl.fromTo("#ly-l2-in", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.22, ease: "power4.out" }, 8.321);
+    sing("#l2w0", 8.571, 8.929);
+    sing("#l2w1", 8.929, 9.107);
+    sing("#l2w2", 9.107, 9.286);
+    sing("#l2w3", 9.286, 10.0);
+    sing("#l2w4", 10.0, 10.536);
+    sing("#l2w5", 10.536, 10.714);
+    sing("#l2w6", 10.714, 11.429);
+    tl.to("#ly-l2-in", { opacity: 0, filter: "blur(8px)", duration: 0.18, ease: "power2.in" }, 10.979);
+    tl.set("#ly-l2-in", { opacity: 0, visibility: "hidden" }, 11.169);
+    // Line 4
+    tl.fromTo("#ly-l3-in", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.22, ease: "power4.out" }, 11.179);
+    sing("#l3w0", 11.429, 11.607);
+    sing("#l3w1", 11.607, 11.786);
+    sing("#l3w2", 11.786, 12.143);
+    sing("#l3w3", 12.143, 12.5);
+    sing("#l3w4", 12.5, 12.857);
+    sing("#l3w5", 12.857, 13.393);
+    sing("#l3w6", 13.393, 14.993);
+    tl.to("#ly-l3-in", { opacity: 0, filter: "blur(8px)", duration: 0.18, ease: "power2.in" }, 14.0);
+    tl.set("#ly-l3-in", { opacity: 0, visibility: "hidden" }, 14.19);
+    window.__timelines["lyrics"] = tl;
+  </script>
+</template>
