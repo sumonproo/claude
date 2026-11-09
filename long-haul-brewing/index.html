@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Long Haul Brewing — Brewery &amp; Taproom, Asheville NC</title>
+<meta name="description" content="Long Haul Brewing: a small brewery and taproom in an old freight depot in Asheville, North Carolina. Six beers in cans, fourteen on draft and a food truck every night.">
+<meta name="theme-color" content="#F3EEE2">
+<link rel="preload" href="assets/fonts/bowlby-one-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/work-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="styles.css">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<a class="skip" href="#beers">Skip to the beers</a>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <a class="nav-mark" href="#top" aria-label="Long Haul Brewing, back to top">LONG HAUL</a>
+  <nav class="nav-links" id="navLinks" aria-label="Main">
+    <a href="#beers">Beers</a>
+    <a href="#taproom">Taproom</a>
+    <a href="#events">Events</a>
+    <a href="#tours">Tours</a>
+    <a href="#find">Find a can</a>
+    <a class="btn btn-sm nav-cta" href="#book">Book a tour</a>
+  </nav>
+  <p class="open-note" id="openNote" aria-live="polite"><span class="dot" aria-hidden="true"></span><span class="open-text">Taproom Tue–Sun from 3 pm</span><span class="open-short">Tue–Sun 3 pm</span></p>
+  <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks"><span class="bars" aria-hidden="true"></span><span class="sr">Menu</span></button>
+</header>
+
+<main>
+<!-- ============ HERO POSTER ============ -->
+<section class="hero sec" id="top" aria-labelledby="heroTitle">
+  <div class="poster">
+    <span class="crop tl" aria-hidden="true"></span><span class="crop tr" aria-hidden="true"></span>
+    <span class="crop bl" aria-hidden="true"></span><span class="crop br" aria-hidden="true"></span>
+    <span class="regmark rm-top" aria-hidden="true"></span><span class="regmark rm-bot" aria-hidden="true"></span>
+    <div class="colorbar" aria-hidden="true">
+      <i style="--c:var(--pink)"></i><i style="--c:var(--pink);opacity:.55"></i><i style="--c:var(--pink);opacity:.2"></i>
+      <i style="--c:var(--blue)"></i><i style="--c:var(--blue);opacity:.55"></i><i style="--c:var(--blue);opacity:.2"></i>
+      <i style="--c:var(--yellow)"></i><i style="--c:var(--indigo)"></i><i style="--c:var(--ink)"></i>
+    </div>
+
+    <div class="hero-meta">
+      <span>Asheville · North Carolina</span>
+      <span>Brewery &amp; Taproom</span>
+      <span class="hide-sm">In an old freight depot</span>
+    </div>
+
+    <h1 class="sr" id="heroTitle">Long Haul Brewing</h1>
+    <div class="hero-stage" aria-hidden="true">
+      <svg class="hero-art" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMax slice" id="heroArt">
+        <defs>
+          <pattern id="dotsBlue" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+            <circle cx="4.5" cy="4.5" r="2.3" fill="#0078BF"/>
+          </pattern>
+          <pattern id="dotsBlueSm" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+            <circle cx="3.5" cy="3.5" r="1.3" fill="#0078BF"/>
+          </pattern>
+        </defs>
+        <g class="ink ink-y"><circle cx="500" cy="400" r="270" fill="#FFE800"/></g>
+        <g class="ink ink-p" id="sunDots"></g>
+        <g class="ink ink-b">
+          <path d="M0 470 C80 440 140 410 210 430 S330 380 400 405 S520 360 600 392 S720 350 800 384 S920 360 1000 380 L1000 700 L0 700Z" fill="url(#dotsBlueSm)"/>
+          <path d="M0 530 C70 500 150 470 230 495 S360 455 450 488 S560 450 650 478 S790 440 870 470 S960 455 1000 465 L1000 700 L0 700Z" fill="url(#dotsBlue)"/>
+          <path d="M0 600 C90 560 170 548 260 572 S420 530 520 560 S690 528 780 556 S920 540 1000 552 L1000 700 L0 700Z" fill="#0078BF"/>
+        </g>
+        <g class="ink ink-p">
+          <path d="M0 640 C110 612 210 600 320 622 S520 596 640 616 S860 598 1000 610 L1000 700 L0 700Z" fill="#FF48B0"/>
+        </g>
+      </svg>
+      <div class="hero-word hw1 riso">LONG</div>
+      <div class="hero-can" id="heroCan"><span class="can-shadow"></span></div>
+      <div class="hero-word hw2 riso">HAUL</div>
+    </div>
+
+    <div class="hero-foot">
+      <p class="hero-brew">BREWING</p>
+      <p class="hero-lede">Six in cans. Fourteen on draft. A different food truck every night.</p>
+      <div class="hero-ctas">
+        <a class="btn" href="#beers">See the beers</a>
+        <a class="btn btn-ghost" href="#book">Book a tour</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TICKER ============ -->
+<div class="ticker" aria-label="Beers in cans: Hazy IPA 6.8%, Smoked Porter 7.4%, Pilsner 4.9%. Fourteen on draft.">
+  <div class="ticker-track" aria-hidden="true">
+    <span>Hazy IPA 6.8%</span><b>✶</b><span>Smoked Porter 7.4%</span><b>✶</b><span>Pilsner 4.9%</span><b>✶</b><span>14 on draft</span><b>✶</b><span>Food truck every night</span><b>✶</b><span>Tue–Sun from 3 pm</span><b>✶</b>
+    <span>Hazy IPA 6.8%</span><b>✶</b><span>Smoked Porter 7.4%</span><b>✶</b><span>Pilsner 4.9%</span><b>✶</b><span>14 on draft</span><b>✶</b><span>Food truck every night</span><b>✶</b><span>Tue–Sun from 3 pm</span><b>✶</b>
+  </div>
+</div>
+
+<!-- ============ TAP LIST ============ -->
+<section class="taps sec" id="beers" aria-labelledby="tapsTitle">
+  <div class="taps-pin">
+    <div class="taps-head">
+      <p class="label">The tap list · In cans</p>
+      <h2 class="riso" id="tapsTitle">Off the line</h2>
+    </div>
+    <div class="taps-body">
+      <div class="tap-detail" id="tapDetail" aria-live="polite">
+        <p class="label tap-count"><span id="tapNum">01</span> / <span id="tapTotal">06</span></p>
+        <h3 class="riso tap-name" id="tapName">Hazy IPA</h3>
+        <p class="tap-style" id="tapStyle">Hazy IPA</p>
+        <p class="tap-abv"><span id="tapAbv">6.8%</span> ABV</p>
+        <p class="tap-note" id="tapNote"></p>
+      </div>
+      <div class="shelf" role="group" aria-label="Choose a beer">
+        <div class="cans" id="cans"></div>
+        <div class="shelf-line" aria-hidden="true"></div>
+      </div>
+    </div>
+    <p class="taps-foot">Fourteen more on draft at the taproom. <span class="ph">[Draft list — add a link or your current board]</span></p>
+    <p class="scroll-hint label" aria-hidden="true">Keep scrolling ↓</p>
+  </div>
+</section>
+
+<!-- ============ TAPROOM ============ -->
+<section class="taproom sec" id="taproom" aria-labelledby="taproomTitle">
+  <div class="wrap">
+    <div class="taproom-intro">
+      <p class="label">The taproom</p>
+      <h2 class="riso" id="taproomTitle">Where the freight used to go</h2>
+      <div class="story">
+        <p>Long Haul Brewing pours out of an old freight depot in Asheville. Fourteen taps on the wall, six beers in cans to take home, and a different food truck pulled up every night we're open.</p>
+        <p class="ph">[Your story in your words: who started Long Haul, how you ended up in the depot, what you care about. Two or three sentences is plenty.]</p>
+      </div>
+    </div>
+  </div>
+
+  <figure class="depot">
+    <svg viewBox="0 0 1400 420" role="img" aria-labelledby="depotTitle" id="depotArt">
+      <title id="depotTitle">Drawing of the old freight depot taproom, with a food truck parked beside it</title>
+      <defs>
+        <pattern id="hatchB" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="2" height="6" fill="#0078BF"/></pattern>
+        <pattern id="dotsP" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(15)"><circle cx="3.5" cy="3.5" r="1.7" fill="#FF48B0"/></pattern>
+        <pattern id="dotsB2" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><circle cx="4" cy="4" r="1.6" fill="#0078BF"/></pattern>
+      </defs>
+      <!-- pink layer -->
+      <g class="ink ink-p">
+        <circle cx="1120" cy="120" r="70" fill="url(#dotsP)"/>
+        <rect x="430" y="58" width="420" height="54" fill="#FF48B0"/>
+        <rect x="236" y="206" width="70" height="102" fill="url(#dotsP)"/>
+        <rect x="566" y="206" width="70" height="102" fill="url(#dotsP)"/>
+        <rect x="896" y="206" width="70" height="102" fill="url(#dotsP)"/>
+        <rect x="1080" y="246" width="210" height="26" fill="#FF48B0"/>
+        <path d="M1086 228 L1284 228 L1270 246 L1100 246Z" fill="#FF48B0"/>
+        <g fill="#FF48B0"><circle cx="1010" cy="196" r="5"/><circle cx="1040" cy="206" r="5"/><circle cx="1070" cy="212" r="5"/><circle cx="1100" cy="214" r="5"/><circle cx="1130" cy="211" r="5"/></g>
+      </g>
+      <!-- blue layer -->
+      <g class="ink ink-b" fill="none" stroke="#0078BF" stroke-width="4" stroke-linejoin="round">
+        <path d="M0 210 C140 170 260 190 380 160 S620 150 760 170 S1060 140 1400 180 L1400 210" fill="url(#dotsB2)" stroke="none"/>
+        <!-- roof -->
+        <path d="M110 190 L230 128 L1050 128 L1170 190 Z" fill="#0078BF" stroke="none"/>
+        <path d="M120 190 L1160 190" />
+        <!-- sign -->
+        <rect x="430" y="58" width="420" height="54" />
+        <line x1="470" y1="112" x2="470" y2="128"/><line x1="810" y1="112" x2="810" y2="128"/>
+        <!-- walls -->
+        <rect x="150" y="190" width="980" height="130" fill="url(#hatchB)" fill-opacity=".35"/>
+        <!-- eave brackets -->
+        <g stroke-width="3"><path d="M170 190 l20 22"/><path d="M330 190 l20 22"/><path d="M490 190 l20 22"/><path d="M650 190 l20 22"/><path d="M810 190 l20 22"/><path d="M970 190 l20 22"/><path d="M1110 190 l-20 22"/></g>
+        <!-- freight doors -->
+        <g><rect x="236" y="206" width="70" height="102" fill="#F3EEE2"/><path d="M236 206 L306 308 M306 206 L236 308"/>
+           <rect x="566" y="206" width="70" height="102" fill="#F3EEE2"/><path d="M566 206 L636 308 M636 206 L566 308"/>
+           <rect x="896" y="206" width="70" height="102" fill="#F3EEE2"/><path d="M896 206 L966 308 M966 206 L896 308"/></g>
+        <!-- windows -->
+        <g fill="#F3EEE2"><rect x="370" y="222" width="54" height="56"/><rect x="460" y="222" width="54" height="56"/><rect x="690" y="222" width="54" height="56"/><rect x="780" y="222" width="54" height="56"/><rect x="1020" y="222" width="54" height="56"/></g>
+        <g stroke-width="2.5"><path d="M397 222 v56 M370 250 h54 M487 222 v56 M460 250 h54 M717 222 v56 M690 250 h54 M807 222 v56 M780 250 h54 M1047 222 v56 M1020 250 h54"/></g>
+        <!-- platform -->
+        <rect x="120" y="320" width="1040" height="22" fill="#0078BF"/>
+        <g stroke-width="3"><path d="M150 342 v18 M320 342 v18 M490 342 v18 M660 342 v18 M830 342 v18 M1000 342 v18 M1140 342 v18"/></g>
+        <!-- tracks -->
+        <path d="M0 372 H1400 M0 392 H1400" stroke-width="3"/>
+        <g stroke-width="5"><path d="M20 366 v32 M70 366 v32 M120 366 v32 M170 366 v32 M220 366 v32 M270 366 v32 M320 366 v32 M370 366 v32 M420 366 v32 M470 366 v32 M520 366 v32 M570 366 v32 M620 366 v32 M670 366 v32 M720 366 v32 M770 366 v32 M820 366 v32 M870 366 v32 M920 366 v32 M970 366 v32 M1020 366 v32 M1070 366 v32 M1120 366 v32 M1170 366 v32 M1220 366 v32 M1270 366 v32 M1320 366 v32 M1370 366 v32"/></g>
+        <!-- string lights -->
+        <path d="M1000 186 Q1070 226 1140 206" stroke-width="2"/>
+        <!-- food truck -->
+        <path d="M1080 246 h210 v80 h-210 z" fill="#F3EEE2"/>
+        <path d="M1290 270 h40 l26 28 v28 h-66" fill="#F3EEE2"/>
+        <rect x="1110" y="262" width="120" height="34" fill="#0078BF"/>
+        <path d="M1300 278 h26 l16 18 h-42z" fill="#0078BF" stroke="none"/>
+        <circle cx="1120" cy="334" r="16" fill="#F3EEE2"/><circle cx="1310" cy="334" r="16" fill="#F3EEE2"/>
+        <circle cx="1120" cy="334" r="5" fill="#0078BF"/><circle cx="1310" cy="334" r="5" fill="#0078BF"/>
+      </g>
+      <g class="ink ink-b sign-text">
+        <text x="640" y="96" text-anchor="middle" class="svg-display" font-size="30" fill="#F3EEE2">LONG HAUL BREWING</text>
+      </g>
+      <!-- annotation -->
+      <g class="ink ink-k annot">
+        <path d="M1200 222 C1200 180 1230 160 1260 150" fill="none" stroke="#1A1A1A" stroke-width="2"/>
+        <path d="M1192 208 L1200 224 L1209 209" fill="none" stroke="#1A1A1A" stroke-width="2"/>
+        <text x="1390" y="146" text-anchor="end" class="svg-label" font-size="15" fill="#1A1A1A">TONIGHT'S TRUCK</text>
+      </g>
+    </svg>
+  </figure>
+
+  <div class="wrap taproom-info">
+    <div class="card hours">
+      <p class="label">Taproom hours</p>
+      <ul class="hours-list" id="hoursList">
+        <li data-day="1"><span>Mon</span><span>Closed</span></li>
+        <li data-day="2"><span>Tue</span><span>3 pm – <span class="ph">[close]</span></span></li>
+        <li data-day="3"><span>Wed</span><span>3 pm – <span class="ph">[close]</span></span></li>
+        <li data-day="4"><span>Thu</span><span>3 pm – <span class="ph">[close]</span></span></li>
+        <li data-day="5"><span>Fri</span><span>3 pm – <span class="ph">[close]</span></span></li>
+        <li data-day="6"><span>Sat</span><span>3 pm – <span class="ph">[close]</span></span></li>
+        <li data-day="0"><span>Sun</span><span>3 pm – <span class="ph">[close]</span></span></li>
+      </ul>
+    </div>
+    <div class="card trucks">
+      <p class="label">Food truck · a different one every night</p>
+      <p class="truck-tonight" id="truckTonight"></p>
+      <ol class="truck-week" id="truckWeek"></ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EVENTS ============ -->
+<section class="events sec" id="events" aria-labelledby="eventsTitle">
+  <div class="wrap">
+    <p class="label">Events</p>
+    <h2 class="riso riso-light" id="eventsTitle">On the bill every week</h2>
+    <div class="gigs">
+      <article class="gig" style="--a:var(--yellow);--b:var(--pink)">
+        <div class="gig-art" aria-hidden="true">
+          <svg viewBox="0 0 200 200">
+            <g class="ink ink-1"><circle cx="100" cy="112" r="62" fill="var(--a)"/></g>
+            <g class="ink ink-2" fill="none" stroke="var(--b)" stroke-width="7" stroke-linecap="round">
+              <circle cx="100" cy="122" r="40" fill="var(--b)"/><circle cx="100" cy="122" r="14" fill="#1A2477" stroke="none"/>
+              <path d="M100 82 L100 14"/><path d="M90 16 h20"/><path d="M92 28 h16 M92 40 h16 M92 52 h16 M92 64 h16" stroke-width="3"/>
+            </g>
+          </svg>
+        </div>
+        <p class="gig-day">Every Thursday</p>
+        <h3 class="gig-title">Bluegrass</h3>
+        <p class="gig-time">Doors 3 pm · Music <span class="ph">[start time]</span></p>
+      </article>
+      <article class="gig" style="--a:var(--pink);--b:var(--blue)">
+        <div class="gig-art" aria-hidden="true">
+          <svg viewBox="0 0 200 200">
+            <g class="ink ink-1"><rect x="30" y="40" width="140" height="140" fill="var(--a)"/></g>
+            <g class="ink ink-2"><text x="104" y="168" text-anchor="middle" class="svg-display" font-size="170" fill="var(--b)">?</text></g>
+          </svg>
+        </div>
+        <p class="gig-day">Every Tuesday</p>
+        <h3 class="gig-title">Trivia</h3>
+        <p class="gig-time">Starts <span class="ph">[start time]</span></p>
+      </article>
+      <article class="gig" style="--a:var(--yellow);--b:var(--blue)">
+        <div class="gig-art" aria-hidden="true">
+          <svg viewBox="0 0 200 200">
+            <g class="ink ink-1"><path d="M20 180 L20 110 L60 80 L60 180Z M140 180 L140 90 L180 60 L180 180Z" fill="var(--a)"/><circle cx="100" cy="60" r="34" fill="var(--a)"/></g>
+            <g class="ink ink-2" fill="var(--b)"><path d="M70 70 h60 v90 l-30 22 l-30 -22z"/><rect x="92" y="40" width="16" height="30"/><path d="M60 182 h80 v8 h-80z"/></g>
+          </svg>
+        </div>
+        <p class="gig-day">Every Saturday</p>
+        <h3 class="gig-title">Brewery tours</h3>
+        <p class="gig-time">1 pm &amp; 3 pm · $18</p>
+        <a class="gig-link" href="#book">Book a spot →</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TOURS ============ -->
+<section class="tours sec" id="tours" aria-labelledby="toursTitle">
+  <div class="wrap">
+    <p class="label">Saturday tours</p>
+    <h2 class="riso" id="toursTitle">Take the long way round</h2>
+    <p class="lede">Saturdays at 1 pm and 3 pm. $18 a head. Come walk the depot with us.</p>
+    <div class="tours-grid">
+      <figure class="plan" id="plan">
+        <svg viewBox="0 0 640 470" role="img" aria-labelledby="planTitle">
+          <title id="planTitle">Floor plan sketch of the depot with the tour route</title>
+          <defs>
+            <pattern id="planDots" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><circle cx="4" cy="4" r="1.4" fill="#0078BF"/></pattern>
+          </defs>
+          <g class="ink ink-b" fill="none" stroke="#0078BF" stroke-width="3">
+            <rect x="20" y="20" width="600" height="410" stroke-width="8"/>
+            <path d="M230 20 V190 M230 260 V430 M230 230 H20 M420 20 V150 M420 220 V320 M420 320 H620 M230 150 H420"/>
+            <!-- bar -->
+            <path d="M50 280 H190 V400" stroke-width="12" stroke-linecap="square"/>
+            <!-- brewhouse -->
+            <circle cx="290" cy="90" r="30" fill="url(#planDots)"/><circle cx="365" cy="90" r="30" fill="url(#planDots)"/>
+            <!-- fermenters -->
+            <g fill="url(#planDots)"><circle cx="465" cy="70" r="22"/><circle cx="520" cy="70" r="22"/><circle cx="575" cy="70" r="22"/><circle cx="465" cy="130" r="22"/><circle cx="520" cy="130" r="22"/><circle cx="575" cy="130" r="22"/></g>
+            <!-- canning line -->
+            <path d="M450 380 H600" stroke-width="10" stroke-dasharray="6 6"/>
+            <!-- cold room -->
+            <rect x="40" y="40" width="170" height="170" fill="url(#planDots)" fill-opacity=".5"/>
+            <!-- tables -->
+            <g><circle cx="80" cy="340" r="14"/><circle cx="130" cy="390" r="14"/><circle cx="290" cy="300" r="16"/><circle cx="360" cy="370" r="16"/><circle cx="290" cy="390" r="16"/></g>
+            <!-- doors -->
+            <path d="M260 430 h60" stroke="#F3EEE2" stroke-width="10"/>
+            <path d="M620 340 v70" stroke="#F3EEE2" stroke-width="10"/>
+          </g>
+          <g class="plan-labels">
+            <text x="125" y="128" text-anchor="middle">COLD ROOM</text>
+            <text x="327" y="44" text-anchor="middle">BREWHOUSE</text>
+            <text x="520" y="180" text-anchor="middle">FERMENTERS</text>
+            <text x="525" y="360" text-anchor="middle">CANNING LINE</text>
+            <text x="120" y="262" text-anchor="middle">BAR</text>
+            <text x="325" y="250" text-anchor="middle">TAPROOM</text>
+            <text x="290" y="456" text-anchor="middle">IN</text>
+            <text x="596" y="420" text-anchor="end">DOCK</text>
+          </g>
+          <path class="route-ghost" d="M290 425 C290 360 320 300 330 250 C340 200 300 170 300 135 C300 120 420 175 470 180 C540 188 600 200 600 250 C600 300 520 300 520 340 C520 360 470 360 400 335 C330 310 260 240 200 220 C150 205 120 180 120 160 C120 200 150 240 130 300"/>
+          <path class="route" id="route" d="M290 425 C290 360 320 300 330 250 C340 200 300 170 300 135 C300 120 420 175 470 180 C540 188 600 200 600 250 C600 300 520 300 520 340 C520 360 470 360 400 335 C330 310 260 240 200 220 C150 205 120 180 120 160 C120 200 150 240 130 300"/>
+          <g id="stations" class="stations">
+            <g data-at="0.0"><circle cx="290" cy="425" r="15"/><text x="290" y="430">1</text></g>
+            <g data-at="0.2"><circle cx="300" cy="135" r="15"/><text x="300" y="140">2</text></g>
+            <g data-at="0.42"><circle cx="600" cy="250" r="15"/><text x="600" y="255">3</text></g>
+            <g data-at="0.58"><circle cx="520" cy="340" r="15"/><text x="520" y="345">4</text></g>
+            <g data-at="0.85"><circle cx="120" cy="160" r="15"/><text x="120" y="165">5</text></g>
+            <g data-at="1"><circle cx="130" cy="300" r="15"/><text x="130" y="305">6</text></g>
+          </g>
+          <circle id="walker" class="walker" r="8" cx="290" cy="425"/>
+        </svg>
+        <figcaption>Route sketch. <span class="ph">[Confirm your real tour stops and how long the tour runs]</span></figcaption>
+      </figure>
+
+      <form class="ticket" id="book" novalidate aria-labelledby="ticketTitle">
+        <div class="ticket-main">
+          <p class="label">Admit · Saturday tour</p>
+          <h3 class="ticket-title" id="ticketTitle">Book a tour</h3>
+          <div class="field">
+            <label for="tDate">Saturday</label>
+            <input id="tDate" name="date" type="date" required aria-describedby="tDateHelp">
+            <small id="tDateHelp">Tours run on Saturdays only.</small>
+          </div>
+          <fieldset class="field times">
+            <legend>Time</legend>
+            <label class="chip"><input type="radio" name="time" value="1 pm" checked> <span>1 pm</span></label>
+            <label class="chip"><input type="radio" name="time" value="3 pm"> <span>3 pm</span></label>
+          </fieldset>
+          <div class="field">
+            <label for="tGuests">Guests</label>
+            <div class="stepper">
+              <button type="button" data-step="-1" aria-label="One fewer guest">–</button>
+              <input id="tGuests" name="guests" type="number" min="1" max="20" value="2" inputmode="numeric">
+              <button type="button" data-step="1" aria-label="One more guest">+</button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="tName">Name</label>
+            <input id="tName" name="name" type="text" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="tContact">Email or phone</label>
+            <input id="tContact" name="contact" type="text" autocomplete="email" required>
+          </div>
+          <p class="form-msg" id="ticketMsg" role="status"></p>
+        </div>
+        <div class="ticket-stub">
+          <p class="label">Total</p>
+          <p class="stub-total"><span id="tTotal">$36</span></p>
+          <p class="stub-calc"><span id="tCalc">2 × $18</span></p>
+          <button class="btn btn-ink" type="submit">Book it</button>
+          <p class="stub-or">or call <a href="tel:+15550182716">(555) 018-2716</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FIND A CAN ============ -->
+<section class="find sec" id="find" aria-labelledby="findTitle">
+  <div class="wrap">
+    <p class="label">Stockists</p>
+    <h2 class="riso" id="findTitle">Find a can near you</h2>
+    <div class="filters" role="group" aria-label="Filter stockists by beer" id="filters">
+      <button class="chip-btn is-on" data-beer="all" aria-pressed="true">All beers</button>
+    </div>
+    <div class="find-grid">
+      <figure class="map">
+        <svg viewBox="0 0 600 480" role="img" aria-labelledby="mapTitle" id="mapSvg">
+          <title id="mapTitle">Illustrated map of stockists around the taproom</title>
+          <defs>
+            <pattern id="mapDots" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><circle cx="5" cy="5" r="2" fill="#0078BF"/></pattern>
+          </defs>
+          <g class="ink ink-b">
+            <path d="M0 70 C80 40 150 90 220 60 S360 20 420 50 S540 30 600 60 V0 H0Z" fill="url(#mapDots)"/>
+            <path d="M0 420 C90 400 180 440 260 420 S420 400 480 430 S560 420 600 410 V480 H0Z" fill="url(#mapDots)"/>
+            <path d="M120 0 C150 90 90 160 150 230 S260 330 230 400 S260 460 280 480" fill="none" stroke="#0078BF" stroke-width="18" stroke-linecap="round" opacity=".85"/>
+            <g fill="none" stroke="#0078BF" stroke-width="3" opacity=".7">
+              <path d="M0 250 H600"/><path d="M0 330 C200 320 400 350 600 320"/><path d="M380 0 V480"/><path d="M470 0 C460 160 520 300 500 480"/><path d="M0 160 C200 170 420 140 600 170"/>
+            </g>
+          </g>
+          <g class="ink ink-p">
+            <path d="M330 220 l12 -24 l12 24 l26 3 l-19 18 l5 26 l-24 -12 l-24 12 l5 -26 l-19 -18z" fill="#FF48B0"/>
+          </g>
+          <text x="342" y="292" text-anchor="middle" class="svg-label" font-size="13" fill="#1A1A1A">THE TAPROOM</text>
+          <g id="pins"></g>
+        </svg>
+        <figcaption>Illustrated, not to scale.</figcaption>
+      </figure>
+      <div class="stock-list">
+        <p class="ph block">[Placeholder stockists. Swap in the real shops, bars and bottle shops that carry your cans, and which beers each one has.]</p>
+        <ol id="stockList"></ol>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="foot sec" id="contact">
+  <div class="wrap foot-grid">
+    <div class="signup">
+      <p class="label">The gig sheet</p>
+      <h2 class="foot-h">Who's on the truck, who's on the stage, what's new in cans.</h2>
+      <form class="signup-form" id="signup" novalidate>
+        <label for="sEmail" class="sr">Email address</label>
+        <input id="sEmail" type="email" placeholder="you@email.com" autocomplete="email" required>
+        <button class="btn btn-ink" type="submit">Sign up</button>
+      </form>
+      <p class="form-msg" id="signupMsg" role="status"></p>
+    </div>
+    <div class="foot-info">
+      <div>
+        <p class="label">Visit</p>
+        <p><span class="ph">[Street address]</span><br>Asheville, North Carolina</p>
+      </div>
+      <div>
+        <p class="label">Call</p>
+        <p><a href="tel:+15550182716">(555) 018-2716</a></p>
+      </div>
+      <div>
+        <p class="label">Taproom</p>
+        <p>Tue–Sun from 3 pm<br>Food truck every night</p>
+      </div>
+      <div>
+        <p class="label">Tours</p>
+        <p>Saturdays 1 pm &amp; 3 pm<br><a href="#book">Book online</a></p>
+      </div>
+    </div>
+  </div>
+  <p class="giant riso riso-ink" aria-hidden="true">LONG HAUL</p>
+  <div class="wrap foot-small">
+    <span>© <span id="year">2026</span> Long Haul Brewing · Asheville, NC</span>
+    <span>Please drink responsibly.</span>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>
