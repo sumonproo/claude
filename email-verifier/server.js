@@ -4,7 +4,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const { EmailVerifier } = require('./src/verifier');
+const { EmailVerifier, DISPOSABLE_COUNT } = require('./src/verifier');
 const { selfTest } = require('./src/selftest');
 
 const PORT = Number(process.env.PORT) || 3000;
@@ -12,6 +12,10 @@ const HOST = process.env.BIND || '127.0.0.1';
 const MAX_EMAILS = Number(process.env.MAX_EMAILS_PER_REQUEST) || 10000;
 const AUTH_USER = process.env.AUTH_USER || '';
 const AUTH_PASS = process.env.AUTH_PASS || '';
+const API_KEY = process.env.API_KEY || '';
+// Origins allowed to call the API from a browser, e.g. your Netlify dashboard:
+// ALLOWED_ORIGINS=https://my-verifier.netlify.app   (comma separated, or * for any)
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '').split(',').map((s) => s.trim().replace(/\/$/, '')).filter(Boolean);
 const PUBLIC = path.join(__dirname, 'public');
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml' };
 
@@ -20,13 +24,26 @@ const verifier = new EmailVerifier();
 const dnsOnly = new EmailVerifier({ smtp: false });
 dnsOnly.mxCache = verifier.mxCache;
 
+const same = (a, b) => { const x = Buffer.from(a); const y = Buffer.from(b); return x.length === y.length && crypto.timingSafeEqual(x, y); };
+
 function authorized(req) {
-  if (!AUTH_USER && !AUTH_PASS) return true;
-  const [scheme, value] = (req.headers.authorization || '').split(' ');
-  if (scheme !== 'Basic' || !value) return false;
-  const given = Buffer.from(Buffer.from(value, 'base64').toString());
-  const want = Buffer.from(`${AUTH_USER}:${AUTH_PASS}`);
-  return given.length === want.length && crypto.timingSafeEqual(given, want);
+  if (!AUTH_USER && !AUTH_PASS && !API_KEY) return true;
+  const [scheme, value = ''] = (req.headers.authorization || '').split(' ');
+  if (API_KEY && scheme === 'Bearer' && same(value, API_KEY)) return true;
+  if ((AUTH_USER || AUTH_PASS) && scheme === 'Basic') return same(Buffer.from(value, 'base64').toString(), `${AUTH_USER}:${AUTH_PASS}`);
+  return false;
+}
+
+function cors(req, res) {
+  const origin = req.headers.origin;
+  if (!origin || !ALLOWED_ORIGINS.length) return;
+  if (ALLOWED_ORIGINS.includes('*') || ALLOWED_ORIGINS.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Vary', 'Origin');
+    res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Max-Age', '600');
+  }
 }
 
 function readBody(req, limit = 5 * 1024 * 1024) {
@@ -60,6 +77,7 @@ async function handleVerify(req, res) {
   const ac = new AbortController();
   res.on('close', () => ac.abort());
   const v = body.smtp === false ? dnsOnly : verifier;
+  res.flushHeaders();
   await v.verifyMany(emails, (result, index) => {
     if (!res.writableEnded) res.write(JSON.stringify({ index, ...result }) + '\n');
   }, { signal: ac.signal });
@@ -80,14 +98,17 @@ function serveStatic(req, res) {
 
 const server = http.createServer(async (req, res) => {
   try {
+    cors(req, res);
+    if (req.method === 'OPTIONS') { res.writeHead(204); return res.end(); }
+    const { pathname } = new URL(req.url, 'http://x');
     if (!authorized(req)) {
-      res.writeHead(401, { 'WWW-Authenticate': 'Basic realm="Email Verifier"' });
+      // API callers (the Netlify dashboard) get a plain 401; browsers opening the UI get the password prompt.
+      res.writeHead(401, pathname.startsWith('/api/') && !AUTH_USER ? {} : { 'WWW-Authenticate': 'Basic realm="Email Verifier"' });
       return res.end('Authentication required');
     }
-    const { pathname } = new URL(req.url, 'http://x');
     if (pathname === '/api/verify' && req.method === 'POST') return await handleVerify(req, res);
     if (pathname === '/api/selftest' && req.method === 'GET') return json(res, 200, await selfTest({ heloHost: verifier.opts.heloHost }));
-    if (pathname === '/api/config' && req.method === 'GET') return json(res, 200, { heloHost: verifier.opts.heloHost, mailFrom: verifier.opts.mailFrom, maxEmails: MAX_EMAILS });
+    if (pathname === '/api/config' && req.method === 'GET') return json(res, 200, { mode: 'server', smtp: true, heloHost: verifier.opts.heloHost, mailFrom: verifier.opts.mailFrom, maxEmails: MAX_EMAILS, disposableDomains: DISPOSABLE_COUNT });
     if (req.method === 'GET') return serveStatic(req, res);
     json(res, 405, { error: 'Method not allowed' });
   } catch (e) {
@@ -99,5 +120,6 @@ const server = http.createServer(async (req, res) => {
 server.listen(PORT, HOST, () => {
   console.log(`Email verifier running at http://${HOST === '0.0.0.0' ? 'localhost' : HOST}:${PORT}`);
   console.log(`HELO ${verifier.opts.heloHost}, MAIL FROM <${verifier.opts.mailFrom}>${AUTH_USER ? ', password protected' : ''}`);
-  if (HOST !== '127.0.0.1' && !AUTH_USER) console.log('Warning: listening publicly without AUTH_USER/AUTH_PASS. Anyone could use your IP to probe mail servers.');
+  if (ALLOWED_ORIGINS.length) console.log(`Browser access allowed from: ${ALLOWED_ORIGINS.join(', ')}`);
+  if (HOST !== '127.0.0.1' && !AUTH_USER && !API_KEY) console.log('Warning: listening publicly without API_KEY or AUTH_USER/AUTH_PASS. Anyone could use your IP to probe mail servers.');
 });

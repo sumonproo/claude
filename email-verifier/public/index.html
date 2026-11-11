@@ -3,320 +3,752 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Email Verifier</title>
+<title>Mailroom</title>
+<meta name="description" content="Verify a cold email list and sort it into addresses to send and addresses to drop.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='7' width='26' height='18' rx='3' fill='%232747C9'/%3E%3Cpath d='M4 9l12 9 12-9' fill='none' stroke='white' stroke-width='2.4' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f6f7f9; --panel: #fff; --text: #16181d; --muted: #646b78; --line: #e3e6eb;
-    --accent: #2f5bea; --accent-ink: #fff;
-    --valid: #13804b; --valid-bg: #e6f5ec; --invalid: #c2362f; --invalid-bg: #fbeaea;
-    --risky: #a35f00; --risky-bg: #fdf1dc; --unknown: #5b6270; --unknown-bg: #eef0f3;
-    --radius: 10px; --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --paper: #F2F4F1; --surface: #FFFFFF; --sunken: #E9ECE7; --ink: #172033; --muted: #5E6878; --line: #DCE1DA;
+    --accent: #2747C9; --accent-ink: #FFFFFF; --accent-soft: #E3E8FA;
+    --send: #18794E; --send-soft: #DDF0E5; --reject: #C0362C; --reject-soft: #F8E1DE; --review: #9A6206; --review-soft: #F6EAD2;
+    --font: "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+    --r-sm: 6px; --r-md: 10px; --r-lg: 16px;
+    color-scheme: light;
   }
   @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #101216; --panel: #181b21; --text: #e8eaee; --muted: #9aa1ad; --line: #2a2f38;
-      --accent: #6d8cff; --accent-ink: #0b0d12;
-      --valid: #4cc98a; --valid-bg: #12291e; --invalid: #f0726b; --invalid-bg: #2e1615;
-      --risky: #f0b14f; --risky-bg: #2e2312; --unknown: #a3aab6; --unknown-bg: #22262d;
+    :root:not([data-theme="light"]) {
+      --paper: #121821; --surface: #1A2230; --sunken: #151C27; --ink: #E6EAF0; --muted: #95A0B2; --line: #2A3445;
+      --accent: #7D97FF; --accent-ink: #0E1430; --accent-soft: #222D4D;
+      --send: #4CC38A; --send-soft: #17311F; --reject: #F07167; --reject-soft: #3A1C1B; --review: #E8B04B; --review-soft: #33280F;
+      color-scheme: dark;
     }
   }
+  :root[data-theme="dark"] {
+    --paper: #121821; --surface: #1A2230; --sunken: #151C27; --ink: #E6EAF0; --muted: #95A0B2; --line: #2A3445;
+    --accent: #7D97FF; --accent-ink: #0E1430; --accent-soft: #222D4D;
+    --send: #4CC38A; --send-soft: #17311F; --reject: #F07167; --reject-soft: #3A1C1B; --review: #E8B04B; --review-soft: #33280F;
+    color-scheme: dark;
+  }
+
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
-  main { max-width: 1100px; margin: 0 auto; padding: 32px 16px 64px; }
-  header { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
-  h1 { font-size: 22px; margin: 0; letter-spacing: -0.01em; }
-  header p { margin: 4px 0 0; color: var(--muted); }
-  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
-  textarea { width: 100%; min-height: 150px; resize: vertical; padding: 12px; border: 1px solid var(--line); border-radius: 8px;
-    background: var(--bg); color: var(--text); font: 13px/1.5 var(--mono); }
-  textarea:focus, button:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
-  .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
-  .spacer { flex: 1; }
-  button, .file, select { font: inherit; font-size: 14px; padding: 8px 14px; border-radius: 8px; border: 1px solid var(--line);
-    background: var(--panel); color: var(--text); cursor: pointer; }
-  button:hover, .file:hover { border-color: var(--muted); }
-  button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
-  button:disabled { opacity: .5; cursor: default; }
-  .file input { display: none; }
-  label.check { display: flex; gap: 6px; align-items: center; color: var(--muted); font-size: 14px; cursor: pointer; }
-  .hint { color: var(--muted); font-size: 13px; }
-  .progress { height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; margin-top: 14px; display: none; }
-  .progress > div { height: 100%; width: 0; background: var(--accent); transition: width .2s; }
-  .stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
-  .stat { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; cursor: pointer; background: var(--panel); text-align: left; }
-  .stat[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
-  .stat b { display: block; font-size: 22px; font-variant-numeric: tabular-nums; }
-  .stat span { color: var(--muted); font-size: 13px; }
-  .stat.valid b { color: var(--valid); } .stat.invalid b { color: var(--invalid); }
-  .stat.risky b { color: var(--risky); } .stat.unknown b { color: var(--unknown); }
-  table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
-  th { color: var(--muted); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
-  td.email { font-family: var(--mono); font-size: 13px; word-break: break-all; }
-  .badge { display: inline-block; padding: 1px 8px; border-radius: 99px; font-size: 12px; font-weight: 600; }
-  .badge.valid { color: var(--valid); background: var(--valid-bg); } .badge.invalid { color: var(--invalid); background: var(--invalid-bg); }
-  .badge.risky { color: var(--risky); background: var(--risky-bg); } .badge.unknown { color: var(--unknown); background: var(--unknown-bg); }
-  .tag { display: inline-block; font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; margin: 0 4px 2px 0; }
-  .detail { color: var(--muted); font-size: 12px; font-family: var(--mono); word-break: break-word; }
-  .scroll { overflow-x: auto; }
-  .notice { border-left: 3px solid var(--risky); background: var(--risky-bg); padding: 10px 14px; border-radius: 6px; margin-bottom: 16px; font-size: 14px; display: none; }
-  .notice.ok { border-color: var(--valid); background: var(--valid-bg); }
-  .notice ul { margin: 6px 0 0; padding-left: 18px; }
-  details summary { cursor: pointer; color: var(--muted); font-size: 14px; }
-  .legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px 20px; margin-top: 10px; font-size: 13px; color: var(--muted); }
-  @media (max-width: 700px) {
-    .stats { grid-template-columns: repeat(2, 1fr); }
-    .hide-sm { display: none; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; }
+  body { background: var(--paper); color: var(--ink); font: 15px/1.5 var(--font); -webkit-font-smoothing: antialiased; }
+  button, input, textarea, select { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* ---------- top bar ---------- */
+  .top { display: flex; align-items: center; gap: 12px; padding: 14px 24px; border-bottom: 1px solid var(--line); background: var(--surface); }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; letter-spacing: -0.02em; }
+  .brand svg { width: 26px; height: 26px; }
+  .mode { display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px; border-radius: 99px; font-size: 13px; font-weight: 500;
+    background: var(--sunken); color: var(--muted); border: 1px solid var(--line); cursor: pointer; }
+  .mode::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+  .mode[data-state="full"] { color: var(--send); background: var(--send-soft); border-color: transparent; }
+  .mode[data-state="full"]::before { background: var(--send); }
+  .mode[data-state="dns"] { color: var(--review); background: var(--review-soft); border-color: transparent; }
+  .mode[data-state="dns"]::before { background: var(--review); }
+  .mode[data-state="error"] { color: var(--reject); background: var(--reject-soft); border-color: transparent; }
+  .mode[data-state="error"]::before { background: var(--reject); }
+  .grow { flex: 1; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 9px 14px; border-radius: var(--r-sm);
+    border: 1px solid var(--line); background: var(--surface); font-weight: 500; font-size: 14px; cursor: pointer; white-space: nowrap; }
+  .btn:hover { border-color: var(--muted); }
+  .btn:disabled { opacity: .5; cursor: default; }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+  .btn.primary:hover { filter: brightness(1.08); }
+  .btn.quiet { border-color: transparent; background: transparent; color: var(--muted); }
+  .btn.quiet:hover { color: var(--ink); background: var(--sunken); }
+  .btn svg { width: 16px; height: 16px; flex: none; }
+
+  /* ---------- layout ---------- */
+  .layout { display: grid; grid-template-columns: minmax(300px, 380px) 1fr; gap: 24px; max-width: 1360px; margin: 0 auto; padding: 24px; align-items: start; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); }
+  .side { display: grid; gap: 16px; position: sticky; top: 24px; }
+  .side .card { padding: 18px; }
+  h2 { font-size: 16px; font-weight: 700; margin: 0 0 12px; letter-spacing: -0.01em; }
+
+  .drop { display: grid; place-items: center; gap: 4px; text-align: center; padding: 22px 16px; border: 1.5px dashed var(--line); border-radius: var(--r-md);
+    background: var(--sunken); cursor: pointer; transition: border-color .15s, background .15s; }
+  .drop:hover, .drop.over { border-color: var(--accent); background: var(--accent-soft); }
+  .drop strong { font-weight: 600; }
+  .drop span { color: var(--muted); font-size: 13px; }
+  .or { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 13px; margin: 12px 0; }
+  .or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  textarea { width: 100%; min-height: 140px; resize: vertical; padding: 12px; border: 1px solid var(--line); border-radius: var(--r-md);
+    background: var(--surface); font: 13px/1.6 var(--mono); }
+  .file-info { display: none; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--r-md); background: var(--accent-soft); font-size: 13px; margin-top: 12px; }
+  .file-info.on { display: flex; }
+  .file-info b { font-weight: 600; }
+  .file-info .btn { padding: 4px 8px; margin-left: auto; }
+  .run { width: 100%; margin-top: 14px; padding: 12px; font-size: 15px; }
+  .meter { height: 4px; border-radius: 2px; background: var(--sunken); overflow: hidden; margin-top: 12px; display: none; }
+  .meter.on { display: block; }
+  .meter i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .25s; }
+  .hint { color: var(--muted); font-size: 13px; margin: 8px 0 0; }
+
+  .history { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .history button { width: 100%; text-align: left; display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; padding: 9px 10px; border: 0;
+    border-radius: var(--r-sm); background: transparent; cursor: pointer; }
+  .history button:hover, .history button[aria-current="true"] { background: var(--sunken); }
+  .history .name { font-weight: 500; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .history .when { color: var(--muted); font-size: 12px; }
+  .history .mini { grid-column: 1 / -1; display: flex; height: 4px; border-radius: 2px; overflow: hidden; background: var(--sunken); }
+  .empty-history { color: var(--muted); font-size: 13px; margin: 0; }
+
+  /* ---------- results ---------- */
+  .main { min-width: 0; }
+  .headline { padding: 26px 28px 22px; }
+  .headline h1 { font-size: clamp(26px, 3.2vw, 40px); line-height: 1.1; letter-spacing: -0.03em; font-weight: 800; margin: 0; max-width: 26ch; text-wrap: balance; }
+  .headline p { margin: 10px 0 0; color: var(--muted); max-width: 64ch; }
+
+  /* The sort ribbon: the whole list, split into the three bins. */
+  .ribbon { display: flex; height: 44px; border-radius: var(--r-md); overflow: hidden; background: var(--sunken); margin-top: 22px; }
+  .ribbon > div { display: flex; align-items: center; padding: 0 12px; min-width: 0; overflow: hidden; white-space: nowrap; font-weight: 700; font-size: 14px;
+    transition: flex-grow .5s cubic-bezier(.2,.8,.2,1); }
+  .ribbon .send { background: var(--send); color: var(--surface); }
+  .ribbon .review { background: var(--review); color: var(--surface); }
+  .ribbon .reject { background: var(--reject); color: var(--surface); }
+  .ribbon .pending { background: transparent; }
+  .ribbon > .zero { padding: 0; }
+  @media (prefers-reduced-motion: reduce) { .ribbon > div, .meter i { transition: none; } }
+
+  .bins { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--line); }
+  .bin { text-align: left; padding: 16px 22px 18px; border: 0; background: transparent; cursor: pointer; border-right: 1px solid var(--line); position: relative; }
+  .bin:last-child { border-right: 0; }
+  .bin:hover { background: var(--sunken); }
+  .bin[aria-selected="true"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--c); }
+  .bin .n { display: block; font-size: 32px; font-weight: 800; letter-spacing: -0.03em; color: var(--c); font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .bin .t { font-weight: 600; font-size: 15px; }
+  .bin .d { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .bin.send { --c: var(--send); } .bin.review { --c: var(--review); } .bin.reject { --c: var(--reject); }
+
+  .table-card { margin-top: 16px; }
+  .toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+  .search { flex: 1; min-width: 180px; display: flex; align-items: center; gap: 8px; padding: 0 12px; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--surface); }
+  .search svg { width: 16px; height: 16px; color: var(--muted); flex: none; }
+  .search input { flex: 1; border: 0; background: transparent; padding: 9px 0; outline: none; min-width: 0; }
+  .search:focus-within { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; padding: 10px 16px 0; }
+  .chip { padding: 4px 10px; border-radius: 99px; border: 1px solid var(--line); background: var(--surface); font-size: 13px; cursor: pointer; color: var(--muted); }
+  .chip[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+  .chip b { font-weight: 600; margin-left: 4px; }
+
+  .rows { list-style: none; margin: 0; padding: 6px 0; }
+  .rows li { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) 210px; gap: 4px 16px; align-items: center; padding: 11px 16px; border-bottom: 1px solid var(--line); }
+  .rows li:last-child { border-bottom: 0; }
+  .addr { font: 500 14px/1.4 var(--mono); overflow-wrap: anywhere; }
+  .addr small { display: block; font: 13px var(--font); color: var(--review); margin-top: 2px; }
+  .why { font-size: 14px; }
+  .why small { display: block; color: var(--muted); font: 12px/1.4 var(--mono); margin-top: 2px; overflow-wrap: anywhere; }
+  .flags { display: flex; gap: 4px; justify-content: flex-end; flex-wrap: wrap; }
+  .flag { font-size: 12px; padding: 1px 7px; border-radius: 4px; background: var(--sunken); color: var(--muted); }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; vertical-align: 1px; background: var(--c); }
+  .dot.send { --c: var(--send); } .dot.review { --c: var(--review); } .dot.reject { --c: var(--reject); }
+  .more { padding: 12px 16px; color: var(--muted); font-size: 13px; margin: 0; }
+  .nothing { padding: 36px 16px; text-align: center; color: var(--muted); margin: 0; }
+
+  /* empty state */
+  .intro { padding: 28px; }
+  .intro h1 { font-size: clamp(28px, 3.4vw, 44px); line-height: 1.08; letter-spacing: -0.03em; font-weight: 800; margin: 0; max-width: 18ch; }
+  .intro > p { color: var(--muted); max-width: 60ch; margin: 12px 0 0; }
+  .explain { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 26px; border-top: 1px solid var(--line); }
+  .explain div { padding: 18px 18px 4px 0; }
+  .explain div + div { padding-left: 18px; border-left: 1px solid var(--line); }
+  .explain h3 { margin: 0 0 6px; font-size: 16px; display: flex; align-items: center; }
+  .explain p { margin: 0; color: var(--muted); font-size: 14px; }
+
+  .banner { display: none; gap: 12px; align-items: flex-start; padding: 12px 16px; border-radius: var(--r-md); margin-bottom: 16px; font-size: 14px;
+    background: var(--review-soft); color: var(--ink); border: 1px solid transparent; }
+  .banner.on { display: flex; }
+  .banner.bad { background: var(--reject-soft); }
+  .banner.good { background: var(--send-soft); }
+  .banner p { margin: 0; flex: 1; }
+  .banner ul { margin: 6px 0 0; padding-left: 18px; }
+
+  /* settings dialog */
+  dialog { border: 1px solid var(--line); border-radius: var(--r-lg); padding: 0; width: min(560px, calc(100vw - 32px)); background: var(--surface); color: var(--ink); }
+  dialog::backdrop { background: rgba(10, 16, 28, .45); }
+  .dlg { padding: 24px; display: grid; gap: 16px; }
+  .dlg h2 { font-size: 20px; margin: 0; }
+  .dlg p { margin: 0; color: var(--muted); font-size: 14px; }
+  .field { display: grid; gap: 6px; }
+  .field label { font-weight: 600; font-size: 14px; }
+  .field input { padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--paper); }
+  .field small { color: var(--muted); font-size: 13px; }
+  .dlg .row { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+  .test-out { font-size: 13px; padding: 10px 12px; border-radius: var(--r-sm); background: var(--sunken); display: none; }
+  .test-out.on { display: block; }
+  .test-out ul { margin: 4px 0 0; padding-left: 18px; }
+  code { font-family: var(--mono); font-size: 0.92em; background: var(--sunken); padding: 1px 5px; border-radius: 4px; }
+
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); opacity: 0; background: var(--ink); color: var(--surface);
+    padding: 10px 16px; border-radius: var(--r-sm); font-size: 14px; transition: opacity .2s, transform .2s; pointer-events: none; z-index: 10; }
+  .toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; padding: 16px; gap: 16px; }
+    .side { position: static; }
+    .top { padding: 12px 16px; flex-wrap: wrap; }
+    .top .label { display: none; }
+  }
+  @media (max-width: 600px) {
+    .bins, .explain { grid-template-columns: 1fr; }
+    .bin { border-right: 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: auto 1fr; gap: 0 14px; align-items: center; }
+    .bin .n { grid-row: span 2; font-size: 26px; min-width: 2.5ch; }
+    .explain div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
+    .rows li { grid-template-columns: 1fr; }
+    .flags { justify-content: flex-start; }
+    .headline, .intro { padding: 20px; }
   }
 </style>
 </head>
 <body>
-<main>
-  <header>
-    <div>
-      <h1>Email Verifier</h1>
-      <p>Check a cold email list before you send. Runs on your own server, no credits.</p>
-    </div>
-    <button id="selftest" type="button">Check server setup</button>
-  </header>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-gear" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="none" stroke="currentColor" stroke-width="1.8" d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="m16 16 4 4"/></symbol>
+  <symbol id="i-retry" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M4 12a8 8 0 0 1 14-5.3L20 9M20 4v5h-5M20 12a8 8 0 0 1-14 5.3L4 15m0 5v-5h5"/></symbol>
+</svg>
 
-  <div id="notice" class="notice" role="status"></div>
+<header class="top">
+  <div class="brand">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="7" width="26" height="18" rx="3" fill="var(--accent)"/><path d="M4 9l12 9 12-9" fill="none" stroke="var(--surface)" stroke-width="2.4" stroke-linejoin="round"/></svg>
+    Mailroom
+  </div>
+  <button class="mode" id="mode" type="button" data-state="loading" title="Open settings">Connecting</button>
+  <span class="grow"></span>
+  <button class="btn quiet" id="openSettings" type="button"><svg><use href="#i-gear"/></svg><span class="label">Settings</span></button>
+</header>
 
-  <section class="panel">
-    <textarea id="input" spellcheck="false" placeholder="Paste emails, one per line (or separated by commas)&#10;&#10;jane@acme.com&#10;john.smith@example.org"></textarea>
-    <div class="row">
-      <label class="file">Upload CSV / TXT<input id="file" type="file" accept=".csv,.txt,.tsv,text/csv,text/plain"></label>
-      <label class="check"><input id="dnsOnly" type="checkbox"> DNS only (skip mailbox check)</label>
-      <span id="fileInfo" class="hint"></span>
-      <span class="spacer"></span>
-      <button id="stop" type="button" hidden>Stop</button>
-      <button id="run" class="primary" type="button">Verify</button>
-    </div>
-    <div class="progress" id="progress"><div></div></div>
-  </section>
+<div class="layout">
+  <aside class="side">
+    <section class="card" aria-labelledby="listTitle">
+      <h2 id="listTitle">Your list</h2>
+      <label class="drop" id="drop">
+        <strong>Drop a CSV or TXT file</strong>
+        <span>or click to choose one. Your other columns are kept.</span>
+        <input id="file" type="file" accept=".csv,.txt,.tsv,text/csv,text/plain" class="sr">
+      </label>
+      <div class="file-info" id="fileInfo" role="status"></div>
+      <div class="or">or paste addresses</div>
+      <label for="input" class="sr">Email addresses</label>
+      <textarea id="input" spellcheck="false" placeholder="jane@acme.com&#10;john.smith@example.org"></textarea>
+      <button class="btn primary run" id="run" type="button">Verify list</button>
+      <button class="btn run" id="stop" type="button" hidden>Stop</button>
+      <div class="meter" id="meter"><i></i></div>
+      <p class="hint" id="runHint"></p>
+    </section>
 
-  <section class="panel" id="resultsPanel" hidden>
-    <div class="stats" id="stats"></div>
-    <div class="row">
-      <span id="summary" class="hint"></span>
-      <span class="spacer"></span>
-      <select id="exportWhat" aria-label="Rows to export">
-        <option value="send">Safe to send (valid)</option>
-        <option value="send+risky">Valid + risky</option>
-        <option value="all">All rows with results</option>
-      </select>
-      <button id="export" type="button">Download CSV</button>
-    </div>
-    <div class="scroll" style="margin-top:12px">
-      <table>
-        <thead><tr><th>Email</th><th>Result</th><th class="hide-sm">Flags</th><th class="hide-sm">Server reply</th></tr></thead>
-        <tbody id="rows"></tbody>
-      </table>
-    </div>
-    <p id="more" class="hint"></p>
-  </section>
+    <section class="card" aria-labelledby="historyTitle">
+      <h2 id="historyTitle">Recent lists</h2>
+      <ul class="history" id="history"></ul>
+      <p class="empty-history" id="historyEmpty">Lists you verify are kept here, in this browser only.</p>
+    </section>
+  </aside>
 
-  <section class="panel">
-    <details>
-      <summary>What the results mean</summary>
-      <div class="legend">
-        <div><span class="badge valid">valid</span> The mail server confirmed this mailbox exists. Safe to send.</div>
-        <div><span class="badge invalid">invalid</span> Bad syntax, domain has no mail server, or the mailbox does not exist. Remove it.</div>
-        <div><span class="badge risky">risky</span> Catch-all domain (accepts any address), disposable address, or full mailbox. Send carefully, in small batches.</div>
-        <div><span class="badge unknown">unknown</span> The server would not say (greylisting, blocked your IP, timeout). Retry later or from a better IP.</div>
-        <div><span class="tag">role</span> Shared inbox like info@ or sales@. Lower reply rates, more spam complaints.</div>
-        <div><span class="tag">free</span> Personal provider like Gmail or Outlook rather than a company domain.</div>
+  <main class="main">
+    <div class="banner" id="banner" role="status"></div>
+
+    <section class="card intro" id="intro">
+      <h1>Find out who will actually get your email.</h1>
+      <p>Add your list and Mailroom checks every address, then sorts it into three piles. Send the first, drop the last, and decide on the middle.</p>
+      <div class="explain">
+        <div><h3><span class="dot send"></span>Send</h3><p>The mail server confirmed the mailbox exists. These are safe to email.</p></div>
+        <div><h3><span class="dot review"></span>Review</h3><p>The server accepts every address, or would not answer. Mail may arrive, or may bounce.</p></div>
+        <div><h3><span class="dot reject"></span>Rejected</h3><p>Typos, dead domains, mailboxes that don't exist and throwaway inboxes. Remove them before you send.</p></div>
       </div>
-    </details>
-  </section>
-</main>
+    </section>
+
+    <section id="results" hidden>
+      <div class="card">
+        <div class="headline">
+          <h1 id="headline"></h1>
+          <p id="subline"></p>
+          <div class="ribbon" id="ribbon" aria-hidden="true">
+            <div class="send"></div><div class="review"></div><div class="reject"></div><div class="pending"></div>
+          </div>
+        </div>
+        <div class="bins" role="tablist" aria-label="Result piles">
+          <button class="bin send" role="tab" data-bin="send" aria-selected="true"><span class="n" id="n-send">0</span><span class="t">Send</span><span class="d">Mailbox confirmed</span></button>
+          <button class="bin review" role="tab" data-bin="review" aria-selected="false"><span class="n" id="n-review">0</span><span class="t">Review</span><span class="d">Catch-all or no answer</span></button>
+          <button class="bin reject" role="tab" data-bin="reject" aria-selected="false"><span class="n" id="n-reject">0</span><span class="t">Rejected</span><span class="d">Do not send</span></button>
+        </div>
+      </div>
+
+      <div class="card table-card" role="tabpanel" aria-labelledby="binTitle">
+        <h2 id="binTitle" class="sr"></h2>
+        <div class="toolbar">
+          <div class="search"><svg><use href="#i-search"/></svg><label for="q" class="sr">Search addresses</label><input id="q" type="search" placeholder="Search addresses"></div>
+          <button class="btn" id="retry" type="button" hidden><svg><use href="#i-retry"/></svg><span></span></button>
+          <button class="btn" id="copy" type="button"><svg><use href="#i-copy"/></svg>Copy addresses</button>
+          <button class="btn primary" id="download" type="button"><svg><use href="#i-down"/></svg><span>Download CSV</span></button>
+        </div>
+        <div class="chips" id="chips"></div>
+        <ul class="rows" id="rows"></ul>
+        <p class="more" id="more" hidden></p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<dialog id="settings" aria-labelledby="settingsTitle">
+  <form method="dialog" class="dlg" id="settingsForm">
+    <h2 id="settingsTitle">Verifier server</h2>
+    <p>Checking whether a mailbox exists needs a server that can reach mail servers on port 25. Netlify can't, so on Netlify Mailroom only checks addresses and domains. Add your own verifier server to get full checks.</p>
+    <div class="field">
+      <label for="serverUrl">Server address</label>
+      <input id="serverUrl" type="url" placeholder="https://verify.yourdomain.com" autocomplete="off">
+      <small>Leave empty to use the checks built into this site.</small>
+    </div>
+    <div class="field">
+      <label for="apiKey">API key</label>
+      <input id="apiKey" type="password" placeholder="The API_KEY set on your server" autocomplete="off">
+      <small>Saved in this browser only.</small>
+    </div>
+    <div class="test-out" id="testOut" role="status"></div>
+    <div class="row">
+      <button class="btn" type="button" id="testConn">Test connection</button>
+      <span class="grow"></span>
+      <button class="btn quiet" value="cancel" formnovalidate>Cancel</button>
+      <button class="btn primary" value="save" id="saveSettings">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="csv.js"></script>
 <script>
 (() => {
   'use strict';
   const $ = (id) => document.getElementById(id);
-  const STATUSES = ['valid', 'risky', 'invalid', 'unknown'];
-  const RESULT_COLUMNS = ['status', 'reason', 'score', 'suggestion', 'catch_all', 'role', 'free', 'disposable', 'mx', 'smtp_code', 'smtp_message'];
-  const REASONS = {
-    accepted: 'Mailbox exists', mailbox_not_found: 'Mailbox does not exist', catch_all: 'Domain accepts every address',
-    disposable: 'Disposable / temporary inbox', mailbox_full: 'Mailbox is full', domain_not_found: 'Domain does not exist',
-    no_mx_records: 'Domain has no mail server', null_mx: 'Domain does not accept email', dns_error: 'DNS lookup failed',
-    smtp_unreachable: 'Could not reach mail server (port 25 blocked?)', smtp_timeout: 'Mail server timed out',
-    smtp_blocked: 'Mail server refused to answer us', greylisted_or_tempfail: 'Temporarily deferred, retry later',
-    smtp_error: 'Unexpected server reply', smtp_skipped: 'Domain OK, mailbox not checked',
-    missing_at_sign: 'Not an email address', invalid_local_part: 'Invalid characters before @',
-    invalid_domain: 'Invalid domain', local_part_too_long: 'Too long before @', address_too_long: 'Address too long',
-  };
-  const RENDER_LIMIT = 1000;
-
-  let source = null;   // { header, rows, column } when a CSV was uploaded
-  let results = [];
-  let filter = 'all';
-  let controller = null;
-
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch { return false; } },
+  };
 
-  function notice(html, ok) {
-    const n = $('notice');
-    n.innerHTML = html;
-    n.className = 'notice' + (ok ? ' ok' : '');
-    n.style.display = html ? 'block' : 'none';
-  }
+  const RESULT_COLUMNS = ['verdict', 'status', 'reason', 'score', 'suggestion', 'catch_all', 'role', 'free', 'disposable', 'mx', 'smtp_code', 'smtp_message'];
+  const REASONS = {
+    accepted: 'Mailbox exists', mailbox_not_found: 'Mailbox does not exist', catch_all: 'Domain accepts any address',
+    disposable: 'Throwaway inbox', mailbox_full: 'Mailbox is full', domain_not_found: 'Domain does not exist',
+    no_mx_records: 'Domain has no mail server', null_mx: 'Domain does not accept email', dns_error: 'Domain lookup failed',
+    smtp_unreachable: 'Mail server unreachable', smtp_timeout: 'Mail server timed out', smtp_blocked: 'Mail server refused to answer',
+    greylisted_or_tempfail: 'Asked us to try again later', smtp_error: 'Unexpected server reply', smtp_skipped: 'Domain OK, mailbox not checked',
+    missing_at_sign: 'Not an email address', invalid_local_part: 'Invalid characters before the @', invalid_domain: 'Invalid domain',
+    local_part_too_long: 'Too long before the @', address_too_long: 'Address too long',
+  };
+  const BIN_NAMES = { send: 'Send', review: 'Review', reject: 'Rejected' };
+  const RENDER_LIMIT = 500;
 
-  $('file').addEventListener('change', async (e) => {
-    const f = e.target.files[0];
-    if (!f) return;
-    const text = await f.text();
-    const parsed = CSV.findEmailColumn(CSV.parseCSV(text));
-    if (parsed.column === -1) { notice('No email column found in that file.'); return; }
-    source = parsed;
-    const emails = parsed.rows.map((r) => (r[parsed.column] || '').trim()).filter(Boolean);
-    $('input').value = emails.join('\n');
-    const col = parsed.header ? `column "${parsed.header[parsed.column]}"` : `column ${parsed.column + 1}`;
-    $('fileInfo').textContent = `${f.name}: ${emails.length} emails from ${col}. Other columns are kept in the export.`;
-    e.target.value = '';
-  });
-  $('input').addEventListener('input', () => { if (source) { source = null; $('fileInfo').textContent = ''; } });
+  // Which pile an address belongs in.
+  const binOf = (r) => (r.status === 'valid' ? 'send' : r.status === 'invalid' || r.reason === 'disposable' ? 'reject' : 'review');
 
-  function currentEmails() {
-    if (source) return source.rows.map((r) => (r[source.column] || '').trim());
-    return CSV.extractEmails($('input').value);
-  }
+  let settings = store.get('mailroom.settings', { serverUrl: '', apiKey: '' });
+  let server = { mode: null, smtp: false, maxEmails: 500 };
+  let run = null;        // { id, name, date, source, emails, results, smtp }
+  let bin = 'send';
+  let reasonFilter = null;
+  let controller = null;
+  let pendingSource = null;
 
-  $('run').addEventListener('click', async () => {
-    const emails = currentEmails();
-    if (!emails.filter(Boolean).length) { notice('Paste some emails or upload a file first.'); return; }
-    notice('');
-    results = new Array(emails.length);
-    filter = 'all';
-    $('resultsPanel').hidden = false;
-    $('run').disabled = true; $('stop').hidden = false;
-    $('progress').style.display = 'block';
-    render(emails.length);
+  // ---------- server connection ----------
+  const apiBase = (s = settings) => (s.serverUrl ? s.serverUrl.replace(/\/+$/, '') + '/api/' : 'api/');
+  const headers = (s = settings) => ({ 'Content-Type': 'application/json', ...(s.apiKey ? { Authorization: `Bearer ${s.apiKey}` } : {}) });
 
-    controller = new AbortController();
-    const started = Date.now();
-    let done = 0;
-    let lastPaint = 0;
+  async function connect() {
+    const m = $('mode');
+    m.dataset.state = 'loading'; m.textContent = 'Connecting';
     try {
-      const res = await fetch('api/verify', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ emails, smtp: !$('dnsOnly').checked }), signal: controller.signal,
+      const res = await fetch(apiBase() + 'config', { headers: headers() });
+      if (res.status === 401) throw new Error('The server rejected the API key.');
+      if (!res.ok) throw new Error(`The server answered ${res.status}.`);
+      server = await res.json();
+      m.dataset.state = server.smtp ? 'full' : 'dns';
+      m.textContent = server.smtp ? 'Full mailbox check' : 'Domain check only';
+      m.title = server.smtp ? 'Mailboxes are checked on your verifier server' : 'Mailboxes are not checked. Add a verifier server in Settings.';
+    } catch (e) {
+      server = { mode: null, smtp: false, maxEmails: 500 };
+      m.dataset.state = 'error'; m.textContent = 'Not connected';
+      banner(`<p><b>Can't reach the verifier.</b> ${esc(e.message === 'Failed to fetch' ? 'Check the server address, and that ALLOWED_ORIGINS on the server includes this site.' : e.message)}</p><button class="btn" type="button" data-open-settings>Open settings</button>`, 'bad');
+    }
+  }
+
+  function banner(html, kind) {
+    const b = $('banner');
+    b.innerHTML = html;
+    b.className = 'banner' + (html ? ' on' : '') + (kind ? ` ${kind}` : '');
+  }
+  document.addEventListener('click', (e) => { if (e.target.closest('[data-open-settings]')) openSettings(); });
+
+  // ---------- input ----------
+  function loadFile(f) {
+    f.text().then((text) => {
+      const parsed = CSV.findEmailColumn(CSV.parseCSV(text));
+      if (parsed.column === -1) { toast('No email column found in that file'); return; }
+      pendingSource = { ...parsed, name: f.name.replace(/\.(csv|txt|tsv)$/i, '') };
+      const n = parsed.rows.filter((r) => (r[parsed.column] || '').trim()).length;
+      const col = parsed.header ? `“${parsed.header[parsed.column]}”` : `column ${parsed.column + 1}`;
+      $('fileInfo').innerHTML = `<span><b>${esc(f.name)}</b><br>${n.toLocaleString()} addresses from ${esc(col)}</span><button class="btn quiet" type="button" id="clearFile">Remove</button>`;
+      $('fileInfo').classList.add('on');
+      $('input').value = '';
+      $('input').placeholder = 'Using the uploaded file';
+      updateRunLabel();
+    });
+  }
+  $('file').addEventListener('change', (e) => { if (e.target.files[0]) loadFile(e.target.files[0]); e.target.value = ''; });
+  const drop = $('drop');
+  ['dragenter', 'dragover'].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.add('over'); }));
+  ['dragleave', 'drop'].forEach((t) => drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.remove('over'); }));
+  drop.addEventListener('drop', (e) => { const f = e.dataTransfer.files[0]; if (f) loadFile(f); });
+  $('fileInfo').addEventListener('click', (e) => {
+    if (e.target.id !== 'clearFile') return;
+    pendingSource = null;
+    $('fileInfo').classList.remove('on');
+    $('input').placeholder = 'jane@acme.com\njohn.smith@example.org';
+    updateRunLabel();
+  });
+  $('input').addEventListener('input', () => {
+    if (pendingSource && $('input').value.trim()) $('clearFile')?.click();
+    updateRunLabel();
+  });
+
+  function currentInput() {
+    if (pendingSource) {
+      return { source: pendingSource, emails: pendingSource.rows.map((r) => (r[pendingSource.column] || '').trim()), name: pendingSource.name };
+    }
+    const emails = CSV.extractEmails($('input').value);
+    return { source: null, emails, name: emails.length ? `Pasted list (${emails.length})` : '' };
+  }
+  function updateRunLabel() {
+    const n = currentInput().emails.filter(Boolean).length;
+    $('run').textContent = n ? `Verify ${n.toLocaleString()} address${n === 1 ? '' : 'es'}` : 'Verify list';
+  }
+
+  // ---------- verification ----------
+  async function verify(emails, indexes, onResult) {
+    // Send addresses grouped by domain, in batches, so one domain's checks share a connection.
+    const order = indexes.slice().sort((a, b) => (emails[a].split('@')[1] || '').localeCompare(emails[b].split('@')[1] || ''));
+    const size = Math.min(server.maxEmails || 500, server.smtp ? 500 : 200);
+    for (let start = 0; start < order.length; start += size) {
+      const batch = order.slice(start, start + size);
+      const res = await fetch(apiBase() + 'verify', {
+        method: 'POST', headers: headers(), signal: controller.signal,
+        body: JSON.stringify({ emails: batch.map((i) => emails[i]), smtp: server.smtp }),
       });
-      if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || res.statusText);
+      if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || `Server answered ${res.status}`);
       const reader = res.body.getReader();
       const dec = new TextDecoder();
       let buf = '';
       for (;;) {
-        const { value, done: end } = await reader.read();
-        if (end) break;
-        buf += dec.decode(value, { stream: true });
+        const { value, done } = await reader.read();
+        if (value) buf += dec.decode(value, { stream: true });
         let i;
         while ((i = buf.indexOf('\n')) !== -1) {
           const line = buf.slice(0, i); buf = buf.slice(i + 1);
-          if (!line) continue;
-          const r = JSON.parse(line);
-          results[r.index] = r; done++;
+          if (line.trim()) { const r = JSON.parse(line); onResult(batch[r.index], r); }
         }
-        $('progress').firstElementChild.style.width = `${(done / emails.length) * 100}%`;
-        if (Date.now() - lastPaint > 400) { render(emails.length); lastPaint = Date.now(); }
-      }
-    } catch (e) {
-      if (e.name !== 'AbortError') notice(`Verification failed: ${esc(e.message)}`);
-    } finally {
-      controller = null;
-      $('run').disabled = false; $('stop').hidden = true;
-      $('progress').style.display = 'none';
-      render(emails.length, (Date.now() - started) / 1000);
-      const r = results.filter(Boolean);
-      if (r.length && r.filter((x) => x.reason === 'smtp_unreachable').length > r.length / 2) {
-        notice('Most mail servers could not be reached. Outbound port 25 is probably blocked on this server, so mailboxes could not be checked. Click <b>Check server setup</b> for details.');
+        if (done) break;
       }
     }
+  }
+
+  async function start(indexes) {
+    controller = new AbortController();
+    $('run').hidden = true; $('stop').hidden = false;
+    $('meter').classList.add('on');
+    banner('');
+    const total = indexes.length;
+    let done = 0;
+    let painted = 0;
+    const started = Date.now();
+    try {
+      await verify(run.emails, indexes, (i, r) => {
+        run.results[i] = slim(r);
+        done++;
+        $('meter').firstElementChild.style.width = `${(done / total) * 100}%`;
+        if (Date.now() - painted > 300) { renderAll(); painted = Date.now(); }
+      });
+      run.seconds = (Date.now() - started) / 1000;
+    } catch (e) {
+      if (e.name !== 'AbortError') banner(`<p><b>Verification stopped.</b> ${esc(e.message)}</p>`, 'bad');
+    } finally {
+      controller = null;
+      $('run').hidden = false; $('stop').hidden = true;
+      $('meter').classList.remove('on');
+      $('meter').firstElementChild.style.width = '0';
+      saveRun();
+      renderAll();
+      afterRunNotes();
+    }
+  }
+
+  function slim(r) {
+    // Keep what the dashboard and exports need, so history fits in browser storage.
+    return { email: r.email, status: r.status, reason: r.reason, score: r.score, suggestion: r.suggestion || '', catchAll: r.catchAll,
+      role: r.role, free: r.free, disposable: r.disposable, mx: (r.mx || [])[0] || '',
+      code: r.smtp?.code || '', reply: (r.smtp?.message || r.smtp?.error || '').slice(0, 200) };
+  }
+
+  $('run').addEventListener('click', () => {
+    const { source, emails, name } = currentInput();
+    if (!emails.filter(Boolean).length) { toast('Add a file or paste some addresses first'); $('input').focus(); return; }
+    if (!server.mode) { toast('Not connected to a verifier'); return; }
+    run = { id: Date.now().toString(36), name, date: new Date().toISOString(), source, emails, results: new Array(emails.length), smtp: server.smtp };
+    bin = 'send'; reasonFilter = null; $('q').value = '';
+    showResults();
+    start(emails.map((_, i) => i));
   });
   $('stop').addEventListener('click', () => controller && controller.abort());
 
+  $('retry').addEventListener('click', () => {
+    const idx = run.results.map((r, i) => (r && r.status === 'unknown' && r.reason !== 'smtp_skipped' ? i : -1)).filter((i) => i >= 0);
+    if (!idx.length || controller) return;
+    idx.forEach((i) => { run.results[i] = undefined; });
+    start(idx);
+  });
+
+  function afterRunNotes() {
+    const r = run.results.filter(Boolean);
+    if (!r.length) return;
+    const unreachable = r.filter((x) => x.reason === 'smtp_unreachable').length;
+    if (!run.smtp) {
+      banner('<p><b>Mailboxes were not checked.</b> This site can confirm that addresses are well formed and that their domains take email, but not that each mailbox exists. Addresses that pass go to Review. Add a verifier server in Settings to sort them into Send and Rejected.</p><button class="btn" type="button" data-open-settings>Add a server</button>');
+    } else if (unreachable > r.length / 3) {
+      banner('<p><b>Many mail servers could not be reached.</b> Outbound port 25 is probably blocked on your verifier server, so those addresses landed in Review. Run <code>node cli.js --check</code> on the server.</p>', 'bad');
+    }
+  }
+
+  // ---------- rendering ----------
   function counts() {
-    const c = { all: 0, valid: 0, risky: 0, invalid: 0, unknown: 0 };
-    results.forEach((r) => { if (r) { c.all++; c[r.status]++; } });
+    const c = { send: 0, review: 0, reject: 0, done: 0 };
+    run.results.forEach((r) => { if (r) { c[binOf(r)]++; c.done++; } });
     return c;
   }
 
-  function render(total, seconds) {
-    const c = counts();
-    $('stats').innerHTML = ['all', ...STATUSES].map((s) => `
-      <button type="button" class="stat ${s}" data-filter="${s}" aria-pressed="${filter === s}">
-        <b>${c[s]}</b><span>${s === 'all' ? `checked of ${total}` : s}${s !== 'all' && c.all ? ` · ${Math.round((c[s] / c.all) * 100)}%` : ''}</span>
-      </button>`).join('');
-    $('summary').textContent = seconds != null ? `Finished in ${seconds.toFixed(1)}s` : `Checking… ${c.all} / ${total}`;
-    const shown = results.filter((r) => r && (filter === 'all' || r.status === filter));
-    $('rows').innerHTML = shown.slice(0, RENDER_LIMIT).map(row).join('');
-    $('more').textContent = shown.length > RENDER_LIMIT ? `Showing ${RENDER_LIMIT} of ${shown.length}. Download the CSV for everything.` : '';
+  function showResults() {
+    $('intro').hidden = true;
+    $('results').hidden = false;
+    renderAll();
+    renderHistory();
   }
 
-  $('stats').addEventListener('click', (e) => {
-    const b = e.target.closest('[data-filter]');
-    if (!b) return;
-    filter = b.dataset.filter;
-    render(results.length);
-  });
+  function renderAll() {
+    if (!run) return;
+    const c = counts();
+    const total = run.emails.length;
+    const busy = !!controller;
+    const pct = (n) => (c.done ? Math.round((n / c.done) * 100) : 0);
+
+    $('headline').textContent = busy
+      ? `Checking ${c.done.toLocaleString()} of ${total.toLocaleString()} addresses`
+      : c.send
+        ? `${c.send.toLocaleString()} of ${c.done.toLocaleString()} addresses are safe to send.`
+        : run.smtp ? `None of these ${c.done.toLocaleString()} addresses were confirmed.` : `${(c.done - c.reject).toLocaleString()} of ${c.done.toLocaleString()} addresses have a working domain.`;
+    const when = new Date(run.date).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
+    $('subline').textContent = busy ? `${run.name}. Results sort into the piles below as they arrive.`
+      : `${run.name}, checked ${when}${run.seconds ? ` in ${run.seconds.toFixed(1)}s` : ''}. ${pct(c.reject)}% rejected, ${pct(c.review)}% to review.`;
+
+    const rib = $('ribbon').children;
+    [['send', c.send], ['review', c.review], ['reject', c.reject], ['pending', total - c.done]].forEach(([k, n], i) => {
+      rib[i].style.flexGrow = n;
+      rib[i].style.flexBasis = '0';
+      rib[i].classList.toggle('zero', n === 0);
+      rib[i].textContent = k !== 'pending' && n / total > 0.06 ? `${Math.round((n / total) * 100)}%` : '';
+    });
+    ['send', 'review', 'reject'].forEach((k) => { $(`n-${k}`).textContent = c[k].toLocaleString(); });
+    document.querySelectorAll('.bin').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.bin === bin)));
+    $('binTitle').textContent = BIN_NAMES[bin];
+
+    const inBin = run.results.map((r, i) => [r, i]).filter(([r]) => r && binOf(r) === bin);
+
+    // Reason chips for the current pile.
+    const reasons = {};
+    inBin.forEach(([r]) => { reasons[r.reason] = (reasons[r.reason] || 0) + 1; });
+    const keys = Object.keys(reasons).sort((a, b) => reasons[b] - reasons[a]);
+    if (reasonFilter && !reasons[reasonFilter]) reasonFilter = null;
+    $('chips').innerHTML = keys.length > 1 ? [`<button class="chip" type="button" data-reason="" aria-pressed="${!reasonFilter}">All<b>${inBin.length}</b></button>`,
+      ...keys.map((k) => `<button class="chip" type="button" data-reason="${esc(k)}" aria-pressed="${reasonFilter === k}">${esc(REASONS[k] || k)}<b>${reasons[k]}</b></button>`)].join('') : '';
+
+    const q = $('q').value.trim().toLowerCase();
+    const shown = inBin.filter(([r]) => (!reasonFilter || r.reason === reasonFilter) && (!q || r.email.toLowerCase().includes(q)));
+    $('rows').innerHTML = shown.length
+      ? shown.slice(0, RENDER_LIMIT).map(([r]) => row(r)).join('')
+      : `<li class="nothing" style="display:block">${busy && !inBin.length ? 'Waiting for results' : q ? 'No addresses match your search.' : emptyText()}</li>`;
+    $('more').hidden = shown.length <= RENDER_LIMIT;
+    $('more').textContent = `Showing ${RENDER_LIMIT} of ${shown.length.toLocaleString()}. Download the CSV to get all of them.`;
+
+    $('download').querySelector('span').textContent = `Download ${BIN_NAMES[bin]} (${shown.length.toLocaleString()})`;
+    $('download').disabled = !shown.length;
+    $('copy').disabled = !shown.length;
+    const retryable = run.smtp ? run.results.filter((r) => r && r.status === 'unknown' && r.reason !== 'smtp_skipped').length : 0;
+    $('retry').hidden = bin !== 'review' || !retryable || busy;
+    $('retry').querySelector('span').textContent = `Recheck ${retryable} without an answer`;
+  }
+
+  function emptyText() {
+    if (bin === 'send') return run.smtp ? 'No confirmed mailboxes in this list.' : 'Mailboxes are only confirmed when a verifier server is connected.';
+    if (bin === 'reject') return 'Nothing rejected. Every address passed.';
+    return 'Nothing to review.';
+  }
 
   function row(r) {
-    const tags = [r.role && 'role', r.free && 'free', r.disposable && 'disposable', r.catchAll && 'catch-all'].filter(Boolean);
-    const reply = r.smtp ? (r.smtp.code ? `${r.smtp.code} ${r.smtp.message || ''}` : r.smtp.error || '') : (r.mx && r.mx[0] ? `MX ${r.mx[0]}` : '');
-    return `<tr>
-      <td class="email">${esc(r.email || r.input)}${r.suggestion ? `<div class="hint">Did you mean @${esc(r.suggestion)}?</div>` : ''}</td>
-      <td><span class="badge ${r.status}">${r.status}</span><div class="hint">${esc(REASONS[r.reason] || r.reason)}</div></td>
-      <td class="hide-sm">${tags.map((t) => `<span class="tag">${t}</span>`).join('')}</td>
-      <td class="hide-sm detail">${esc(reply.slice(0, 160))}</td>
-    </tr>`;
+    const flags = [r.role && 'Shared inbox', r.free && 'Free provider', r.catchAll && r.reason !== 'catch_all' && 'Catch-all'].filter(Boolean);
+    const detail = r.code ? `${r.code} ${r.reply}` : r.reply || (r.mx ? `Mail server ${r.mx}` : '');
+    return `<li>
+      <div class="addr">${esc(r.email)}${r.suggestion ? `<small>Did you mean @${esc(r.suggestion)}?</small>` : ''}</div>
+      <div class="why"><span class="dot ${binOf(r)}"></span>${esc(REASONS[r.reason] || r.reason)}${detail ? `<small>${esc(detail.slice(0, 140))}</small>` : ''}</div>
+      <div class="flags">${flags.map((f) => `<span class="flag">${f}</span>`).join('')}</div>
+    </li>`;
   }
 
-  function cells(r) {
-    if (!r) return RESULT_COLUMNS.map(() => '');
-    return [r.status, r.reason, r.score, r.suggestion || '', r.catchAll == null ? '' : r.catchAll, r.role, r.free, r.disposable,
-      (r.mx || [])[0] || '', r.smtp?.code || '', r.smtp?.message || r.smtp?.error || ''];
-  }
+  document.querySelector('.bins').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-bin]');
+    if (!b) return;
+    bin = b.dataset.bin; reasonFilter = null;
+    renderAll();
+  });
+  document.querySelector('.bins').addEventListener('keydown', (e) => {
+    if (!['ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+    const tabs = [...document.querySelectorAll('.bin')];
+    const next = tabs[(tabs.findIndex((t) => t.dataset.bin === bin) + (e.key === 'ArrowRight' ? 1 : 2)) % 3];
+    next.click(); next.focus();
+  });
+  $('chips').addEventListener('click', (e) => {
+    const c = e.target.closest('[data-reason]');
+    if (!c) return;
+    reasonFilter = c.dataset.reason || null;
+    renderAll();
+  });
+  $('q').addEventListener('input', renderAll);
 
-  $('export').addEventListener('click', () => {
-    const what = $('exportWhat').value;
-    const keep = (r) => r && (what === 'all' || r.status === 'valid' || (what === 'send+risky' && r.status === 'risky'));
+  // ---------- export ----------
+  function selected() {
+    const q = $('q').value.trim().toLowerCase();
+    return run.results.map((r, i) => [r, i]).filter(([r]) => r && binOf(r) === bin && (!reasonFilter || r.reason === reasonFilter) && (!q || r.email.toLowerCase().includes(q)));
+  }
+  const cells = (r) => [BIN_NAMES[binOf(r)], r.status, r.reason, r.score, r.suggestion, r.catchAll == null ? '' : r.catchAll, r.role, r.free, r.disposable, r.mx, r.code, r.reply];
+
+  $('download').addEventListener('click', () => {
+    const rows = selected();
     let out;
-    if (source) {
-      const width = Math.max(source.header ? source.header.length : 0, ...source.rows.map((r) => r.length));
-      const pad = (r) => [...r, ...Array(width - r.length).fill('')];
-      const head = source.header ? pad(source.header) : Array.from({ length: width }, (_, i) => (i === source.column ? 'email' : `col${i + 1}`));
-      out = [[...head, ...RESULT_COLUMNS]];
-      source.rows.forEach((r, i) => { if (keep(results[i])) out.push([...pad(r), ...cells(results[i])]); });
+    const src = run.source;
+    if (src) {
+      const width = Math.max(src.header ? src.header.length : 0, ...src.rows.map((r) => r.length));
+      const pad = (r) => [...r, ...Array(Math.max(0, width - r.length)).fill('')];
+      out = [[...(src.header ? pad(src.header) : Array.from({ length: width }, (_, i) => (i === src.column ? 'email' : `column_${i + 1}`))), ...RESULT_COLUMNS]];
+      rows.forEach(([r, i]) => out.push([...pad(src.rows[i]), ...cells(r)]));
     } else {
       out = [['email', ...RESULT_COLUMNS]];
-      results.forEach((r) => { if (keep(r)) out.push([r.email, ...cells(r)]); });
+      rows.forEach(([r]) => out.push([r.email, ...cells(r)]));
     }
-    const blob = new Blob([CSV.toCSV(out)], { type: 'text/csv' });
     const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `verified-${what}-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.href = URL.createObjectURL(new Blob([CSV.toCSV(out)], { type: 'text/csv' }));
+    a.download = `${(run.name || 'list').replace(/[^\w-]+/g, '-').replace(/^-|-$/g, '').toLowerCase()}-${bin}.csv`;
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    toast(`Downloaded ${rows.length.toLocaleString()} rows`);
   });
 
-  $('selftest').addEventListener('click', async () => {
-    const b = $('selftest');
-    b.disabled = true; b.textContent = 'Checking…';
+  $('copy').addEventListener('click', async () => {
+    const list = selected().map(([r]) => r.email).join('\n');
+    try { await navigator.clipboard.writeText(list); toast(`Copied ${selected().length.toLocaleString()} addresses`); }
+    catch { toast('Copying is blocked in this browser'); }
+  });
+
+  // ---------- history (this browser only) ----------
+  function saveRun() {
+    if (!run || !run.results.some(Boolean)) return;
+    let list = store.get('mailroom.history', []).filter((h) => h.id !== run.id);
+    list.unshift(run);
+    list = list.slice(0, 8);
+    while (list.length && !store.set('mailroom.history', list)) {
+      if (list.length > 1) list.pop();                       // drop the oldest list
+      else if (list[0].source) list[0] = { ...list[0], source: null }; // then the original CSV columns
+      else break;
+    }
+    renderHistory();
+  }
+
+  function renderHistory() {
+    const list = store.get('mailroom.history', []);
+    $('historyEmpty').hidden = list.length > 0;
+    $('history').innerHTML = list.map((h) => {
+      const c = { send: 0, review: 0, reject: 0 };
+      h.results.forEach((r) => { if (r) c[binOf(r)]++; });
+      const when = new Date(h.date).toLocaleDateString([], { month: 'short', day: 'numeric' });
+      return `<li><button type="button" data-run="${esc(h.id)}" aria-current="${run && run.id === h.id}">
+        <span class="name">${esc(h.name)}</span><span class="when">${when}</span>
+        <span class="mini"><i style="flex:${c.send};background:var(--send)"></i><i style="flex:${c.review};background:var(--review)"></i><i style="flex:${c.reject};background:var(--reject)"></i></span>
+      </button></li>`;
+    }).join('');
+  }
+  $('history').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-run]');
+    if (!b || controller) return;
+    run = store.get('mailroom.history', []).find((h) => h.id === b.dataset.run);
+    if (!run) return;
+    bin = 'send'; reasonFilter = null; $('q').value = '';
+    banner('');
+    showResults();
+  });
+
+  // ---------- settings ----------
+  function openSettings() {
+    $('serverUrl').value = settings.serverUrl;
+    $('apiKey').value = settings.apiKey;
+    $('testOut').classList.remove('on');
+    $('settings').showModal();
+  }
+  $('openSettings').addEventListener('click', openSettings);
+  $('mode').addEventListener('click', openSettings);
+  const draft = () => ({ serverUrl: $('serverUrl').value.trim(), apiKey: $('apiKey').value.trim() });
+
+  $('testConn').addEventListener('click', async () => {
+    const out = $('testOut');
+    out.classList.add('on');
+    out.textContent = 'Testing…';
+    const s = draft();
     try {
-      const r = await (await fetch('api/selftest')).json();
-      const ready = r.port25 && r.mailFromAccepted;
-      notice(`<b>${ready ? 'Ready: mailbox checks will work from this server.' : 'Not ready for mailbox checks.'}</b>
-        <ul>${r.details.map((d) => `<li>${esc(d)}</li>`).join('')}
-        ${r.publicIp ? `<li>Public IP ${esc(r.publicIp)}, reverse DNS ${esc(r.ptr || 'not set')}</li>` : ''}
-        ${r.tips.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`, ready);
+      const cfg = await fetch(apiBase(s) + 'config', { headers: headers(s) });
+      if (cfg.status === 401) throw new Error('The server rejected the API key.');
+      const config = await cfg.json();
+      const t = await (await fetch(apiBase(s) + 'selftest', { headers: headers(s) })).json();
+      const ready = t.port25 && t.mailFromAccepted;
+      out.innerHTML = `<b>${config.smtp ? (ready ? 'Connected. Full mailbox checks will work.' : 'Connected, but mailbox checks will not work yet.') : 'Connected to the built-in checks (no mailbox check).'}</b>
+        <ul>${[...t.details, ...t.tips].map((d) => `<li>${esc(d)}</li>`).join('')}</ul>`;
     } catch (e) {
-      notice(`Self-test failed: ${esc(e.message)}`);
-    } finally {
-      b.disabled = false; b.textContent = 'Check server setup';
+      out.innerHTML = `<b>Could not connect.</b> ${esc(e.message === 'Failed to fetch' ? 'Check the address, that the server is running with HTTPS, and that ALLOWED_ORIGINS includes ' + location.origin + '.' : e.message)}`;
     }
   });
+
+  $('settings').addEventListener('close', () => {
+    if ($('settings').returnValue !== 'save') return;
+    settings = draft();
+    store.set('mailroom.settings', settings);
+    banner('');
+    connect();
+  });
+
+  let toastTimer;
+  function toast(msg) {
+    const t = $('toast');
+    t.textContent = msg;
+    t.classList.add('on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('on'), 2200);
+  }
+
+  renderHistory();
+  updateRunLabel();
+  connect();
 })();
 </script>
 </body>

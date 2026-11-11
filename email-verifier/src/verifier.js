@@ -304,4 +304,4 @@ async function runPool(tasks, size, signal) {
   await Promise.all(Array.from({ length: Math.max(1, Math.min(size, tasks.length)) }, worker));
 }
 
-module.exports = { EmailVerifier, normalize, checkSyntax, suggestDomain, isDisposable, isRole, classifyReply };
+module.exports = { DISPOSABLE_COUNT: DISPOSABLE.size, EmailVerifier, normalize, checkSyntax, suggestDomain, isDisposable, isRole, classifyReply };

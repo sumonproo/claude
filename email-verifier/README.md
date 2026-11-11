@@ -1,10 +1,13 @@
-# Email Verifier
+# Mailroom: email verifier
 
 A self-hosted email verifier for cold outreach lists. It runs the same checks as paid tools
 like Reoon or Hunter, on your own server, with no credits and no limits.
 Plain Node.js with **no dependencies**: no `npm install` needed.
 
-- **Web UI**: paste emails or upload a CSV (it finds the email column and keeps your other columns), watch results come in, then download *valid only*, *valid + risky*, or everything.
+- **Dashboard**: drop in a CSV or paste addresses. Mailroom sorts the list into three piles:
+  **Send** (mailbox confirmed), **Review** (catch-all, full or no answer) and **Rejected** (do not send).
+  Download or copy any pile as CSV, with your original columns kept. Recent lists stay in your browser.
+  It runs on Netlify or on your own server.
 - **CLI**: `node cli.js leads.csv` writes `leads.verified.csv`.
 - **HTTP API**: `POST /api/verify`, for Make, n8n, Zapier or your own scripts.
 
@@ -54,9 +57,54 @@ For the best results:
    and ideally a separate domain from your main sending domain.
 5. Click **Check server setup** in the UI (or `node cli.js --check`) to confirm port 25, MAIL FROM and PTR are fine.
 
-## Run it
+## Two parts: dashboard on Netlify, checker on a VPS
 
-Requires Node.js 18 or newer.
+Netlify runs its functions on AWS Lambda, which blocks port 25, so **a Netlify site cannot check mailboxes**.
+The usual setup:
+
+```
+ Browser ──> Mailroom dashboard (Netlify) ──> your verifier server (VPS, port 25 open) ──> mail servers
+```
+
+- **Netlify only**: the dashboard works on its own with the built-in Netlify Function. It checks syntax,
+  typos, throwaway inboxes and domains, but every address that passes lands in **Review**, because no
+  mailbox was checked.
+- **Netlify + verifier server**: open **Settings** in the dashboard, enter your server's address and API key.
+  Mailboxes are checked and addresses land in **Send** or **Rejected**.
+
+### Deploy the dashboard to Netlify
+
+1. In Netlify: **Add new site > Import an existing project**, and pick this repository and branch.
+2. Set **Base directory** to `email-verifier`. The rest comes from `netlify.toml`
+   (publish `public`, functions `netlify/functions`, no build command).
+3. Deploy. The dashboard shows *Domain check only* until you connect a server.
+
+### Connect your verifier server
+
+On the VPS (see the port 25 section above), run the server with an API key, and allow your Netlify site
+to call it:
+
+```bash
+HELO_HOST=verify.yourdomain.com \
+API_KEY='a-long-random-key' \
+ALLOWED_ORIGINS=https://your-site.netlify.app \
+BIND=0.0.0.0 npm start
+```
+
+Put it behind HTTPS (a Netlify site on `https://` cannot call a plain `http://` server). Caddy does it in two lines:
+
+```
+verify.yourdomain.com {
+    reverse_proxy localhost:3000
+}
+```
+
+Then in the dashboard: **Settings > Server address** `https://verify.yourdomain.com`, **API key** the same key,
+**Test connection**, **Save**. The badge at the top turns green: *Full mailbox check*.
+
+## Run everything on your own server
+
+Requires Node.js 18 or newer. The server also serves the dashboard, so you don't need Netlify at all.
 
 ```bash
 cd email-verifier
@@ -100,7 +148,7 @@ curl -X POST http://localhost:3000/api/verify \
 
 The response streams one JSON object per line (NDJSON) as each address finishes, each with its `index` in
 your input. Add `"smtp": false` for DNS-only checks. `GET /api/selftest` runs the port 25 check.
-If `AUTH_USER` is set, add `-u me:password`.
+If `API_KEY` is set, add `-H 'Authorization: Bearer <key>'` (or `-u me:password` with `AUTH_USER`).
 
 ### Settings (environment variables)
 
@@ -109,12 +157,14 @@ If `AUTH_USER` is set, add `-u me:password`.
 | `HELO_HOST` | `localhost` | Hostname sent in `EHLO`. Set this to your server's hostname. |
 | `MAIL_FROM` | `verify@HELO_HOST` | Sender used in `MAIL FROM` |
 | `PORT` / `BIND` | `3000` / `127.0.0.1` | Where the web server listens |
-| `AUTH_USER` / `AUTH_PASS` | none | Password-protect the UI and API |
+| `API_KEY` | none | Required as `Authorization: Bearer <key>` on API calls (what the Netlify dashboard sends) |
+| `ALLOWED_ORIGINS` | none | Sites allowed to call the API from a browser, e.g. `https://your-site.netlify.app` (comma separated) |
+| `AUTH_USER` / `AUTH_PASS` | none | Password-protect the UI and API (browser login prompt) |
 | `CONCURRENCY` | `5` | Domains checked in parallel |
 | `SMTP_TIMEOUT` | `12000` | ms per SMTP connection |
 | `MAX_EMAILS_PER_REQUEST` | `10000` | |
 
-Keep the disposable list fresh with `npm run update-disposable`. Put your own junk domains in `data/disposable_custom.txt`.
+The repository includes a list of about 10,000 throwaway-inbox domains. Refresh it with `npm run update-disposable`. Put your own junk domains in `data/disposable_custom.txt`.
 
 ## Honest limits (paid tools have the same ones)
 
@@ -133,4 +183,4 @@ npm test     # unit tests + end-to-end tests against a fake SMTP server (no netw
 ```
 
 Code: `src/verifier.js` (checks + result logic), `src/smtp.js` (SMTP conversation), `src/data.js` (role / free /
-disposable lists), `src/selftest.js`, `server.js`, `cli.js`, `public/index.html` (UI), `public/csv.js` (shared CSV parser).
+disposable lists), `src/selftest.js`, `server.js`, `cli.js`, `netlify/functions/api.mjs` (Netlify API), `public/index.html` (dashboard), `public/csv.js` (shared CSV parser).

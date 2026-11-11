@@ -52,12 +52,21 @@ const POPULAR_DOMAINS = [
 ];
 const TLD_FIXES = { con: 'com', cmo: 'com', ocm: 'com', vom: 'com', xom: 'com', comm: 'com', cm: 'com', om: 'com', nte: 'net', ner: 'net', ogr: 'org', orh: 'org' };
 
+// Where data/ may live: next to src/ normally, or the function root when bundled on Netlify.
+const DATA_DIRS = [
+  path.join(__dirname, '..', 'data'),
+  path.join(process.cwd(), 'data'),
+  path.join(process.cwd(), 'email-verifier', 'data'),
+  ...(process.env.LAMBDA_TASK_ROOT ? [path.join(process.env.LAMBDA_TASK_ROOT, 'data'), path.join(process.env.LAMBDA_TASK_ROOT, 'email-verifier', 'data')] : []),
+];
+
 function loadDisposable() {
   const set = new Set(BUILTIN_DISPOSABLE);
-  // Optional bigger lists: data/disposable_domains.txt (from `npm run update-disposable`)
+  // Bigger lists: data/disposable_domains.txt (from `npm run update-disposable`)
   // and data/disposable_custom.txt (your own additions). One domain per line.
+  const dir = DATA_DIRS.find((d) => fs.existsSync(path.join(d, 'disposable_domains.txt'))) || DATA_DIRS[0];
   for (const name of ['disposable_domains.txt', 'disposable_custom.txt']) {
-    const file = path.join(__dirname, '..', 'data', name);
+    const file = path.join(dir, name);
     if (!fs.existsSync(file)) continue;
     for (const line of fs.readFileSync(file, 'utf8').split(/\r?\n/)) {
       const d = line.trim().toLowerCase();
