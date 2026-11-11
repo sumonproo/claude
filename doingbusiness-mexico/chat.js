@@ -11,6 +11,11 @@ const KB = [
   { k: ["18 months", "how long", "stay", "inputs"], a: "Raw materials, parts and packaging imported under IMMEX can generally stay in Mexico for up to 18 months. Machinery can stay for as long as the program is active.", l: [["How long goods can stay", "immex.html#time"]] },
   { k: ["shelter", "without a company", "albergue"], a: "A shelter arrangement lets a foreign manufacturer operate under a Mexican shelter company's IMMEX program without forming its own company, for a limited period.", l: [["IMMEX program types", "immex.html#types"]] },
   { k: ["annual report", "report"], a: "IMMEX holders file an annual report of sales and exports with the Ministry of Economy, due in May for the previous year.", l: [["Annual IMMEX report", "blog-post.html"]] },
+  { k: ["import into", "importing", "padrón", "padron", "importers' registry", "register to import"], a: "Most commercial imports need an active RFC and e.firma, registration in the importers' registry (Padrón de Importadores) with SAT, and for some goods a sector registry.", l: [["Registrations you need", "international-trade.html#registrations"]] },
+  { k: ["customs broker", "agente aduanal", "pedimento", "customs declaration", "clearance"], a: "Shipments are cleared with a customs declaration (pedimento), filed in practice by a licensed customs broker. The importer remains responsible for classification, value and origin.", l: [["Customs clearance", "international-trade.html#broker"]] },
+  { k: ["tariff", "import duty", "igi", "china", "dta"], a: "Imports pay a general import duty set by tariff code and origin, 16% VAT on value plus duty, and a customs processing fee. Duties on many goods from countries without a trade agreement, including China, have gone up recently.", l: [["Taxes and fees on imports", "international-trade.html#taxes"]] },
+  { k: ["trade agreement", "free trade", "usmca", "t-mec", "tmec", "cptpp", "rules of origin", "origin"], a: "Mexico has free trade agreements covering about 50 countries, including USMCA (T-MEC), the EU agreement and CPTPP. Goods must meet the rules of origin to pay the lower duty.", l: [["Trade agreements", "international-trade.html#agreements"]] },
+  { k: ["export", "exporting", "nom", "noms", "labeling", "cofepris"], a: "Exports are generally duty-free and zero-rated for VAT, with an electronic invoice that includes the foreign trade complement. Many imported products must meet Mexican standards (NOMs) before sale.", l: [["International trade guide", "international-trade.html"]] },
   { k: ["benefit", "aguinaldo", "vacation", "bonus", "ptu", "profit sharing"], a: "Mandatory benefits include a Christmas bonus of at least 15 days' salary, 12 vacation days after the first year with a 25% premium, profit sharing of 10% of taxable profit, and social security contributions.", l: [["Mandatory benefits", "labor.html#benefits"]] },
   { k: ["outsourc", "staffing", "subcontract", "repse"], a: "Since 2021, companies cannot subcontract personnel for their core activity. Specialized services are allowed if the provider is registered in REPSE.", l: [["Outsourcing rules", "labor.html#outsourcing"]] },
   { k: ["union", "collective"], a: "Collective agreements must be approved by workers in a personal, free and secret vote, and registered with the Federal Center for Conciliation and Labor Registration.", l: [["Unions", "labor.html#unions"]] },
@@ -23,7 +28,7 @@ const KB = [
   { k: ["expert", "lawyer", "consult", "advisor", "talk", "help"], a: "You can book a consultation or send an inquiry to one of our contributing experts.", l: [["Experts directory", "experts.html"]] },
 ];
 
-const GREETING = "Ask about IMMEX, labor, corporate or real estate in Mexico. I answer from this site's guides.";
+const GREETING = "Ask about IMMEX, international trade, labor, corporate or real estate in Mexico. I answer from this site's guides.";
 const FALLBACK = "I couldn't find that in our guides. An expert can answer it directly.";
 
 let panel, log, input, launcher;

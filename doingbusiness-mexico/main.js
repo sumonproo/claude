@@ -11,6 +11,20 @@
     });
   }
 
+  // Guides dropdown (desktop). On mobile the guides are listed inside the menu.
+  const menuBtn = document.querySelector(".menu__btn");
+  if (menuBtn) {
+    const close = () => menuBtn.setAttribute("aria-expanded", "false");
+    menuBtn.addEventListener("click", e => {
+      e.stopPropagation();
+      menuBtn.setAttribute("aria-expanded", String(menuBtn.getAttribute("aria-expanded") !== "true"));
+    });
+    document.addEventListener("click", e => { if (!e.target.closest(".menu")) close(); });
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape" && menuBtn.getAttribute("aria-expanded") === "true") { close(); menuBtn.focus(); }
+    });
+  }
+
   // Topic filters (experts directory, blog)
   const filters = document.querySelector(".filters");
   if (filters) {

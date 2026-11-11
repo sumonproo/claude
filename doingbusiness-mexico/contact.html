@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=68f2b1fb">
+<link rel="stylesheet" href="styles.css?v=c3dbf9c1">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -18,7 +18,10 @@
     <a class="brand" href="index.html">
       <img class="brand__logo" src="assets/logo-ink.png" width="134" height="46" alt="Doing Business Mexico">
     </a>
-    <nav class="nav__links" id="nav-links" aria-label="Main"><a href="immex.html">IMMEX</a><a href="labor.html">Labor</a><a href="corporate.html">Corporate</a><a href="real-estate.html">Real estate</a><a href="experts.html">Experts</a><a href="blog.html">Blog</a>
+    <nav class="nav__links" id="nav-links" aria-label="Main"><div class="menu">
+        <button class="menu__btn" type="button" aria-expanded="false" aria-controls="guides-menu">Guides<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg></button>
+        <ul class="menu__panel" id="guides-menu"><li><a href="immex.html"><span class="menu__name">IMMEX</span><span class="menu__desc">Import inputs duty-free for export manufacturing, and how to qualify.</span></a></li><li><a href="international-trade.html"><span class="menu__name">International trade</span><span class="menu__desc">Importing and exporting: registrations, customs, tariffs and trade agreements.</span></a></li><li><a href="labor.html"><span class="menu__name">Labor</span><span class="menu__desc">Contracts, mandatory benefits, unions and hiring foreign staff.</span></a></li><li><a href="corporate.html"><span class="menu__name">Corporate</span><span class="menu__desc">Choosing an entity, incorporating, and staying compliant.</span></a></li><li><a href="real-estate.html"><span class="menu__name">Real estate</span><span class="menu__desc">Buying or leasing industrial land, and the checks to run first.</span></a></li></ul>
+      </div><a href="experts.html">Experts</a><a href="blog.html">Blog</a>
       <a class="nav__mobile-cta" href="contact.html#inquiry">Send an inquiry</a>
     </nav>
     <a class="btn btn--small nav__cta" href="contact.html">Book a consultation</a>
@@ -50,7 +53,7 @@
         <div class="field"><label for="f-name">Your name</label><input id="f-name" name="name" autocomplete="name" required></div>
         <div class="field"><label for="f-email">Work email</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
         <div class="field"><label for="f-co">Company</label><input id="f-co" name="company" autocomplete="organization"></div>
-        <div class="field"><label for="f-topic">Topic</label><select id="f-topic" name="topic"><option value="general">General question</option><option value="immex">IMMEX and customs</option><option value="labor">Labor</option><option value="corporate">Corporate and tax</option><option value="real-estate">Real estate</option><option value="security">Security</option><option value="contributor">Becoming a contributor</option></select></div>
+        <div class="field"><label for="f-topic">Topic</label><select id="f-topic" name="topic"><option value="general">General question</option><option value="immex">IMMEX, customs and trade</option><option value="labor">Labor</option><option value="corporate">Corporate and tax</option><option value="real-estate">Real estate</option><option value="security">Security</option><option value="contributor">Becoming a contributor</option></select></div>
         <div class="field field--full"><label for="f-msg">Your question</label><textarea id="f-msg" name="message" rows="5" required></textarea></div>
         <div class="form__end field--full">
           <button class="btn" type="submit">Send inquiry</button>
@@ -68,7 +71,7 @@
       <a class="brand" href="index.html"><img class="brand__logo" src="assets/logo-white.png" width="134" height="46" alt="Doing Business Mexico"></a>
       <p>Free, public guidance for companies doing business in Mexico, written with the experts who do this work.</p>
     </div>
-    <div><h2 class="foot__h">Guides</h2><ul><li><a href="immex.html">IMMEX</a></li><li><a href="labor.html">Labor</a></li><li><a href="corporate.html">Corporate</a></li><li><a href="real-estate.html">Real estate</a></li></ul></div>
+    <div><h2 class="foot__h">Guides</h2><ul><li><a href="immex.html">IMMEX</a></li><li><a href="international-trade.html">International trade</a></li><li><a href="labor.html">Labor</a></li><li><a href="corporate.html">Corporate</a></li><li><a href="real-estate.html">Real estate</a></li></ul></div>
     <div><h2 class="foot__h">Get help</h2><ul>
       <li><a href="experts.html">Find an expert</a></li>
       <li><a href="contact.html">Book a consultation</a></li>
@@ -87,6 +90,6 @@
 <button class="chat-launch" type="button" aria-haspopup="dialog">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><span>Ask a question</span>
 </button>
-<script src="main.js?v=d822b808" defer></script>
+<script src="main.js?v=9541bb72" defer></script>
 </body>
 </html>

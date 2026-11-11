@@ -17,16 +17,13 @@ SITE = "Doing Business Mexico"
 REVIEWED = "November 2026"
 
 NAV = [
-    ("immex.html", "IMMEX"),
-    ("labor.html", "Labor"),
-    ("corporate.html", "Corporate"),
-    ("real-estate.html", "Real estate"),
     ("experts.html", "Experts"),
     ("blog.html", "Blog"),
-]
+]  # the Guides dropdown is built from GUIDES, so new guides appear in the menu automatically
 
 GUIDES = {
     "immex": ("immex.html", "IMMEX", "Import inputs duty-free for export manufacturing, and how to qualify."),
+    "trade": ("international-trade.html", "International trade", "Importing and exporting: registrations, customs, tariffs and trade agreements."),
     "labor": ("labor.html", "Labor", "Contracts, mandatory benefits, unions and hiring foreign staff."),
     "corporate": ("corporate.html", "Corporate", "Choosing an entity, incorporating, and staying compliant."),
     "real-estate": ("real-estate.html", "Real estate", "Buying or leasing industrial land, and the checks to run first."),
@@ -44,11 +41,12 @@ EXPERTS = [
     ("ex5", "security", "Security and risk", "Guadalajara, Jalisco", "English, Spanish",
      "Security consultant who prepares site risk assessments and travel protocols for visiting teams."),
 ]
-TOPIC_NAMES = {"immex": "IMMEX and customs", "labor": "Labor", "corporate": "Corporate and tax",
+TOPIC_NAMES = {"immex": "IMMEX, customs and trade", "labor": "Labor", "corporate": "Corporate and tax",
                "real-estate": "Real estate", "security": "Security"}
 
 POSTS = [
     ("immex", "IMMEX", "Annual IMMEX report: what to file and when", "Every IMMEX holder files an annual report with the Ministry of Economy. Here is what goes in it.", "6 min read"),
+    ("trade", "International trade", "Importing from a country without a trade agreement: check your tariff rate first", "Duties on many goods from non-agreement countries have gone up. How to find the rate that applies to your product.", "5 min read"),
     ("labor", "Labor", "Profit sharing (PTU): how the cap works", "Employers share 10% of taxable profit with staff. The 2021 reform added a cap per employee.", "5 min read"),
     ("corporate", "Corporate", "S.A. de C.V. or S. de R.L.: which one fits a foreign parent?", "The two most common entity types compared, including how US tax rules treat each.", "7 min read"),
     ("real-estate", "Real estate", "Industrial lease terms to negotiate before you sign", "Currency, escalation, deposits and who pays for what in a typical park lease.", "8 min read"),
@@ -65,6 +63,8 @@ PHOTOS = {
     "corporate": ("1681505531034-8d67054e07f6", "Amina Atar", "minaslens", "Two people shaking hands over a signed document"),
     "real-estate": ("1759310347467-578dfd846229", "Mathias Reding", "matreding", "Industrial warehouse with loading gates"),
     "port": ("1590497008432-598f04441de8", "Timelab", "timelabpro", "Container port with cranes"),
+    "trade": ("1590497008432-598f04441de8", "Timelab", "timelabpro", "Container port with cranes at dusk"),
+    "containers": ("1678182451047-196f22a4143e", "Ali Mkumbwa", "mkumbwajr", "Shipping containers stacked at a port"),
     "docs": ("1583521214690-73421a1829a9", "Wesley Tingey", "wesleyphotography", "Stacks of documents and file folders"),
     "garment": ("1741591646737-e634ae96e83d", "EqualStock", "equalstock", "Workers in a garment factory"),
     "meeting": ("1681505504714-4ded1bc247e7", "Amina Atar", "minaslens", "Two people reviewing papers at a table"),
@@ -73,7 +73,7 @@ PHOTOS = {
     "signing": ("1635859890085-ec8cb5466806", "Dimitri Karastelev", "dkfra19", "Person signing a contract"),
 }
 UTM = "utm_source=doingbusiness_mexico&utm_medium=referral"
-TOPIC_PHOTO = {"immex": "port", "labor": "labor", "corporate": "corporate", "real-estate": "real-estate"}
+TOPIC_PHOTO = {"immex": "immex", "trade": "port", "labor": "labor", "corporate": "corporate", "real-estate": "real-estate"}
 
 
 def usrc(key, w, h):
@@ -93,11 +93,21 @@ def credit(key):
     return (f'Photo by <a href="https://unsplash.com/@{user}?{UTM}">{escape(name)}</a> on '
             f'<a href="https://unsplash.com/?{UTM}">Unsplash</a>')
 
-POST_PHOTO = ["docs", "garment", "meeting", "building", "team", "signing"]
+POST_PHOTO = ["docs", "containers", "garment", "meeting", "building", "team", "signing"]
 
 
 def header(active):
-    links = "".join(
+    guide_files = [h for h, _, _ in GUIDES.values()]
+    in_guides = active in guide_files
+    items = "".join(
+        f'<li><a href="{h}"{" aria-current=\"page\"" if h == active else ""}><span class="menu__name">{t}</span><span class="menu__desc">{d}</span></a></li>'
+        for h, t, d in GUIDES.values()
+    )
+    guides = f"""<div class="menu">
+        <button class="menu__btn{' is-current' if in_guides else ''}" type="button" aria-expanded="false" aria-controls="guides-menu">Guides<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg></button>
+        <ul class="menu__panel" id="guides-menu">{items}</ul>
+      </div>"""
+    links = guides + "".join(
         f'<a href="{h}"{" aria-current=\"page\"" if h == active else ""}>{t}</a>' for h, t in NAV
     )
     return f"""<a class="skip" href="#main">Skip to content</a>
@@ -358,7 +368,7 @@ def guide_page(slug, h1, lede, sections, faqs, expert_idx):
 <section class="related">
   <div class="wrap">
     <h2>Other guides</h2>
-    <ul class="topics__list topics__list--3">{related}</ul>
+    <ul class="topics__list">{related}</ul>
   </div>
 </section>
 
@@ -489,6 +499,36 @@ def build_guides():
             ("Are industrial leases in pesos or dollars?", "Industrial park leases are commonly priced in US dollars. Peso leases are possible, and the currency is worth negotiating."),
             ("What is a build-to-suit lease?", "The developer builds a facility to your specifications and you lease it, usually on a longer term than a standard building."),
         ], 3)
+
+    guide_page("trade", "International trade guide: importing and exporting",
+        "What companies need to import into and export from Mexico: registrations, customs clearance, taxes on imports, and how trade agreements lower tariffs.",
+        [
+            ("registrations", "Registrations you need", """<ul>
+<li>An active tax ID (RFC) and electronic signature (e.firma) with the tax authority (SAT).</li>
+<li>Registration in the importers' registry (Padrón de Importadores), required for most commercial imports.</li>
+<li>A sector registry (padrón sectorial) for certain goods, such as steel, textiles, footwear and some chemicals.</li>
+<li>For a small number of goods, a sector registry for exporters as well.</li>
+</ul>"""),
+            ("broker", "Customs clearance and brokers", """<p>Commercial imports and exports are cleared through a customs declaration (pedimento), filed in practice by a licensed customs broker (agente aduanal). The importer authorizes the broker electronically for each shipment or for a period.</p>
+<p>The importer stays responsible for what is declared: the tariff classification, the customs value and the country of origin. Errors can lead to fines and back duties, so review your broker's classifications before your first shipments.</p>"""),
+            ("taxes", "Taxes and fees on imports", """<ul>
+<li><strong>General import duty (IGI):</strong> set by the product's tariff code and its country of origin.</li>
+<li><strong>VAT:</strong> 16%, calculated on the customs value plus duty.</li>
+<li><strong>Customs processing fee (DTA)</strong> on each declaration.</li>
+<li><strong>Excise tax (IEPS)</strong> on some goods, such as fuels, alcohol and tobacco.</li>
+</ul>
+<p>In recent years Mexico has raised import duties on many products from countries without a trade agreement with Mexico, including China. Check the current rate for your tariff code before you set prices.</p>
+<p>If you import inputs to manufacture goods for export, the <a href="immex.html">IMMEX program</a> lets you defer duty and VAT on them.</p>"""),
+            ("agreements", "Trade agreements", """<p>Mexico has free trade agreements covering about 50 countries, including the USMCA (known in Mexico as T-MEC) with the United States and Canada, the agreement with the European Union, and the CPTPP with Pacific countries.</p>
+<p>To pay a lower preferential duty, goods must meet the agreement's rules of origin, and the importer must hold valid proof of origin. Plan your supply chain around these rules if you sell into the US or Canada.</p>"""),
+            ("requirements", "Standards and permits", """<p>Many products must meet Mexican official standards (NOMs), especially for labeling, safety and energy use, before they can be sold. Some goods also need an import permit or approval from a specific authority, such as the Ministry of Economy, the health regulator (COFEPRIS) or the agriculture authority (SENASICA).</p>"""),
+            ("exporting", "Exporting from Mexico", """<p>Exports are generally not subject to export duties and are zero-rated for VAT. For definitive exports, the exporter issues an electronic invoice (CFDI) with the foreign trade complement, which customs matches against the export declaration.</p>"""),
+        ],
+        [
+            ("Do I need to register to import into Mexico?", "Yes. Most commercial imports require registration in the importers' registry with SAT, and some goods also need a sector registry."),
+            ("Can I import without a customs broker?", "In practice, almost all commercial shipments are cleared through a licensed customs broker, who files the customs declaration for you."),
+            ("Does Mexico have a trade agreement with China?", "No. Goods from China pay Mexico's general import duties, which have increased for many products in recent years."),
+        ], 0)
 
 
 # ---------------------------------------------------------------- EXPERTS

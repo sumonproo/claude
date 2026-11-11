@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=68f2b1fb">
+<link rel="stylesheet" href="styles.css?v=c3dbf9c1">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -18,7 +18,10 @@
     <a class="brand" href="index.html">
       <img class="brand__logo" src="assets/logo-ink.png" width="134" height="46" alt="Doing Business Mexico">
     </a>
-    <nav class="nav__links" id="nav-links" aria-label="Main"><a href="immex.html">IMMEX</a><a href="labor.html">Labor</a><a href="corporate.html">Corporate</a><a href="real-estate.html">Real estate</a><a href="experts.html">Experts</a><a href="blog.html" aria-current="page">Blog</a>
+    <nav class="nav__links" id="nav-links" aria-label="Main"><div class="menu">
+        <button class="menu__btn" type="button" aria-expanded="false" aria-controls="guides-menu">Guides<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg></button>
+        <ul class="menu__panel" id="guides-menu"><li><a href="immex.html"><span class="menu__name">IMMEX</span><span class="menu__desc">Import inputs duty-free for export manufacturing, and how to qualify.</span></a></li><li><a href="international-trade.html"><span class="menu__name">International trade</span><span class="menu__desc">Importing and exporting: registrations, customs, tariffs and trade agreements.</span></a></li><li><a href="labor.html"><span class="menu__name">Labor</span><span class="menu__desc">Contracts, mandatory benefits, unions and hiring foreign staff.</span></a></li><li><a href="corporate.html"><span class="menu__name">Corporate</span><span class="menu__desc">Choosing an entity, incorporating, and staying compliant.</span></a></li><li><a href="real-estate.html"><span class="menu__name">Real estate</span><span class="menu__desc">Buying or leasing industrial land, and the checks to run first.</span></a></li></ul>
+      </div><a href="experts.html">Experts</a><a href="blog.html" aria-current="page">Blog</a>
       <a class="nav__mobile-cta" href="contact.html#inquiry">Send an inquiry</a>
     </nav>
     <a class="btn btn--small nav__cta" href="contact.html">Book a consultation</a>
@@ -48,8 +51,16 @@
         </div>
       </a>
     </article>
-    <div class="filters" role="group" aria-label="Filter articles by topic"><button type="button" class="chip" aria-pressed="true" data-filter="all">All</button><button type="button" class="chip" aria-pressed="false" data-filter="immex">IMMEX</button><button type="button" class="chip" aria-pressed="false" data-filter="labor">Labor</button><button type="button" class="chip" aria-pressed="false" data-filter="corporate">Corporate</button><button type="button" class="chip" aria-pressed="false" data-filter="real-estate">Real estate</button></div>
-    <div class="posts-grid"><article class="post" data-topic="labor">
+    <div class="filters" role="group" aria-label="Filter articles by topic"><button type="button" class="chip" aria-pressed="true" data-filter="all">All</button><button type="button" class="chip" aria-pressed="false" data-filter="immex">IMMEX</button><button type="button" class="chip" aria-pressed="false" data-filter="trade">International trade</button><button type="button" class="chip" aria-pressed="false" data-filter="labor">Labor</button><button type="button" class="chip" aria-pressed="false" data-filter="corporate">Corporate</button><button type="button" class="chip" aria-pressed="false" data-filter="real-estate">Real estate</button></div>
+    <div class="posts-grid"><article class="post" data-topic="trade">
+  <a class="post__link" href="blog-post.html">
+    <img class="post__img" src="https://images.unsplash.com/photo-1678182451047-196f22a4143e?auto=format&fit=crop&w=640&h=360&q=70" srcset="https://images.unsplash.com/photo-1678182451047-196f22a4143e?auto=format&fit=crop&w=640&h=360&q=70 1x, https://images.unsplash.com/photo-1678182451047-196f22a4143e?auto=format&fit=crop&w=1280&h=720&q=70 2x" width="640" height="360" alt="Shipping containers stacked at a port" loading="lazy" decoding="async">
+    <p class="post__topic">International trade</p>
+    <h3 class="post__title">Importing from a country without a trade agreement: check your tariff rate first</h3>
+    <p class="post__dek">Duties on many goods from non-agreement countries have gone up. How to find the rate that applies to your product.</p>
+    <p class="post__meta">5 min read</p>
+  </a>
+</article><article class="post" data-topic="labor">
   <a class="post__link" href="blog-post.html">
     <img class="post__img" src="https://images.unsplash.com/photo-1741591646737-e634ae96e83d?auto=format&fit=crop&w=640&h=360&q=70" srcset="https://images.unsplash.com/photo-1741591646737-e634ae96e83d?auto=format&fit=crop&w=640&h=360&q=70 1x, https://images.unsplash.com/photo-1741591646737-e634ae96e83d?auto=format&fit=crop&w=1280&h=720&q=70 2x" width="640" height="360" alt="Workers in a garment factory" loading="lazy" decoding="async">
     <p class="post__topic">Labor</p>
@@ -113,7 +124,7 @@
       <a class="brand" href="index.html"><img class="brand__logo" src="assets/logo-white.png" width="134" height="46" alt="Doing Business Mexico"></a>
       <p>Free, public guidance for companies doing business in Mexico, written with the experts who do this work.</p>
     </div>
-    <div><h2 class="foot__h">Guides</h2><ul><li><a href="immex.html">IMMEX</a></li><li><a href="labor.html">Labor</a></li><li><a href="corporate.html">Corporate</a></li><li><a href="real-estate.html">Real estate</a></li></ul></div>
+    <div><h2 class="foot__h">Guides</h2><ul><li><a href="immex.html">IMMEX</a></li><li><a href="international-trade.html">International trade</a></li><li><a href="labor.html">Labor</a></li><li><a href="corporate.html">Corporate</a></li><li><a href="real-estate.html">Real estate</a></li></ul></div>
     <div><h2 class="foot__h">Get help</h2><ul>
       <li><a href="experts.html">Find an expert</a></li>
       <li><a href="contact.html">Book a consultation</a></li>
@@ -132,6 +143,6 @@
 <button class="chat-launch" type="button" aria-haspopup="dialog">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><span>Ask a question</span>
 </button>
-<script src="main.js?v=d822b808" defer></script>
+<script src="main.js?v=9541bb72" defer></script>
 </body>
 </html>

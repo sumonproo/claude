@@ -9,6 +9,7 @@ Static HTML concepts for doingbusiness-mexico.com, to review with the client and
 | Labor | `labor.html` |
 | Corporate | `corporate.html` |
 | Real estate | `real-estate.html` |
+| International trade | `international-trade.html` |
 | Blog | `blog.html` |
 | Blog post template | `blog-post.html` |
 | Experts directory (the "members page") | `experts.html` |
