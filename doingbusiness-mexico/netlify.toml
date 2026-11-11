@@ -1,0 +1,14 @@
+[build]
+  publish = "."
+  command = ""
+
+# Re-check CSS, JS and images on every visit (cheap 304s via ETag), so a page
+# never pairs with an outdated stylesheet after a deploy.
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"

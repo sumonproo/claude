@@ -72,6 +72,9 @@
     });
   }
 
+  // On the Netlify preview, Netlify shows a badge in the bottom-right corner; lift the chat button above it.
+  if (/\.netlify\.app$/.test(location.hostname)) document.documentElement.classList.add("is-netlify-preview");
+
   // AI chat: load chat.js on first use only
   const launch = document.querySelector(".chat-launch");
   let chat;

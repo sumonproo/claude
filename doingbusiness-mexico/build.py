@@ -7,6 +7,12 @@ from pathlib import Path
 from html import escape
 
 OUT = Path(__file__).parent
+
+
+def ver(name):
+    """Short content hash, so browsers never pair a new page with an old stylesheet or script."""
+    import hashlib
+    return hashlib.sha1((OUT / name).read_bytes()).hexdigest()[:8]
 SITE = "Doing Business Mexico"
 REVIEWED = "November 2026"
 
@@ -153,7 +159,7 @@ def footer():
 <button class="chat-launch" type="button" aria-haspopup="dialog">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg><span>Ask a question</span>
 </button>
-<script src="main.js" defer></script>"""
+<script src="main.js?v={ver('main.js')}" defer></script>"""
 
 
 def page(filename, title, description, active, body, extra_head=""):
@@ -169,7 +175,7 @@ def page(filename, title, description, active, body, extra_head=""):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v={ver('styles.css')}">
 {extra_head}</head>
 <body>
 {header(active)}

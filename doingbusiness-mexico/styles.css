@@ -331,6 +331,7 @@ img { max-width: 100%; height: auto; }
 .chat-launch svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linejoin: round; }
 .chat-launch:hover { background: var(--jade-deep); }
 .chat-launch[aria-expanded="true"] { display: none; }
+.is-netlify-preview .chat-launch { bottom: 76px; }
 @media (max-width: 560px) {
   .chat-launch { right: 12px; bottom: 12px; width: 48px; height: 48px; min-height: 48px; padding: 0; justify-content: center; }
   .chat-launch span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
