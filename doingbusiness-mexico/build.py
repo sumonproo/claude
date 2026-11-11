@@ -51,8 +51,43 @@ POSTS = [
 ]
 
 
-def ext_icon():
-    return ""
+# Unsplash photos are hotlinked from images.unsplash.com, as Unsplash's API terms require.
+# Their CDN resizes and serves WebP/AVIF automatically (auto=format).
+PHOTOS = {
+    "immex": ("1647427060118-4911c9821b82", "Simon Kadula", "simonkadula", "Robots on an automotive assembly line"),
+    "labor": ("1652211955967-99c892925469", "Arno Senoner", "arnosenoner", "A team at work on a factory floor"),
+    "corporate": ("1681505531034-8d67054e07f6", "Amina Atar", "minaslens", "Two people shaking hands over a signed document"),
+    "real-estate": ("1759310347467-578dfd846229", "Mathias Reding", "matreding", "Industrial warehouse with loading gates"),
+    "port": ("1590497008432-598f04441de8", "Timelab", "timelabpro", "Container port with cranes"),
+    "docs": ("1583521214690-73421a1829a9", "Wesley Tingey", "wesleyphotography", "Stacks of documents and file folders"),
+    "garment": ("1741591646737-e634ae96e83d", "EqualStock", "equalstock", "Workers in a garment factory"),
+    "meeting": ("1681505504714-4ded1bc247e7", "Amina Atar", "minaslens", "Two people reviewing papers at a table"),
+    "building": ("1669003750682-93cf2c65b9ca", "Point3D Commercial Imaging", "3dottawa", "Industrial building with loading doors"),
+    "team": ("1651525670114-2b8117390b28", "Arno Senoner", "arnosenoner", "People working in a factory"),
+    "signing": ("1635859890085-ec8cb5466806", "Dimitri Karastelev", "dkfra19", "Person signing a contract"),
+}
+UTM = "utm_source=doingbusiness_mexico&utm_medium=referral"
+TOPIC_PHOTO = {"immex": "port", "labor": "labor", "corporate": "corporate", "real-estate": "real-estate"}
+
+
+def usrc(key, w, h):
+    pid = PHOTOS[key][0]
+    return f"https://images.unsplash.com/photo-{pid}?auto=format&fit=crop&w={w}&h={h}&q=70"
+
+
+def photo(key, w, h, cls="", eager=False):
+    alt = PHOTOS[key][3]
+    lazy = 'fetchpriority="high"' if eager else 'loading="lazy" decoding="async"'
+    return (f'<img class="{cls}" src="{usrc(key, w, h)}" srcset="{usrc(key, w, h)} 1x, {usrc(key, w * 2, h * 2)} 2x" '
+            f'width="{w}" height="{h}" alt="{escape(alt)}" {lazy}>')
+
+
+def credit(key):
+    _, name, user, _ = PHOTOS[key]
+    return (f'Photo by <a href="https://unsplash.com/@{user}?{UTM}">{escape(name)}</a> on '
+            f'<a href="https://unsplash.com/?{UTM}">Unsplash</a>')
+
+POST_PHOTO = ["docs", "garment", "meeting", "building", "team", "signing"]
 
 
 def header(active):
@@ -62,9 +97,8 @@ def header(active):
     return f"""<a class="skip" href="#main">Skip to content</a>
 <header class="nav">
   <div class="wrap nav__inner">
-    <a class="brand" href="index.html" aria-label="{SITE}, home">
-      <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="7" cy="16" r="4"/><circle cx="25" cy="16" r="4"/><path d="M7 16 C 12 4, 20 4, 25 16" fill="none" stroke-width="2"/></svg>
-      <span class="brand__name">Doing Business <b>Mexico</b></span>
+    <a class="brand" href="index.html">
+      <img class="brand__logo" src="assets/logo-ink.png" width="134" height="46" alt="Doing Business Mexico">
     </a>
     <nav class="nav__links" id="nav-links" aria-label="Main">{links}
       <a class="nav__mobile-cta" href="contact.html#inquiry">Send an inquiry</a>
@@ -97,7 +131,7 @@ def footer():
     return f"""<footer class="foot">
   <div class="wrap foot__grid">
     <div class="foot__about">
-      <a class="brand brand--light" href="index.html"><span class="brand__name">Doing Business <b>Mexico</b></span></a>
+      <a class="brand" href="index.html"><img class="brand__logo" src="assets/logo-white.png" width="134" height="46" alt="Doing Business Mexico"></a>
       <p>Free, public guidance for companies doing business in Mexico, written with the experts who do this work.</p>
     </div>
     <div><h2 class="foot__h">Guides</h2><ul>{guides}</ul></div>
@@ -113,6 +147,7 @@ def footer():
   </div>
   <div class="wrap foot__legal">
     <p>Content on this site is general information, not legal or tax advice. Rules change, so confirm details with an expert before acting.</p>
+    <p>Stock photos from <a href="https://unsplash.com/?{UTM}">Unsplash</a>.</p>
   </div>
 </footer>
 <button class="chat-launch" type="button" aria-haspopup="dialog">
@@ -171,9 +206,10 @@ def expert_card(i, e, compact=False):
 
 def post_card(p, idx):
     topic, label, title, dek, read = p
+    img = photo(POST_PHOTO[idx], 640, 360, "post__img")
     return f"""<article class="post">
   <a class="post__link" href="blog-post.html">
-    <div class="post__img post__img--{topic}" aria-hidden="true"></div>
+    {img}
     <p class="post__topic">{label}</p>
     <h3 class="post__title">{title}</h3>
     <p class="post__dek">{dek}</p>
@@ -185,13 +221,17 @@ def post_card(p, idx):
 # ---------------------------------------------------------------- HOME
 def build_home():
     topics = "".join(
-        f'<li><a class="topic" href="{h}"><span class="topic__name">{t}</span><span class="topic__desc">{d}</span></a></li>'
-        for h, t, d in GUIDES.values()
+        f'<li><a class="topic topic--img" href="{h}">{photo(TOPIC_PHOTO[k], 560, 360, "topic__img")}<span class="topic__name">{t}</span><span class="topic__desc">{d}</span></a></li>'
+        for k, (h, t, d) in GUIDES.items()
     )
     experts = "".join(expert_card(i, e, compact=True) for i, e in enumerate(EXPERTS[:3]))
     posts = "".join(post_card(p, i) for i, p in enumerate(POSTS[:3]))
     body = f"""
-<section class="hero">
+<section class="hero hero--photo">
+  <picture class="hero__bg">
+    <source media="(max-width: 640px)" srcset="assets/mexico-city-skyline-640.webp">
+    <img src="assets/mexico-city-skyline.webp" width="1026" height="769" alt="" fetchpriority="high">
+  </picture>
   <div class="wrap hero__inner">
     <h1 class="hero__title">Practical guidance for doing business in Mexico</h1>
     <p class="hero__lede">Free, public guides on IMMEX, labor, corporate and real estate, written with the experts who handle these questions every day.</p>
@@ -209,12 +249,12 @@ def build_home():
 
 <section class="topics">
   <div class="wrap">
-    <h2 class="sr-only">Guides</h2>
-    <ul class="topics__list">{topics}</ul>
+    <div class="sec-head"><h2>Guides</h2><p>Start with the topic you need. Each guide is free and kept up to date by our contributors.</p></div>
+    <ul class="topics__list topics__list--cards">{topics}</ul>
   </div>
 </section>
 
-<section class="pathway">
+<section class="pathway textured">
   <div class="wrap">
     <div class="sec-head">
       <h2>How companies set up in Mexico</h2>
@@ -253,6 +293,7 @@ def build_home():
 """
     jsonld = """<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Doing Business Mexico","url":"https://doingbusiness-mexico.com/"}</script>
 """
+    jsonld += '<link rel="preload" as="image" href="assets/mexico-city-skyline.webp" media="(min-width: 641px)">\n<link rel="preload" as="image" href="assets/mexico-city-skyline-640.webp" media="(max-width: 640px)">\n'
     page("index.html", SITE, "Free, public guides on IMMEX, labor, corporate and real estate in Mexico, plus a directory of experts you can consult.", None, body, jsonld)
 
 
@@ -277,6 +318,10 @@ def guide_page(slug, h1, lede, sections, faqs, expert_idx):
     <p class="guide-hero__meta">Last reviewed {REVIEWED}. Written with contributors from our <a href="experts.html">experts directory</a>.</p>
   </div>
 </div>
+<figure class="wrap banner">
+  {photo(slug, 1200, 420, "banner__img", eager=True)}
+  <figcaption>{credit(slug)}</figcaption>
+</figure>
 
 <div class="wrap guide">
   <aside class="guide__toc" aria-label="On this page">
@@ -456,7 +501,7 @@ def build_experts():
     <p class="empty" hidden>No experts listed for this topic yet. <a href="contact.html#inquiry">Send an inquiry</a> and we'll connect you with someone.</p>
   </div>
 </section>
-<section class="contribute" id="contribute">
+<section class="contribute textured" id="contribute">
   <div class="wrap contribute__inner">
     <div>
       <h2>Become a contributor</h2>
@@ -475,7 +520,7 @@ def build_blog():
         f'<button type="button" class="chip" aria-pressed="false" data-filter="{k}">{t}</button>' for k, (_, t, _) in GUIDES.items()
     )
     feat = POSTS[0]
-    posts = "".join(post_card(p, i).replace('<article class="post">', f'<article class="post" data-topic="{p[0]}">') for i, p in enumerate(POSTS[1:]))
+    posts = "".join(post_card(p, i + 1).replace('<article class="post">', f'<article class="post" data-topic="{p[0]}">') for i, p in enumerate(POSTS[1:]))
     body = f"""
 <div class="guide-hero">
   <div class="wrap">
@@ -487,7 +532,7 @@ def build_blog():
   <div class="wrap">
     <article class="feature">
       <a class="feature__link" href="blog-post.html">
-        <div class="post__img post__img--{feat[0]} feature__img" aria-hidden="true"></div>
+        {photo(POST_PHOTO[0], 760, 428, "post__img feature__img", eager=True)}
         <div class="feature__body">
           <p class="post__topic">{feat[1]}</p>
           <h2 class="feature__title">{feat[2]}</h2>
@@ -507,7 +552,7 @@ def build_blog():
 
 
 def build_post():
-    related = "".join(post_card(p, i) for i, p in enumerate(POSTS[1:4]))
+    related = "".join(post_card(p, i + 1) for i, p in enumerate(POSTS[1:4]))
     body = f"""
 <article class="article">
   <header class="wrap article__head">
@@ -517,7 +562,10 @@ def build_post():
     <p class="article__dek">Every IMMEX holder files an annual report with the Ministry of Economy. Here is what goes in it.</p>
     <div class="byline">{initials_avatar(1)}<div><p class="byline__name">Expert name</p><p class="byline__meta">IMMEX and customs · Published November 2026 · 6 min read</p></div></div>
   </header>
-  <div class="post__img post__img--immex article__img" role="img" aria-label="Featured image"></div>
+  <figure class="article__fig">
+    {photo("docs", 1120, 480, "article__img", eager=True)}
+    <figcaption class="wrap">{credit("docs")}</figcaption>
+  </figure>
   <div class="wrap article__body">
     <div class="prose">
       <p>Each year, companies with an IMMEX program report their total sales and the value of their exports for the previous year to the Ministry of Economy. The report shows that the company still meets the program's requirements.</p>

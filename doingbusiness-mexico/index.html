@@ -11,14 +11,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Doing Business Mexico","url":"https://doingbusiness-mexico.com/"}</script>
+<link rel="preload" as="image" href="assets/mexico-city-skyline.webp" media="(min-width: 641px)">
+<link rel="preload" as="image" href="assets/mexico-city-skyline-640.webp" media="(max-width: 640px)">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="nav">
   <div class="wrap nav__inner">
-    <a class="brand" href="index.html" aria-label="Doing Business Mexico, home">
-      <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="7" cy="16" r="4"/><circle cx="25" cy="16" r="4"/><path d="M7 16 C 12 4, 20 4, 25 16" fill="none" stroke-width="2"/></svg>
-      <span class="brand__name">Doing Business <b>Mexico</b></span>
+    <a class="brand" href="index.html">
+      <img class="brand__logo" src="assets/logo-ink.png" width="134" height="46" alt="Doing Business Mexico">
     </a>
     <nav class="nav__links" id="nav-links" aria-label="Main"><a href="immex.html">IMMEX</a><a href="labor.html">Labor</a><a href="corporate.html">Corporate</a><a href="real-estate.html">Real estate</a><a href="experts.html">Experts</a><a href="blog.html">Blog</a>
       <a class="nav__mobile-cta" href="contact.html#inquiry">Send an inquiry</a>
@@ -31,7 +32,11 @@
 </header>
 <main id="main">
 
-<section class="hero">
+<section class="hero hero--photo">
+  <picture class="hero__bg">
+    <source media="(max-width: 640px)" srcset="assets/mexico-city-skyline-640.webp">
+    <img src="assets/mexico-city-skyline.webp" width="1026" height="769" alt="" fetchpriority="high">
+  </picture>
   <div class="wrap hero__inner">
     <h1 class="hero__title">Practical guidance for doing business in Mexico</h1>
     <p class="hero__lede">Free, public guides on IMMEX, labor, corporate and real estate, written with the experts who handle these questions every day.</p>
@@ -49,12 +54,12 @@
 
 <section class="topics">
   <div class="wrap">
-    <h2 class="sr-only">Guides</h2>
-    <ul class="topics__list"><li><a class="topic" href="immex.html"><span class="topic__name">IMMEX</span><span class="topic__desc">Import inputs duty-free for export manufacturing, and how to qualify.</span></a></li><li><a class="topic" href="labor.html"><span class="topic__name">Labor</span><span class="topic__desc">Contracts, mandatory benefits, unions and hiring foreign staff.</span></a></li><li><a class="topic" href="corporate.html"><span class="topic__name">Corporate</span><span class="topic__desc">Choosing an entity, incorporating, and staying compliant.</span></a></li><li><a class="topic" href="real-estate.html"><span class="topic__name">Real estate</span><span class="topic__desc">Buying or leasing industrial land, and the checks to run first.</span></a></li></ul>
+    <div class="sec-head"><h2>Guides</h2><p>Start with the topic you need. Each guide is free and kept up to date by our contributors.</p></div>
+    <ul class="topics__list topics__list--cards"><li><a class="topic topic--img" href="immex.html"><img class="topic__img" src="https://images.unsplash.com/photo-1590497008432-598f04441de8?auto=format&fit=crop&w=560&h=360&q=70" srcset="https://images.unsplash.com/photo-1590497008432-598f04441de8?auto=format&fit=crop&w=560&h=360&q=70 1x, https://images.unsplash.com/photo-1590497008432-598f04441de8?auto=format&fit=crop&w=1120&h=720&q=70 2x" width="560" height="360" alt="Container port with cranes" loading="lazy" decoding="async"><span class="topic__name">IMMEX</span><span class="topic__desc">Import inputs duty-free for export manufacturing, and how to qualify.</span></a></li><li><a class="topic topic--img" href="labor.html"><img class="topic__img" src="https://images.unsplash.com/photo-1652211955967-99c892925469?auto=format&fit=crop&w=560&h=360&q=70" srcset="https://images.unsplash.com/photo-1652211955967-99c892925469?auto=format&fit=crop&w=560&h=360&q=70 1x, https://images.unsplash.com/photo-1652211955967-99c892925469?auto=format&fit=crop&w=1120&h=720&q=70 2x" width="560" height="360" alt="A team at work on a factory floor" loading="lazy" decoding="async"><span class="topic__name">Labor</span><span class="topic__desc">Contracts, mandatory benefits, unions and hiring foreign staff.</span></a></li><li><a class="topic topic--img" href="corporate.html"><img class="topic__img" src="https://images.unsplash.com/photo-1681505531034-8d67054e07f6?auto=format&fit=crop&w=560&h=360&q=70" srcset="https://images.unsplash.com/photo-1681505531034-8d67054e07f6?auto=format&fit=crop&w=560&h=360&q=70 1x, https://images.unsplash.com/photo-1681505531034-8d67054e07f6?auto=format&fit=crop&w=1120&h=720&q=70 2x" width="560" height="360" alt="Two people shaking hands over a signed document" loading="lazy" decoding="async"><span class="topic__name">Corporate</span><span class="topic__desc">Choosing an entity, incorporating, and staying compliant.</span></a></li><li><a class="topic topic--img" href="real-estate.html"><img class="topic__img" src="https://images.unsplash.com/photo-1759310347467-578dfd846229?auto=format&fit=crop&w=560&h=360&q=70" srcset="https://images.unsplash.com/photo-1759310347467-578dfd846229?auto=format&fit=crop&w=560&h=360&q=70 1x, https://images.unsplash.com/photo-1759310347467-578dfd846229?auto=format&fit=crop&w=1120&h=720&q=70 2x" width="560" height="360" alt="Industrial warehouse with loading gates" loading="lazy" decoding="async"><span class="topic__name">Real estate</span><span class="topic__desc">Buying or leasing industrial land, and the checks to run first.</span></a></li></ul>
   </div>
 </section>
 
-<section class="pathway">
+<section class="pathway textured">
   <div class="wrap">
     <div class="sec-head">
       <h2>How companies set up in Mexico</h2>
@@ -123,7 +128,7 @@
     </div>
     <div class="posts-grid"><article class="post">
   <a class="post__link" href="blog-post.html">
-    <div class="post__img post__img--immex" aria-hidden="true"></div>
+    <img class="post__img" src="https://images.unsplash.com/photo-1583521214690-73421a1829a9?auto=format&fit=crop&w=640&h=360&q=70" srcset="https://images.unsplash.com/photo-1583521214690-73421a1829a9?auto=format&fit=crop&w=640&h=360&q=70 1x, https://images.unsplash.com/photo-1583521214690-73421a1829a9?auto=format&fit=crop&w=1280&h=720&q=70 2x" width="640" height="360" alt="Stacks of documents and file folders" loading="lazy" decoding="async">
     <p class="post__topic">IMMEX</p>
     <h3 class="post__title">Annual IMMEX report: what to file and when</h3>
     <p class="post__dek">Every IMMEX holder files an annual report with the Ministry of Economy. Here is what goes in it.</p>
@@ -131,7 +136,7 @@
   </a>
 </article><article class="post">
   <a class="post__link" href="blog-post.html">
-    <div class="post__img post__img--labor" aria-hidden="true"></div>
+    <img class="post__img" src="https://images.unsplash.com/photo-1741591646737-e634ae96e83d?auto=format&fit=crop&w=640&h=360&q=70" srcset="https://images.unsplash.com/photo-1741591646737-e634ae96e83d?auto=format&fit=crop&w=640&h=360&q=70 1x, https://images.unsplash.com/photo-1741591646737-e634ae96e83d?auto=format&fit=crop&w=1280&h=720&q=70 2x" width="640" height="360" alt="Workers in a garment factory" loading="lazy" decoding="async">
     <p class="post__topic">Labor</p>
     <h3 class="post__title">Profit sharing (PTU): how the cap works</h3>
     <p class="post__dek">Employers share 10% of taxable profit with staff. The 2021 reform added a cap per employee.</p>
@@ -139,7 +144,7 @@
   </a>
 </article><article class="post">
   <a class="post__link" href="blog-post.html">
-    <div class="post__img post__img--corporate" aria-hidden="true"></div>
+    <img class="post__img" src="https://images.unsplash.com/photo-1681505504714-4ded1bc247e7?auto=format&fit=crop&w=640&h=360&q=70" srcset="https://images.unsplash.com/photo-1681505504714-4ded1bc247e7?auto=format&fit=crop&w=640&h=360&q=70 1x, https://images.unsplash.com/photo-1681505504714-4ded1bc247e7?auto=format&fit=crop&w=1280&h=720&q=70 2x" width="640" height="360" alt="Two people reviewing papers at a table" loading="lazy" decoding="async">
     <p class="post__topic">Corporate</p>
     <h3 class="post__title">S.A. de C.V. or S. de R.L.: which one fits a foreign parent?</h3>
     <p class="post__dek">The two most common entity types compared, including how US tax rules treat each.</p>
@@ -166,7 +171,7 @@
 <footer class="foot">
   <div class="wrap foot__grid">
     <div class="foot__about">
-      <a class="brand brand--light" href="index.html"><span class="brand__name">Doing Business <b>Mexico</b></span></a>
+      <a class="brand" href="index.html"><img class="brand__logo" src="assets/logo-white.png" width="134" height="46" alt="Doing Business Mexico"></a>
       <p>Free, public guidance for companies doing business in Mexico, written with the experts who do this work.</p>
     </div>
     <div><h2 class="foot__h">Guides</h2><ul><li><a href="immex.html">IMMEX</a></li><li><a href="labor.html">Labor</a></li><li><a href="corporate.html">Corporate</a></li><li><a href="real-estate.html">Real estate</a></li></ul></div>
@@ -182,6 +187,7 @@
   </div>
   <div class="wrap foot__legal">
     <p>Content on this site is general information, not legal or tax advice. Rules change, so confirm details with an expert before acting.</p>
+    <p>Stock photos from <a href="https://unsplash.com/?utm_source=doingbusiness_mexico&utm_medium=referral">Unsplash</a>.</p>
   </div>
 </footer>
 <button class="chat-launch" type="button" aria-haspopup="dialog">

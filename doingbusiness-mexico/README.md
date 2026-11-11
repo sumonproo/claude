@@ -46,3 +46,10 @@ Edit content in `build.py`, then run `python3 build.py` to regenerate the pages.
 - Guide and blog copy is a draft based on general rules. The client is writing the final copy, and each guide should be reviewed by its expert.
 - Blog featured images are colored placeholders.
 - The "Inquiry sent" message is shown without sending anything until the real form is connected.
+
+## Images
+
+- `assets/logo-ink.png` and `assets/logo-white.png`: the client's logo, recolored for the light header and the dark footer.
+- `assets/mexico-city-skyline*.webp`: the client's skyline photo, used as the home hero (WebP, with a smaller version for phones).
+- `assets/pattern.webp`: the client's pattern tile, used as a light texture behind two sections.
+- Stock photos come from Unsplash and are hotlinked from `images.unsplash.com`, as Unsplash's API terms require, with photographer credits on guide banners and the blog post. The photo list is `PHOTOS` in `build.py`. In WordPress, either keep hotlinking with credits, or download them into the Media Library (the Unsplash License allows that) and serve them as WebP.
