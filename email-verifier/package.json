@@ -1,0 +1,16 @@
+{
+  "name": "email-verifier",
+  "version": "1.0.0",
+  "description": "Self-hosted email verifier for cold outreach lists: syntax, typo, disposable, role, MX, SMTP mailbox and catch-all checks. No dependencies.",
+  "private": true,
+  "license": "MIT",
+  "main": "src/verifier.js",
+  "bin": { "email-verify": "cli.js" },
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "node server.js",
+    "check": "node cli.js --check",
+    "test": "node --test test/*.test.js",
+    "update-disposable": "node scripts/update-disposable.js"
+  }
+}

@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Email Verifier</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --panel: #fff; --text: #16181d; --muted: #646b78; --line: #e3e6eb;
+    --accent: #2f5bea; --accent-ink: #fff;
+    --valid: #13804b; --valid-bg: #e6f5ec; --invalid: #c2362f; --invalid-bg: #fbeaea;
+    --risky: #a35f00; --risky-bg: #fdf1dc; --unknown: #5b6270; --unknown-bg: #eef0f3;
+    --radius: 10px; --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #101216; --panel: #181b21; --text: #e8eaee; --muted: #9aa1ad; --line: #2a2f38;
+      --accent: #6d8cff; --accent-ink: #0b0d12;
+      --valid: #4cc98a; --valid-bg: #12291e; --invalid: #f0726b; --invalid-bg: #2e1615;
+      --risky: #f0b14f; --risky-bg: #2e2312; --unknown: #a3aab6; --unknown-bg: #22262d;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 1100px; margin: 0 auto; padding: 32px 16px 64px; }
+  header { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+  h1 { font-size: 22px; margin: 0; letter-spacing: -0.01em; }
+  header p { margin: 4px 0 0; color: var(--muted); }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; margin-bottom: 16px; }
+  textarea { width: 100%; min-height: 150px; resize: vertical; padding: 12px; border: 1px solid var(--line); border-radius: 8px;
+    background: var(--bg); color: var(--text); font: 13px/1.5 var(--mono); }
+  textarea:focus, button:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+  .spacer { flex: 1; }
+  button, .file, select { font: inherit; font-size: 14px; padding: 8px 14px; border-radius: 8px; border: 1px solid var(--line);
+    background: var(--panel); color: var(--text); cursor: pointer; }
+  button:hover, .file:hover { border-color: var(--muted); }
+  button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+  button:disabled { opacity: .5; cursor: default; }
+  .file input { display: none; }
+  label.check { display: flex; gap: 6px; align-items: center; color: var(--muted); font-size: 14px; cursor: pointer; }
+  .hint { color: var(--muted); font-size: 13px; }
+  .progress { height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; margin-top: 14px; display: none; }
+  .progress > div { height: 100%; width: 0; background: var(--accent); transition: width .2s; }
+  .stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .stat { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; cursor: pointer; background: var(--panel); text-align: left; }
+  .stat[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  .stat b { display: block; font-size: 22px; font-variant-numeric: tabular-nums; }
+  .stat span { color: var(--muted); font-size: 13px; }
+  .stat.valid b { color: var(--valid); } .stat.invalid b { color: var(--invalid); }
+  .stat.risky b { color: var(--risky); } .stat.unknown b { color: var(--unknown); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+  td.email { font-family: var(--mono); font-size: 13px; word-break: break-all; }
+  .badge { display: inline-block; padding: 1px 8px; border-radius: 99px; font-size: 12px; font-weight: 600; }
+  .badge.valid { color: var(--valid); background: var(--valid-bg); } .badge.invalid { color: var(--invalid); background: var(--invalid-bg); }
+  .badge.risky { color: var(--risky); background: var(--risky-bg); } .badge.unknown { color: var(--unknown); background: var(--unknown-bg); }
+  .tag { display: inline-block; font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; margin: 0 4px 2px 0; }
+  .detail { color: var(--muted); font-size: 12px; font-family: var(--mono); word-break: break-word; }
+  .scroll { overflow-x: auto; }
+  .notice { border-left: 3px solid var(--risky); background: var(--risky-bg); padding: 10px 14px; border-radius: 6px; margin-bottom: 16px; font-size: 14px; display: none; }
+  .notice.ok { border-color: var(--valid); background: var(--valid-bg); }
+  .notice ul { margin: 6px 0 0; padding-left: 18px; }
+  details summary { cursor: pointer; color: var(--muted); font-size: 14px; }
+  .legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px 20px; margin-top: 10px; font-size: 13px; color: var(--muted); }
+  @media (max-width: 700px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .hide-sm { display: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div>
+      <h1>Email Verifier</h1>
+      <p>Check a cold email list before you send. Runs on your own server, no credits.</p>
+    </div>
+    <button id="selftest" type="button">Check server setup</button>
+  </header>
+
+  <div id="notice" class="notice" role="status"></div>
+
+  <section class="panel">
+    <textarea id="input" spellcheck="false" placeholder="Paste emails, one per line (or separated by commas)&#10;&#10;jane@acme.com&#10;john.smith@example.org"></textarea>
+    <div class="row">
+      <label class="file">Upload CSV / TXT<input id="file" type="file" accept=".csv,.txt,.tsv,text/csv,text/plain"></label>
+      <label class="check"><input id="dnsOnly" type="checkbox"> DNS only (skip mailbox check)</label>
+      <span id="fileInfo" class="hint"></span>
+      <span class="spacer"></span>
+      <button id="stop" type="button" hidden>Stop</button>
+      <button id="run" class="primary" type="button">Verify</button>
+    </div>
+    <div class="progress" id="progress"><div></div></div>
+  </section>
+
+  <section class="panel" id="resultsPanel" hidden>
+    <div class="stats" id="stats"></div>
+    <div class="row">
+      <span id="summary" class="hint"></span>
+      <span class="spacer"></span>
+      <select id="exportWhat" aria-label="Rows to export">
+        <option value="send">Safe to send (valid)</option>
+        <option value="send+risky">Valid + risky</option>
+        <option value="all">All rows with results</option>
+      </select>
+      <button id="export" type="button">Download CSV</button>
+    </div>
+    <div class="scroll" style="margin-top:12px">
+      <table>
+        <thead><tr><th>Email</th><th>Result</th><th class="hide-sm">Flags</th><th class="hide-sm">Server reply</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <p id="more" class="hint"></p>
+  </section>
+
+  <section class="panel">
+    <details>
+      <summary>What the results mean</summary>
+      <div class="legend">
+        <div><span class="badge valid">valid</span> The mail server confirmed this mailbox exists. Safe to send.</div>
+        <div><span class="badge invalid">invalid</span> Bad syntax, domain has no mail server, or the mailbox does not exist. Remove it.</div>
+        <div><span class="badge risky">risky</span> Catch-all domain (accepts any address), disposable address, or full mailbox. Send carefully, in small batches.</div>
+        <div><span class="badge unknown">unknown</span> The server would not say (greylisting, blocked your IP, timeout). Retry later or from a better IP.</div>
+        <div><span class="tag">role</span> Shared inbox like info@ or sales@. Lower reply rates, more spam complaints.</div>
+        <div><span class="tag">free</span> Personal provider like Gmail or Outlook rather than a company domain.</div>
+      </div>
+    </details>
+  </section>
+</main>
+
+<script src="csv.js"></script>
+<script>
+(() => {
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  const STATUSES = ['valid', 'risky', 'invalid', 'unknown'];
+  const RESULT_COLUMNS = ['status', 'reason', 'score', 'suggestion', 'catch_all', 'role', 'free', 'disposable', 'mx', 'smtp_code', 'smtp_message'];
+  const REASONS = {
+    accepted: 'Mailbox exists', mailbox_not_found: 'Mailbox does not exist', catch_all: 'Domain accepts every address',
+    disposable: 'Disposable / temporary inbox', mailbox_full: 'Mailbox is full', domain_not_found: 'Domain does not exist',
+    no_mx_records: 'Domain has no mail server', null_mx: 'Domain does not accept email', dns_error: 'DNS lookup failed',
+    smtp_unreachable: 'Could not reach mail server (port 25 blocked?)', smtp_timeout: 'Mail server timed out',
+    smtp_blocked: 'Mail server refused to answer us', greylisted_or_tempfail: 'Temporarily deferred, retry later',
+    smtp_error: 'Unexpected server reply', smtp_skipped: 'Domain OK, mailbox not checked',
+    missing_at_sign: 'Not an email address', invalid_local_part: 'Invalid characters before @',
+    invalid_domain: 'Invalid domain', local_part_too_long: 'Too long before @', address_too_long: 'Address too long',
+  };
+  const RENDER_LIMIT = 1000;
+
+  let source = null;   // { header, rows, column } when a CSV was uploaded
+  let results = [];
+  let filter = 'all';
+  let controller = null;
+
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  function notice(html, ok) {
+    const n = $('notice');
+    n.innerHTML = html;
+    n.className = 'notice' + (ok ? ' ok' : '');
+    n.style.display = html ? 'block' : 'none';
+  }
+
+  $('file').addEventListener('change', async (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    const text = await f.text();
+    const parsed = CSV.findEmailColumn(CSV.parseCSV(text));
+    if (parsed.column === -1) { notice('No email column found in that file.'); return; }
+    source = parsed;
+    const emails = parsed.rows.map((r) => (r[parsed.column] || '').trim()).filter(Boolean);
+    $('input').value = emails.join('\n');
+    const col = parsed.header ? `column "${parsed.header[parsed.column]}"` : `column ${parsed.column + 1}`;
+    $('fileInfo').textContent = `${f.name}: ${emails.length} emails from ${col}. Other columns are kept in the export.`;
+    e.target.value = '';
+  });
+  $('input').addEventListener('input', () => { if (source) { source = null; $('fileInfo').textContent = ''; } });
+
+  function currentEmails() {
+    if (source) return source.rows.map((r) => (r[source.column] || '').trim());
+    return CSV.extractEmails($('input').value);
+  }
+
+  $('run').addEventListener('click', async () => {
+    const emails = currentEmails();
+    if (!emails.filter(Boolean).length) { notice('Paste some emails or upload a file first.'); return; }
+    notice('');
+    results = new Array(emails.length);
+    filter = 'all';
+    $('resultsPanel').hidden = false;
+    $('run').disabled = true; $('stop').hidden = false;
+    $('progress').style.display = 'block';
+    render(emails.length);
+
+    controller = new AbortController();
+    const started = Date.now();
+    let done = 0;
+    let lastPaint = 0;
+    try {
+      const res = await fetch('api/verify', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ emails, smtp: !$('dnsOnly').checked }), signal: controller.signal,
+      });
+      if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || res.statusText);
+      const reader = res.body.getReader();
+      const dec = new TextDecoder();
+      let buf = '';
+      for (;;) {
+        const { value, done: end } = await reader.read();
+        if (end) break;
+        buf += dec.decode(value, { stream: true });
+        let i;
+        while ((i = buf.indexOf('\n')) !== -1) {
+          const line = buf.slice(0, i); buf = buf.slice(i + 1);
+          if (!line) continue;
+          const r = JSON.parse(line);
+          results[r.index] = r; done++;
+        }
+        $('progress').firstElementChild.style.width = `${(done / emails.length) * 100}%`;
+        if (Date.now() - lastPaint > 400) { render(emails.length); lastPaint = Date.now(); }
+      }
+    } catch (e) {
+      if (e.name !== 'AbortError') notice(`Verification failed: ${esc(e.message)}`);
+    } finally {
+      controller = null;
+      $('run').disabled = false; $('stop').hidden = true;
+      $('progress').style.display = 'none';
+      render(emails.length, (Date.now() - started) / 1000);
+      const r = results.filter(Boolean);
+      if (r.length && r.filter((x) => x.reason === 'smtp_unreachable').length > r.length / 2) {
+        notice('Most mail servers could not be reached. Outbound port 25 is probably blocked on this server, so mailboxes could not be checked. Click <b>Check server setup</b> for details.');
+      }
+    }
+  });
+  $('stop').addEventListener('click', () => controller && controller.abort());
+
+  function counts() {
+    const c = { all: 0, valid: 0, risky: 0, invalid: 0, unknown: 0 };
+    results.forEach((r) => { if (r) { c.all++; c[r.status]++; } });
+    return c;
+  }
+
+  function render(total, seconds) {
+    const c = counts();
+    $('stats').innerHTML = ['all', ...STATUSES].map((s) => `
+      <button type="button" class="stat ${s}" data-filter="${s}" aria-pressed="${filter === s}">
+        <b>${c[s]}</b><span>${s === 'all' ? `checked of ${total}` : s}${s !== 'all' && c.all ? ` · ${Math.round((c[s] / c.all) * 100)}%` : ''}</span>
+      </button>`).join('');
+    $('summary').textContent = seconds != null ? `Finished in ${seconds.toFixed(1)}s` : `Checking… ${c.all} / ${total}`;
+    const shown = results.filter((r) => r && (filter === 'all' || r.status === filter));
+    $('rows').innerHTML = shown.slice(0, RENDER_LIMIT).map(row).join('');
+    $('more').textContent = shown.length > RENDER_LIMIT ? `Showing ${RENDER_LIMIT} of ${shown.length}. Download the CSV for everything.` : '';
+  }
+
+  $('stats').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-filter]');
+    if (!b) return;
+    filter = b.dataset.filter;
+    render(results.length);
+  });
+
+  function row(r) {
+    const tags = [r.role && 'role', r.free && 'free', r.disposable && 'disposable', r.catchAll && 'catch-all'].filter(Boolean);
+    const reply = r.smtp ? (r.smtp.code ? `${r.smtp.code} ${r.smtp.message || ''}` : r.smtp.error || '') : (r.mx && r.mx[0] ? `MX ${r.mx[0]}` : '');
+    return `<tr>
+      <td class="email">${esc(r.email || r.input)}${r.suggestion ? `<div class="hint">Did you mean @${esc(r.suggestion)}?</div>` : ''}</td>
+      <td><span class="badge ${r.status}">${r.status}</span><div class="hint">${esc(REASONS[r.reason] || r.reason)}</div></td>
+      <td class="hide-sm">${tags.map((t) => `<span class="tag">${t}</span>`).join('')}</td>
+      <td class="hide-sm detail">${esc(reply.slice(0, 160))}</td>
+    </tr>`;
+  }
+
+  function cells(r) {
+    if (!r) return RESULT_COLUMNS.map(() => '');
+    return [r.status, r.reason, r.score, r.suggestion || '', r.catchAll == null ? '' : r.catchAll, r.role, r.free, r.disposable,
+      (r.mx || [])[0] || '', r.smtp?.code || '', r.smtp?.message || r.smtp?.error || ''];
+  }
+
+  $('export').addEventListener('click', () => {
+    const what = $('exportWhat').value;
+    const keep = (r) => r && (what === 'all' || r.status === 'valid' || (what === 'send+risky' && r.status === 'risky'));
+    let out;
+    if (source) {
+      const width = Math.max(source.header ? source.header.length : 0, ...source.rows.map((r) => r.length));
+      const pad = (r) => [...r, ...Array(width - r.length).fill('')];
+      const head = source.header ? pad(source.header) : Array.from({ length: width }, (_, i) => (i === source.column ? 'email' : `col${i + 1}`));
+      out = [[...head, ...RESULT_COLUMNS]];
+      source.rows.forEach((r, i) => { if (keep(results[i])) out.push([...pad(r), ...cells(results[i])]); });
+    } else {
+      out = [['email', ...RESULT_COLUMNS]];
+      results.forEach((r) => { if (keep(r)) out.push([r.email, ...cells(r)]); });
+    }
+    const blob = new Blob([CSV.toCSV(out)], { type: 'text/csv' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `verified-${what}-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  });
+
+  $('selftest').addEventListener('click', async () => {
+    const b = $('selftest');
+    b.disabled = true; b.textContent = 'Checking…';
+    try {
+      const r = await (await fetch('api/selftest')).json();
+      const ready = r.port25 && r.mailFromAccepted;
+      notice(`<b>${ready ? 'Ready: mailbox checks will work from this server.' : 'Not ready for mailbox checks.'}</b>
+        <ul>${r.details.map((d) => `<li>${esc(d)}</li>`).join('')}
+        ${r.publicIp ? `<li>Public IP ${esc(r.publicIp)}, reverse DNS ${esc(r.ptr || 'not set')}</li>` : ''}
+        ${r.tips.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`, ready);
+    } catch (e) {
+      notice(`Self-test failed: ${esc(e.message)}`);
+    } finally {
+      b.disabled = false; b.textContent = 'Check server setup';
+    }
+  });
+})();
+</script>
+</body>
+</html>

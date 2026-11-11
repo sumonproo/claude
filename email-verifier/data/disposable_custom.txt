@@ -1,0 +1,1 @@
+# Add your own disposable / junk domains here, one per line.
