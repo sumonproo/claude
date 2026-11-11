@@ -227,23 +227,28 @@ def build_home():
     experts = "".join(expert_card(i, e, compact=True) for i, e in enumerate(EXPERTS[:3]))
     posts = "".join(post_card(p, i) for i, p in enumerate(POSTS[:3]))
     body = f"""
-<section class="hero hero--photo">
-  <picture class="hero__bg">
-    <source media="(max-width: 640px)" srcset="assets/mexico-city-skyline-640.webp">
-    <img src="assets/mexico-city-skyline.webp" width="1026" height="769" alt="" fetchpriority="high">
-  </picture>
-  <div class="wrap hero__inner">
-    <h1 class="hero__title">Practical guidance for doing business in Mexico</h1>
-    <p class="hero__lede">Free, public guides on IMMEX, labor, corporate and real estate, written with the experts who handle these questions every day.</p>
-    <form class="ask" role="search" data-ask>
-      <label for="ask-q" class="sr-only">Ask a question about doing business in Mexico</label>
-      <input id="ask-q" name="q" type="text" placeholder="Ask about IMMEX, labor, tax, land…" autocomplete="off">
-      <button class="btn" type="submit">Ask</button>
-    </form>
-    <div class="hero__ctas">
-      <a class="btn btn--ghost" href="contact.html">Book a consultation</a>
-      <a class="link" href="contact.html#inquiry">Send an inquiry</a>
+<section class="hero">
+  <div class="wrap hero__grid">
+    <div class="hero__copy">
+      <h1 class="hero__title">Practical guidance for doing business in Mexico</h1>
+      <p class="hero__lede">Free, public guides on IMMEX, labor, corporate and real estate, written with the experts who handle these questions every day.</p>
+      <form class="ask" role="search" data-ask>
+        <label for="ask-q" class="sr-only">Ask a question about doing business in Mexico</label>
+        <input id="ask-q" name="q" type="text" placeholder="Ask about IMMEX, labor, tax, land…" autocomplete="off">
+        <button class="btn" type="submit">Ask</button>
+      </form>
+      <div class="hero__ctas">
+        <a class="btn btn--ghost" href="contact.html">Book a consultation</a>
+        <a class="link" href="contact.html#inquiry">Send an inquiry</a>
+      </div>
     </div>
+    <figure class="hero__media">
+      <picture>
+        <source media="(max-width: 860px)" srcset="assets/hero-reforma-wide.webp" width="646" height="484">
+        <img src="assets/hero-reforma.webp" width="615" height="769" alt="Paseo de la Reforma and the Mexico City skyline at sunset" fetchpriority="high">
+      </picture>
+      <figcaption>Paseo de la Reforma, Mexico City</figcaption>
+    </figure>
   </div>
 </section>
 
@@ -293,7 +298,7 @@ def build_home():
 """
     jsonld = """<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Doing Business Mexico","url":"https://doingbusiness-mexico.com/"}</script>
 """
-    jsonld += '<link rel="preload" as="image" href="assets/mexico-city-skyline.webp" media="(min-width: 641px)">\n<link rel="preload" as="image" href="assets/mexico-city-skyline-640.webp" media="(max-width: 640px)">\n'
+    jsonld += '<link rel="preload" as="image" href="assets/hero-reforma.webp" media="(min-width: 861px)">\n<link rel="preload" as="image" href="assets/hero-reforma-wide.webp" media="(max-width: 860px)">\n'
     page("index.html", SITE, "Free, public guides on IMMEX, labor, corporate and real estate in Mexico, plus a directory of experts you can consult.", None, body, jsonld)
 
 
